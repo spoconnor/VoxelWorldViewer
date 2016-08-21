@@ -95,14 +95,14 @@ namespace AiKnowledgeEngine
 
                 if (chr.Position == moveTo)
                 {
-					//Console.WriteLine ("Moved to {0}", moveTo);
+                    //Console.WriteLine ("Moved to {0}", moveTo);
                     index--;
                 }
                 if (index == 0)
                 {
                     Console.WriteLine ("{0}:At destination", chr.Id);
                     chr.RemoveTask (this);
-				}
+                }
             }
         }
     }
@@ -124,36 +124,36 @@ namespace AiKnowledgeEngine
 //        }
 //    }
     
-	internal class WaitTask : BaseTaskItem
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AiKnowledgeEngine.WaitTask"/> class.
-		/// </summary>
-		/// <param name='waitTime'>
-		/// Wait time in seconds.
-		/// </param>
-		internal WaitTask (double waitTime)
-		{
+    internal class WaitTask : BaseTaskItem
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AiKnowledgeEngine.WaitTask"/> class.
+        /// </summary>
+        /// <param name='waitTime'>
+        /// Wait time in seconds.
+        /// </param>
+        internal WaitTask (double waitTime)
+        {
             this.waitTime = waitTime * 1000;
-		}
+        }
 
-		internal override void DoTask (Character chr, FrameEventArgs e)
-		{
-			waitTime -= e.Time;
-			if (waitTime < 0) {
+        internal override void DoTask (Character chr, FrameEventArgs e)
+        {
+            waitTime -= e.Time;
+            if (waitTime < 0) {
                 chr.RemoveTask (this);
-			}
-		}
+            }
+        }
 
-		private double waitTime; // Waittime in ms
-	}
+        private double waitTime; // Waittime in ms
+    }
 
     internal class LookAroundTask : BaseTaskItem
     {
         internal override void DoTask (Character chr, FrameEventArgs e)
         {
             Console.WriteLine ("{0}:Looking around", chr.Id);
-			chr.path.FindPaths(chr.Position, chr.knowledge);
+            chr.path.FindPaths(chr.Position, chr.knowledge);
             chr.RemoveTask (this);
         }
     }
@@ -190,26 +190,26 @@ namespace AiKnowledgeEngine
                 chr.AddTask (new WaitTask(10));
                 chr.AddTask( new LookAroundTask());
                 //chr.RemoveTask (this);
-				//chr.AddTask (new SearchTask ());
-				return;
-			}
+                //chr.AddTask (new SearchTask ());
+                return;
+            }
             chr.AddTask (new ChopBlocksAtPosTask(blockType, route[0]));
             chr.AddTask (new MoveToTask (route));
-		}
+        }
 
         private Block.BlockType blockType;
     }
 
-	internal class ChopBlocksAtPosTask : BaseTaskItem
+    internal class ChopBlocksAtPosTask : BaseTaskItem
     {
         internal ChopBlocksAtPosTask (Block.BlockType blockType, Position position)
         {
-			this.blockType = blockType;
-			this.position = position;
+            this.blockType = blockType;
+            this.position = position;
         }
 
-		private Block.BlockType blockType;
-		private Position position;
+        private Block.BlockType blockType;
+        private Position position;
 
         internal override void DoTask (Character chr, FrameEventArgs e)
         {
@@ -217,13 +217,13 @@ namespace AiKnowledgeEngine
             foreach (Position pos in chr.path.NeighbourBlocks(position))
             {
                 if (pos.GetBlock().Type == blockType)
-			    {
+                {
                     chr.AddTask (new ChopBlockTask(blockType, pos));
                 }
             }
             chr.RemoveTask (this);
         }
-	}
+    }
 
     internal class ChopBlockTask : BaseTaskItem
     {

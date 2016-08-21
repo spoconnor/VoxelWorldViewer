@@ -9,80 +9,80 @@ using Hexpoint.Blox.GameActions;
 
 namespace Hexpoint.Blox.Hosts
 {
-	internal class BlockCursorHost : IHost
-	{
-		#region Constructors
-		internal BlockCursorHost()
-		{
+    internal class BlockCursorHost : IHost
+    {
+        #region Constructors
+        internal BlockCursorHost()
+        {
             _game = Settings.Game;
-			Position = new Position();
-			_positionAdd = new Position();
+            Position = new Position();
+            _positionAdd = new Position();
             _game.Mouse.ButtonDown += OnMouseButtonDown;
             _game.Mouse.ButtonUp += OnMouseButtonUp;
             _game.KeyPress += OnKeyPress;
-			_blockCursorUpdateTimer = new Stopwatch();
-			_blockCursorUpdateTimer.Start();
-		}
-		#endregion
+            _blockCursorUpdateTimer = new Stopwatch();
+            _blockCursorUpdateTimer.Start();
+        }
+        #endregion
 
-		#region Properties
+        #region Properties
         private readonly Game _game; //provides a shortcut to game (Settings.Game could also be used instead)
-		private const int BLOCK_CURSOR_UPDATE_INTERVAL_MS = 100;
-		private readonly Stopwatch _blockCursorUpdateTimer;
+        private const int BLOCK_CURSOR_UPDATE_INTERVAL_MS = 100;
+        private readonly Stopwatch _blockCursorUpdateTimer;
 
-		/// <summary>Returns the position the block cursor is on (the block that would be destroyed).</summary>
-		internal static Position Position;
+        /// <summary>Returns the position the block cursor is on (the block that would be destroyed).</summary>
+        internal static Position Position;
 
-		private static Position _positionAdd;
-		/// <summary>Returns the coords of where a block will be added (the block cursor + 1 in the direction of the selected surface).</summary>
-		internal static Position PositionAdd
-		{
-			get
-			{
-				_positionAdd.X = Position.X;
-				_positionAdd.Y = Position.Y;
-				_positionAdd.Z = Position.Z;
-				switch (SelectedFace)
-				{
-					case Face.Right:
-						_positionAdd.X++;
-						break;
-					case Face.Left:
-						_positionAdd.X--;
-						break;
-					case Face.Top:
-						_positionAdd.Y++;
-						break;
-					case Face.Bottom:
-						_positionAdd.Y--;
-						break;
-					case Face.Front:
-						_positionAdd.Z++;
-						break;
-					case Face.Back:
-						_positionAdd.Z--;
-						break;
-				}
-				return _positionAdd;
-			}
-		}
+        private static Position _positionAdd;
+        /// <summary>Returns the coords of where a block will be added (the block cursor + 1 in the direction of the selected surface).</summary>
+        internal static Position PositionAdd
+        {
+            get
+            {
+                _positionAdd.X = Position.X;
+                _positionAdd.Y = Position.Y;
+                _positionAdd.Z = Position.Z;
+                switch (SelectedFace)
+                {
+                    case Face.Right:
+                        _positionAdd.X++;
+                        break;
+                    case Face.Left:
+                        _positionAdd.X--;
+                        break;
+                    case Face.Top:
+                        _positionAdd.Y++;
+                        break;
+                    case Face.Bottom:
+                        _positionAdd.Y--;
+                        break;
+                    case Face.Front:
+                        _positionAdd.Z++;
+                        break;
+                    case Face.Back:
+                        _positionAdd.Z--;
+                        break;
+                }
+                return _positionAdd;
+            }
+        }
 
-		internal static Face SelectedFace { get; private set; }
+        internal static Face SelectedFace { get; private set; }
 
-		/// <summary>Get the distance between the player and the block cursor.</summary>
-		private static float CursorDistance
-		{
+        /// <summary>Get the distance between the player and the block cursor.</summary>
+        private static float CursorDistance
+        {
             get { return Game.CameraCoords.ToPosition().GetDistanceExact(ref Position); }
-		}
+        }
 
-		private Vector3d _mouseVector;
-		private Vector3d _mouseVectorXPlusOne;
-		private Vector3d _mouseVectorYPlusOne;
+        private Vector3d _mouseVector;
+        private Vector3d _mouseVectorXPlusOne;
+        private Vector3d _mouseVectorYPlusOne;
         private static Position _leftMouseDownBlock;
         private static Position _leftMouseUpBlock;
         private static bool _leftMouseDown;
         private static bool _rightMouseDown;
-		#endregion
+        #endregion
 
         private void OnMouseButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -144,47 +144,47 @@ namespace Hexpoint.Blox.Hosts
                         NetworkClient.SendAddOrRemoveBlock(block, blockType);
         }
 
-		public void Update(FrameEventArgs e)
-		{
-			//todo: doing this in the update makes the game choppy, works fine when moved to the render apparently...
-			//UpdateCursor();
-		}
+        public void Update(FrameEventArgs e)
+        {
+            //todo: doing this in the update makes the game choppy, works fine when moved to the render apparently...
+            //UpdateCursor();
+        }
 
-		public void Render(FrameEventArgs e)
-		{
-			if (Settings.UiDisabled) return;
+        public void Render(FrameEventArgs e)
+        {
+            if (Settings.UiDisabled) return;
 
-			//update the block cursor location if the specified interval has elapsed
-			if (_blockCursorUpdateTimer.ElapsedMilliseconds > BLOCK_CURSOR_UPDATE_INTERVAL_MS)
-			{
-				UpdateCursor();
+            //update the block cursor location if the specified interval has elapsed
+            if (_blockCursorUpdateTimer.ElapsedMilliseconds > BLOCK_CURSOR_UPDATE_INTERVAL_MS)
+            {
+                UpdateCursor();
                 if (_leftMouseDown)
                     _leftMouseUpBlock = PositionAdd;
-				_blockCursorUpdateTimer.Restart();
-			}
+                _blockCursorUpdateTimer.Restart();
+            }
 
-			Utilities.GlHelper.ResetTexture();
-			GL.PushAttrib(AttribMask.PolygonBit); //http://www.talisman.org/opengl-1.1/Reference/glPushAttrib.html
-			GL.Enable(EnableCap.PolygonOffsetLine); //enable polygon offset to stitch the cursor on top of the existing block face polygon (red book pg 293)
-			GL.PolygonMode(MaterialFace.Front, PolygonMode.Line); //gm: have to use polygon line mode and draw a wire quad for PolygonOffsetLine to work (http://dmi.uib.es/~josemaria/files/OpenGLFAQ/polygonoffset.htm)
-			GL.LineWidth(Math.Max(3 - CursorDistance / 3, 1)); //change line width based on distance
+            Utilities.GlHelper.ResetTexture();
+            GL.PushAttrib(AttribMask.PolygonBit); //http://www.talisman.org/opengl-1.1/Reference/glPushAttrib.html
+            GL.Enable(EnableCap.PolygonOffsetLine); //enable polygon offset to stitch the cursor on top of the existing block face polygon (red book pg 293)
+            GL.PolygonMode(MaterialFace.Front, PolygonMode.Line); //gm: have to use polygon line mode and draw a wire quad for PolygonOffsetLine to work (http://dmi.uib.es/~josemaria/files/OpenGLFAQ/polygonoffset.htm)
+            GL.LineWidth(Math.Max(3 - CursorDistance / 3, 1)); //change line width based on distance
 
-			//set cursor color based on the current tool
-			switch (Buttons.CurrentTool)
-			{
-				case ToolType.Default:
-					GL.Color3(0.2f, 0.2f, 1f);
-					break;
-				case ToolType.FastBuild:
-					GL.Color3(0.2f, 1f, 0.2f);
-					break;
-				case ToolType.FastDestroy:
-					GL.Color3(1f, 0.2f, 0.2f);
-					break;
-				default:
-					GL.Color3(0.8f, 0.8f, 0.2f);
-					break;
-			}
+            //set cursor color based on the current tool
+            switch (Buttons.CurrentTool)
+            {
+                case ToolType.Default:
+                    GL.Color3(0.2f, 0.2f, 1f);
+                    break;
+                case ToolType.FastBuild:
+                    GL.Color3(0.2f, 1f, 0.2f);
+                    break;
+                case ToolType.FastDestroy:
+                    GL.Color3(1f, 0.2f, 0.2f);
+                    break;
+                default:
+                    GL.Color3(0.8f, 0.8f, 0.2f);
+                    break;
+            }
             //if (_mouseDown)
             {
                 int xIncr = (_leftMouseDownBlock.X <= _leftMouseUpBlock.X) ? 1 : -1;
@@ -201,9 +201,9 @@ namespace Hexpoint.Blox.Hosts
                 DrawBlockHighlight(_positionAdd);
             }
 
-			GL.PopAttrib();
-			Utilities.GlHelper.ResetColor();
-		}
+            GL.PopAttrib();
+            Utilities.GlHelper.ResetColor();
+        }
 
         private void DrawBlockHighlight(Position Position)
         {
@@ -253,111 +253,111 @@ namespace Hexpoint.Blox.Hosts
             GL.PopMatrix();
         }
 
-		public void Resize(EventArgs e)
-		{
-			
-		}
+        public void Resize(EventArgs e)
+        {
+            
+        }
 
-		private void UpdateCursor()
-		{
-			//GetMousePosition will get the position of the mouse pointer
-			//If you get the vector of the mouse from x+1 and y+1 you have 3 points now... since you're on one surface each of the points will have one matching coord (x/y/z)... whichever it is is the face they have selected.
-			_mouseVector = GetMousePosition(ref Game.Projection, ref Game.ModelView, false, false);
-			_mouseVectorXPlusOne = GetMousePosition(ref Game.Projection, ref Game.ModelView, true, false);
-			_mouseVectorYPlusOne = GetMousePosition(ref Game.Projection, ref Game.ModelView, false, true);
+        private void UpdateCursor()
+        {
+            //GetMousePosition will get the position of the mouse pointer
+            //If you get the vector of the mouse from x+1 and y+1 you have 3 points now... since you're on one surface each of the points will have one matching coord (x/y/z)... whichever it is is the face they have selected.
+            _mouseVector = GetMousePosition(ref Game.Projection, ref Game.ModelView, false, false);
+            _mouseVectorXPlusOne = GetMousePosition(ref Game.Projection, ref Game.ModelView, true, false);
+            _mouseVectorYPlusOne = GetMousePosition(ref Game.Projection, ref Game.ModelView, false, true);
 
-			var xDelta = GetDelta(_mouseVector.X, _mouseVectorXPlusOne.X, _mouseVectorYPlusOne.X);
-			var yDelta = GetDelta(_mouseVector.Y, _mouseVectorXPlusOne.Y, _mouseVectorYPlusOne.Y);
-			var zDelta = GetDelta(_mouseVector.Z, _mouseVectorXPlusOne.Z, _mouseVectorYPlusOne.Z);
+            var xDelta = GetDelta(_mouseVector.X, _mouseVectorXPlusOne.X, _mouseVectorYPlusOne.X);
+            var yDelta = GetDelta(_mouseVector.Y, _mouseVectorXPlusOne.Y, _mouseVectorYPlusOne.Y);
+            var zDelta = GetDelta(_mouseVector.Z, _mouseVectorXPlusOne.Z, _mouseVectorYPlusOne.Z);
 
-			if (xDelta < Math.Min(yDelta, zDelta))
-			{
-				SelectedFace = _mouseVector.X > Game.CameraCoords.Xf ? Face.Left : Face.Right;
-			}
-			else if (yDelta < Math.Min(xDelta, zDelta))
-			{
+            if (xDelta < Math.Min(yDelta, zDelta))
+            {
+                SelectedFace = _mouseVector.X > Game.CameraCoords.Xf ? Face.Left : Face.Right;
+            }
+            else if (yDelta < Math.Min(xDelta, zDelta))
+            {
                 SelectedFace = _mouseVector.Y > Game.CameraCoords.Yf + 1 ? Face.Bottom : Face.Top;
-			}
-			else if (zDelta < Math.Min(xDelta, yDelta))
-			{
+            }
+            else if (zDelta < Math.Min(xDelta, yDelta))
+            {
                 SelectedFace = _mouseVector.Z > Game.CameraCoords.Zf ? Face.Back : Face.Front;
-			}
+            }
 
-			switch (SelectedFace)
-			{
-				case Face.Right:
-					Position.X = (int)Math.Round(_mouseVector.X - 1);
-					break;
-				case Face.Left:
-					Position.X = (int)Math.Round(_mouseVector.X);
-					break;
-				default:
-					Position.X = (int)Math.Round(_mouseVector.X - .5);
-					break;
-			}
+            switch (SelectedFace)
+            {
+                case Face.Right:
+                    Position.X = (int)Math.Round(_mouseVector.X - 1);
+                    break;
+                case Face.Left:
+                    Position.X = (int)Math.Round(_mouseVector.X);
+                    break;
+                default:
+                    Position.X = (int)Math.Round(_mouseVector.X - .5);
+                    break;
+            }
 
-			switch (SelectedFace)
-			{
-				case Face.Top:
-					Position.Y = (int)Math.Round(_mouseVector.Y - 1, 0);
-					break;
-				case Face.Bottom:
-					Position.Y = (int)Math.Round(_mouseVector.Y);
-					break;
-				default:
-					Position.Y = (int)Math.Round(_mouseVector.Y - .5, 0);
-					break;
-			}
+            switch (SelectedFace)
+            {
+                case Face.Top:
+                    Position.Y = (int)Math.Round(_mouseVector.Y - 1, 0);
+                    break;
+                case Face.Bottom:
+                    Position.Y = (int)Math.Round(_mouseVector.Y);
+                    break;
+                default:
+                    Position.Y = (int)Math.Round(_mouseVector.Y - .5, 0);
+                    break;
+            }
 
-			switch (SelectedFace)
-			{
-				case Face.Front:
-					Position.Z = (int)Math.Round(_mouseVector.Z - 1);
-					break;
-				case Face.Back:
-					Position.Z = (int)Math.Round(_mouseVector.Z);
-					break;
-				default:
-					Position.Z = (int)Math.Round(_mouseVector.Z - .5);
-					break;
-			}
-		}
+            switch (SelectedFace)
+            {
+                case Face.Front:
+                    Position.Z = (int)Math.Round(_mouseVector.Z - 1);
+                    break;
+                case Face.Back:
+                    Position.Z = (int)Math.Round(_mouseVector.Z);
+                    break;
+                default:
+                    Position.Z = (int)Math.Round(_mouseVector.Z - .5);
+                    break;
+            }
+        }
 
-		/// <summary>Gets the vector of where the mouse cursor currently is.</summary>
-		/// <param name="projection"></param>
-		/// <param name="modelView"></param>
-		/// <param name="offsetX">will get the coords of the pixel to the right of the mouse cursor if true</param>
-		/// <param name="offsetY">will get the coords of the pixel below the mouse cursor if true</param>
-		private static Vector3d GetMousePosition(ref Matrix4d projection, ref Matrix4d modelView, bool offsetX, bool offsetY)
-		{
-			Matrix4d view;
-			Matrix4d.Mult(ref modelView, ref projection, out view);
-			int x = Settings.Game.Mouse.X + (offsetX ? 1 : 0);
-			int y = Settings.Game.Height + (offsetY ? 1 : 0) - Settings.Game.Mouse.Y - 1; //invert Y, window coords are opposite
-			float depth = 0;
-			GL.ReadPixels(x, y, 1, 1, PixelFormat.DepthComponent, PixelType.Float, ref depth);
-			var viewPosition = new Vector4d
-			(
-				(float)x / Settings.Game.Width * 2.0f - 1.0f,	//map X to -1 to 1 range
-				(float)y / Settings.Game.Height * 2.0f - 1.0f,	//map Y to -1 to 1 range
-				depth * 2.0f - 1.0f,							//map Z to -1 to 1 range
-				1.0f
-			);
-			var temp = Vector4d.Transform(viewPosition, Matrix4d.Invert(view));
-			return new Vector3d(temp.X, temp.Y, temp.Z) / temp.W;
-		}
+        /// <summary>Gets the vector of where the mouse cursor currently is.</summary>
+        /// <param name="projection"></param>
+        /// <param name="modelView"></param>
+        /// <param name="offsetX">will get the coords of the pixel to the right of the mouse cursor if true</param>
+        /// <param name="offsetY">will get the coords of the pixel below the mouse cursor if true</param>
+        private static Vector3d GetMousePosition(ref Matrix4d projection, ref Matrix4d modelView, bool offsetX, bool offsetY)
+        {
+            Matrix4d view;
+            Matrix4d.Mult(ref modelView, ref projection, out view);
+            int x = Settings.Game.Mouse.X + (offsetX ? 1 : 0);
+            int y = Settings.Game.Height + (offsetY ? 1 : 0) - Settings.Game.Mouse.Y - 1; //invert Y, window coords are opposite
+            float depth = 0;
+            GL.ReadPixels(x, y, 1, 1, PixelFormat.DepthComponent, PixelType.Float, ref depth);
+            var viewPosition = new Vector4d
+            (
+                (float)x / Settings.Game.Width * 2.0f - 1.0f,    //map X to -1 to 1 range
+                (float)y / Settings.Game.Height * 2.0f - 1.0f,    //map Y to -1 to 1 range
+                depth * 2.0f - 1.0f,                            //map Z to -1 to 1 range
+                1.0f
+            );
+            var temp = Vector4d.Transform(viewPosition, Matrix4d.Invert(view));
+            return new Vector3d(temp.X, temp.Y, temp.Z) / temp.W;
+        }
 
-		/// <summary>Gets the difference between the biggest and smallest of 3 numbers.</summary>
-		private static double GetDelta(double d1, double d2, double d3)
-		{
-			return Math.Max(Math.Max(d1, d2), d3) - Math.Min(Math.Min(d1, d2), d3);
-		}
+        /// <summary>Gets the difference between the biggest and smallest of 3 numbers.</summary>
+        private static double GetDelta(double d1, double d2, double d3)
+        {
+            return Math.Max(Math.Max(d1, d2), d3) - Math.Min(Math.Min(d1, d2), d3);
+        }
 
-		public void Dispose()
-		{
-			
-		}
+        public void Dispose()
+        {
+            
+        }
 
-		public bool Enabled { get; set; }
-	}
+        public bool Enabled { get; set; }
+    }
 }

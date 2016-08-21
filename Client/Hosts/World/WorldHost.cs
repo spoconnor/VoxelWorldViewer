@@ -18,12 +18,6 @@ namespace Hexpoint.Blox.Hosts.World
         {
             PerformanceHost.OnHalfSecondElapsed += PerformanceHost_OnHalfSecondElapsed;
 
-            for (var i = 0; i < Math.Max(1, Environment.ProcessorCount / 2); i++)
-            {
-                var buildChunkThread = new Thread (BuildChunksThread) { IsBackground = true, Priority = ThreadPriority.Lowest, Name = "Chunk Builder " + i}; //Lowest priority makes it noticeably less choppy when working through the queue (startup)
-                buildChunkThread.Start ();
-            }
-
             FogColorUnderWater = new ColorRgb (51, 128, 204);
         }
 

@@ -174,7 +174,6 @@
     <Compile Include="GameActions\PickupBlockItem.cs" />
     <Compile Include="GameActions\PlayerOption.cs" />
     <Compile Include="GameActions\RemoveBlockItem.cs" />
-    <Compile Include="GameActions\ServerSync.cs" />
     <Compile Include="GameActions\ThrowException.cs" />
     <Compile Include="GameObjects\GameItems\Clutter.cs" />
     <Compile Include="GameObjects\GameItems\BlockItem.cs" />
@@ -202,7 +201,6 @@
     <Compile Include="GameActions\PlayerMove.cs" />
     <Compile Include="GameActions\RemoveBlock.cs" />
     <Compile Include="GameActions\ServerCommand.cs" />
-    <Compile Include="GameActions\ServerMsg.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />

@@ -63,20 +63,20 @@ namespace Hexpoint.Blox.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
         ///&lt;xsd:schema xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///	&lt;xsd:element name=&quot;Config&quot;&gt;
-        ///		&lt;xsd:complexType&gt;
-        ///			&lt;xsd:all&gt;
-        ///				&lt;xsd:element name=&quot;Mode&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;1&quot;&gt;
-        ///					&lt;xsd:simpleType&gt;
-        ///						&lt;xsd:restriction base=&quot;xsd:string&quot;&gt;
-        ///							&lt;xsd:minLength value=&quot;0&quot; /&gt;
-        ///							&lt;xsd:maxLength value=&quot;32&quot; /&gt;
-        ///						&lt;/xsd:restriction&gt;
-        ///					&lt;/xsd:simpleType&gt;
-        ///				&lt;/xsd:element&gt;
-        ///				&lt;xsd:element name=&quot;UserName&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;1&quot;&gt;
-        ///					&lt;xsd:simpleType&gt;
-        ///						&lt;xsd: [rest of string was truncated]&quot;;.
+        ///    &lt;xsd:element name=&quot;Config&quot;&gt;
+        ///        &lt;xsd:complexType&gt;
+        ///            &lt;xsd:all&gt;
+        ///                &lt;xsd:element name=&quot;Mode&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;1&quot;&gt;
+        ///                    &lt;xsd:simpleType&gt;
+        ///                        &lt;xsd:restriction base=&quot;xsd:string&quot;&gt;
+        ///                            &lt;xsd:minLength value=&quot;0&quot; /&gt;
+        ///                            &lt;xsd:maxLength value=&quot;32&quot; /&gt;
+        ///                        &lt;/xsd:restriction&gt;
+        ///                    &lt;/xsd:simpleType&gt;
+        ///                &lt;/xsd:element&gt;
+        ///                &lt;xsd:element name=&quot;UserName&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;1&quot;&gt;
+        ///                    &lt;xsd:simpleType&gt;
+        ///                        &lt;xsd: [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Config {
             get {

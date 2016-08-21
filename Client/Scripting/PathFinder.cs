@@ -163,59 +163,59 @@ namespace AiKnowledgeEngine
         }
 
         public List<Position> FindPath (Position start, Position goal)
-		{
-			List<Position> route = new List<Position> ();
-			int maxSearch = 100;
-			int searched = 0;
-			Position current = start;
-			route.Add (goal);
-			scores.Clear ();
-			openset.Clear ();
+        {
+            List<Position> route = new List<Position> ();
+            int maxSearch = 100;
+            int searched = 0;
+            Position current = start;
+            route.Add (goal);
+            scores.Clear ();
+            openset.Clear ();
 
-			openset.Add (start);
-			SetGScore (start, 0);    // Cost from start along best known path.            
-			SetFScore (start, GetGScore (start) + HeuristicCostEstimate (start, goal));
+            openset.Add (start);
+            SetGScore (start, 0);    // Cost from start along best known path.            
+            SetFScore (start, GetGScore (start) + HeuristicCostEstimate (start, goal));
 
-			while (openset.Count != 0 && searched++ < maxSearch) {
-				current = GetMinFScore (openset);
-				openset.Remove (current);
-				AddToClosedSet (current);
+            while (openset.Count != 0 && searched++ < maxSearch) {
+                current = GetMinFScore (openset);
+                openset.Remove (current);
+                AddToClosedSet (current);
             
-				if (CloseEnough(current, goal))
-				{
-					break;
-				}
+                if (CloseEnough(current, goal))
+                {
+                    break;
+                }
 
-				List<Position> neighbours = NeighbourNodes (current);
-				foreach (Position neighbour in neighbours) {
-					if (IsClosedSet (neighbour))
-						continue;
+                List<Position> neighbours = NeighbourNodes (current);
+                foreach (Position neighbour in neighbours) {
+                    if (IsClosedSet (neighbour))
+                        continue;
             
-					int tentativeGScore = GetGScore (current) + DistBetween (current, neighbour);
+                    int tentativeGScore = GetGScore (current) + DistBetween (current, neighbour);
             
-					if (!openset.Contains (neighbour) || tentativeGScore < GetGScore (neighbour)) {
-						SetCameFrom (neighbour, current);
-						SetGScore (neighbour, tentativeGScore);
-						SetFScore (neighbour, tentativeGScore + HeuristicCostEstimate (neighbour, goal));
+                    if (!openset.Contains (neighbour) || tentativeGScore < GetGScore (neighbour)) {
+                        SetCameFrom (neighbour, current);
+                        SetGScore (neighbour, tentativeGScore);
+                        SetFScore (neighbour, tentativeGScore + HeuristicCostEstimate (neighbour, goal));
                     
-						if (!openset.Contains (neighbour)) {
-							openset.Add (neighbour);
-						}
+                        if (!openset.Contains (neighbour)) {
+                            openset.Add (neighbour);
+                        }
                 
-					}
-				}
-			}
+                    }
+                }
+            }
 
-			if (searched >= maxSearch) 
-			{
-				//Console.WriteLine ("Could not find path from {0} to {1}", start, goal);
-				return null;
-			}
-			else
+            if (searched >= maxSearch) 
+            {
+                //Console.WriteLine ("Could not find path from {0} to {1}", start, goal);
+                return null;
+            }
+            else
             //if (GetFScore (goal) > 0) // Found path
             //if (DistBetween(current, goal) < WithinRangeScore)
             {
-				Console.WriteLine ("Found route from {0} to {1} after checking {2} locations", start, goal, searched);
+                Console.WriteLine ("Found route from {0} to {1} after checking {2} locations", start, goal, searched);
                 //Position current = goal;
                 while (current != start)
                 {
@@ -227,23 +227,23 @@ namespace AiKnowledgeEngine
         }
 
         public List<Position> FindPaths (Position start, Knowledge knowledge, Block.BlockType stopAtType = Block.BlockType.Air, int maxSearch = 100)
-		{
-			int searched = 0;
-			Position current = start;
-			scores.Clear ();
-			openset.Clear ();
+        {
+            int searched = 0;
+            Position current = start;
+            scores.Clear ();
+            openset.Clear ();
 
-			openset.Add (start);
-			SetGScore (start, 0);    // Cost from start along best known path.            
-			SetFScore (start, GetGScore (start));
+            openset.Add (start);
+            SetGScore (start, 0);    // Cost from start along best known path.            
+            SetFScore (start, GetGScore (start));
 
-			while (openset.Count != 0 && searched++ < maxSearch) {
-				current = GetMinFScore (openset);
-				openset.Remove (current);
-				AddToClosedSet (current);
+            while (openset.Count != 0 && searched++ < maxSearch) {
+                current = GetMinFScore (openset);
+                openset.Remove (current);
+                AddToClosedSet (current);
 
-				foreach (Position neighbour in NeighbourBlocks(current))
-				{
+                foreach (Position neighbour in NeighbourBlocks(current))
+                {
                     if (neighbour.GetBlock().Type == stopAtType)
                     {
                         Console.WriteLine ("Found route from {0} to {1} after checking {2} locations", start, current, searched);
@@ -255,27 +255,27 @@ namespace AiKnowledgeEngine
                         }
                         return route;
                     }
-					knowledge.Add(neighbour, start, GetGScore(current));
-				}
-				List<Position> neighbours = NeighbourNodes (current);
-				foreach (Position neighbour in neighbours) {
-					if (IsClosedSet (neighbour))
-						continue;
+                    knowledge.Add(neighbour, start, GetGScore(current));
+                }
+                List<Position> neighbours = NeighbourNodes (current);
+                foreach (Position neighbour in neighbours) {
+                    if (IsClosedSet (neighbour))
+                        continue;
             
-					int tentativeGScore = GetGScore (current) + DistBetween (current, neighbour);
+                    int tentativeGScore = GetGScore (current) + DistBetween (current, neighbour);
             
-					if (!openset.Contains (neighbour) || tentativeGScore < GetGScore (neighbour)) {
-						SetCameFrom (neighbour, current);
-						SetGScore (neighbour, tentativeGScore);
-						SetFScore (neighbour, tentativeGScore + HeuristicCostEstimate (start, neighbour));
+                    if (!openset.Contains (neighbour) || tentativeGScore < GetGScore (neighbour)) {
+                        SetCameFrom (neighbour, current);
+                        SetGScore (neighbour, tentativeGScore);
+                        SetFScore (neighbour, tentativeGScore + HeuristicCostEstimate (start, neighbour));
                     
-						if (!openset.Contains (neighbour)) {
-							openset.Add (neighbour);
-						}
+                        if (!openset.Contains (neighbour)) {
+                            openset.Add (neighbour);
+                        }
                 
-					}
-				}
-			}
+                    }
+                }
+            }
             return null;
         }
 
@@ -327,11 +327,11 @@ namespace AiKnowledgeEngine
             return null;
         }
 
-		private bool CloseEnough (Position position, Position target)
-		{
-			Position diff = (position - target).Abs();
-			return (diff.X <= 1 && diff.Z <= 1 && diff.Y<=3);
-		}
+        private bool CloseEnough (Position position, Position target)
+        {
+            Position diff = (position - target).Abs();
+            return (diff.X <= 1 && diff.Z <= 1 && diff.Y<=3);
+        }
 
         public IEnumerable<Position> FindNearestBlock(Position start, Block.BlockType target)
         {
@@ -339,17 +339,17 @@ namespace AiKnowledgeEngine
             {
                 if (check.GetBlock().Type == target)
                     yield return check;
-			}
+            }
         }
 
         //IEnumerable<Position>
         public IEnumerable<Position> ListVisibleBlocks (Coords location, int depth)
-		{
-			//int depth = 100;
-			int fieldOfView = depth / 2;
-			Coords focus = location;
-			focus.Xf += (float)(Math.Cos (location.Direction) * depth);
-			focus.Zf += (float)(Math.Sin (location.Direction) * depth);
+        {
+            //int depth = 100;
+            int fieldOfView = depth / 2;
+            Coords focus = location;
+            focus.Xf += (float)(Math.Cos (location.Direction) * depth);
+            focus.Zf += (float)(Math.Sin (location.Direction) * depth);
 
             Position tl = new Position(-fieldOfView, 0, fieldOfView);
             Position tr = new Position(fieldOfView, 0, fieldOfView);
@@ -361,7 +361,7 @@ namespace AiKnowledgeEngine
         public IEnumerable<Position> ListVisibleBlocksRecurse (Coords location, Coords focus, 
                                                                Position tl, Position tr, Position bl, Position br)
         {
-			Coords tlc, trc, blc, brc;
+            Coords tlc, trc, blc, brc;
             tlc = GetCoords (focus, tl.X, tl.Z, location.Direction);
             trc = GetCoords (focus, tr.X, tr.Z, location.Direction);
             blc = GetCoords (focus, bl.X, bl.Z, location.Direction);
@@ -372,7 +372,7 @@ namespace AiKnowledgeEngine
             Position trb = FindIntersectingBlock(location, trc);
             Position blb = FindIntersectingBlock(location, blc);
             Position brb = FindIntersectingBlock(location, brc);
-			/*
+            /*
             if (tlb != trb || blb != brb || trb != brb || tlb != blb)
             {
                 Position lc = new Position(tl.X, 0, (tr.Z + bl.Z) / 2);
@@ -397,20 +397,20 @@ namespace AiKnowledgeEngine
             //yield return trb;
             //yield return blb;
             //yield return brb;
-		}
+        }
 
         private Coords GetCoords(Coords focus, int x, int y, float direction)
-		{	
-		    Coords pt = focus;
+        {    
+            Coords pt = focus;
             pt.Xf -= (float)(Math.Sin(direction) * x);
             pt.Zf += (float)(Math.Cos(direction) * x);
-			pt.Yf += y;
-			return pt;
-		}
+            pt.Yf += y;
+            return pt;
+        }
 
         private IEnumerable<Position> ListVisibleBlocksRecursive(Coords start, Coords tl, Coords tr, Coords bl, Coords br)
-	    {
-			Position tlb = FindIntersectingBlock(start, tl);
+        {
+            Position tlb = FindIntersectingBlock(start, tl);
             Position trb = FindIntersectingBlock(start, tr);
             Position blb = FindIntersectingBlock(start, bl);
             Position brb = FindIntersectingBlock(start, br);
@@ -420,12 +420,12 @@ namespace AiKnowledgeEngine
             yield return blb;
             yield return brb;
 
-			//float w = fieldOfView;
-			//
+            //float w = fieldOfView;
+            //
             //for(int w = -fieldOfView; w < fieldOfView; w++)
             //{
             //
-			//	Position block = FindIntersectingBlock(location, focus);
+            //    Position block = FindIntersectingBlock(location, focus);
 /*
                 Coords pt2 = pt;
                 pt2.Yf -= fieldOfView;
@@ -448,11 +448,11 @@ namespace AiKnowledgeEngine
                    // NetworkClient.SendAddOrRemoveBlock(pt.ToPosition(), block.Type);
                 }
 */
-			//}
+            //}
         }
 
-		private Position FindIntersectingBlock(Coords start, Coords end)
-		{
+        private Position FindIntersectingBlock(Coords start, Coords end)
+        {
             foreach (Position pt in GraphicsAlgorithms.FindIntersectingBlocks(start.ToPosition(), end.ToPosition()))
             {
                 if (!pt.IsValidBlockLocation)
@@ -461,7 +461,7 @@ namespace AiKnowledgeEngine
                 }
                 if (pt.GetBlock().IsSolid)
                 {
-					return pt;
+                    return pt;
                 }
             }
             return end.ToPosition();
@@ -618,8 +618,8 @@ namespace AiKnowledgeEngine
             return GetMinFScore (openset);
         }
 
-		public IEnumerable<Position> NeighbourBlocks (Position pt)
-		{
+        public IEnumerable<Position> NeighbourBlocks (Position pt)
+        {
             foreach (Position pos in ListNeighbourBlocks (pt))
                 yield return pos;
             foreach (Position pos in ListNeighbourBlocks (pt + new Position (-1, 0, 0)))
@@ -630,47 +630,47 @@ namespace AiKnowledgeEngine
                 yield return pos;
             foreach (Position pos in ListNeighbourBlocks (pt + new Position (0, 0, -1)))
                 yield return pos;
-		}
+        }
 
         private IEnumerable<Position> ListNeighbourBlocks (Position pos)
-		{
-			Position up1 = pos + new Position (0, 1, 0);
-			Position up2 = pos + new Position (0, 2, 0);
-			Position up3 = pos + new Position (0, 3, 0);
-			Position dn1 = pos + new Position (0, -1, 0);
-			Position dn2 = pos + new Position (0, -2, 0);
-			Position dn3 = pos + new Position(0,-3,0);
+        {
+            Position up1 = pos + new Position (0, 1, 0);
+            Position up2 = pos + new Position (0, 2, 0);
+            Position up3 = pos + new Position (0, 3, 0);
+            Position dn1 = pos + new Position (0, -1, 0);
+            Position dn2 = pos + new Position (0, -2, 0);
+            Position dn3 = pos + new Position(0,-3,0);
 
-			if (up3.GetBlock ().IsSolid)
-				yield return up3;
-			if (up2.GetBlock ().IsSolid)
-				yield return up2;
-			if (up1.GetBlock ().IsSolid)
-				yield return up1;
-			if (pos.GetBlock ().IsSolid)
-			{
-				yield return pos;
-				yield break;
-			} 
+            if (up3.GetBlock ().IsSolid)
+                yield return up3;
+            if (up2.GetBlock ().IsSolid)
+                yield return up2;
+            if (up1.GetBlock ().IsSolid)
+                yield return up1;
+            if (pos.GetBlock ().IsSolid)
+            {
+                yield return pos;
+                yield break;
+            } 
 
-			if (dn1.GetBlock().IsSolid)
-			{
-				yield return dn1;
-				yield break;
-			}
+            if (dn1.GetBlock().IsSolid)
+            {
+                yield return dn1;
+                yield break;
+            }
 
-		  	if (dn2.GetBlock().IsSolid)
-			{
-				yield return dn2;
-				yield break;
-			}
+              if (dn2.GetBlock().IsSolid)
+            {
+                yield return dn2;
+                yield break;
+            }
 
-			if (dn3.GetBlock().IsSolid)
-			{
-				yield return dn3;
-				yield break;
-			}
-	    }
+            if (dn3.GetBlock().IsSolid)
+            {
+                yield return dn3;
+                yield break;
+            }
+        }
  
 
 

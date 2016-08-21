@@ -126,7 +126,6 @@ namespace Hexpoint.Blox
 
             CalculateProjectionMatrix ();
             UpdateFrustum ();
-            WorldHost.BuildWorld ();
         }
 
         protected override void OnResize (EventArgs e)
@@ -255,8 +254,7 @@ namespace Hexpoint.Blox
 
         protected override void OnUnload (EventArgs e)
         {
-            if (!Config.IsSinglePlayer)
-                NetworkClient.Disconnect ();
+            NetworkClient.Disconnect ();
             foreach (var host in _hosts)
                 host.Dispose ();
             Sounds.Audio.Dispose ();

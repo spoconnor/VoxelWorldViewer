@@ -215,21 +215,21 @@ namespace Hexpoint.Blox.GameObjects.Units
             float jumpDist = 0.0f;
             if (IsJumping)
             {
-				// Jumping
+                // Jumping
                 _jumpVelocity -= (float)e.Time;
                 jumpDist = _jumpVelocity;
                 //if (Math.Abs(jumpDist) > 1) jumpDist = Math.Sign(jumpDist);
-				destCoords = Coords;
-				collisionTestDistance = jumpDist + Math.Sign(jumpDist) * Constants.MOVE_COLLISION_BUFFER;
-				destCoords.Yf += (float)collisionTestDistance;
-				if (!destCoords.IsValidBlockLocation)
-				{
-					IsJumping = false; // cancel jump due to collision
-				}
-				else
-				{
-                	Coords.Yf += jumpDist;
-				}
+                destCoords = Coords;
+                collisionTestDistance = jumpDist + Math.Sign(jumpDist) * Constants.MOVE_COLLISION_BUFFER;
+                destCoords.Yf += (float)collisionTestDistance;
+                if (!destCoords.IsValidBlockLocation)
+                {
+                    IsJumping = false; // cancel jump due to collision
+                }
+                else
+                {
+                    Coords.Yf += jumpDist;
+                }
 
                 if (_jumpVelocity <= 0)
                 {
@@ -238,7 +238,7 @@ namespace Hexpoint.Blox.GameObjects.Units
             }
             else
             {
-				// Falling
+                // Falling
                 destCoords.Yf -= (FallVelocity + Constants.MOVE_COLLISION_BUFFER); //account for fall speed and the collision buffer
                 if (destCoords.Yf >= Chunk.CHUNK_HEIGHT || !WorldData.GetBlock(ref destCoords).IsSolid) //player wont hit a solid block so let them keep falling
                 {
@@ -264,17 +264,17 @@ namespace Hexpoint.Blox.GameObjects.Units
                 }
             }
 
-			var chunk = WorldData.Chunks [Coords];
-			foreach (var gameItem in chunk.GameItems.Values) 
-			{
-				if (gameItem.Type == GameItemType.BlockItem) 
-				{
-					if (Coords.GetDistanceExact (ref gameItem.Coords) <= 2) 
-					{
-						new PickupBlockItem (Game.Player.Id, gameItem.Id).Send (); // TODO - pick up, for this character
-					} 
-				}
-			}
+            var chunk = WorldData.Chunks [Coords];
+            foreach (var gameItem in chunk.GameItems.Values) 
+            {
+                if (gameItem.Type == GameItemType.BlockItem) 
+                {
+                    if (Coords.GetDistanceExact (ref gameItem.Coords) <= 2) 
+                    {
+                        new PickupBlockItem (Game.Player.Id, gameItem.Id).Send (); // TODO - pick up, for this character
+                    } 
+                }
+            }
             // TODO - send character movement to other networked players
             //if (moved)
             //    NetworkClient.SendPlayerLocation (Coords);
@@ -353,10 +353,10 @@ namespace Hexpoint.Blox.GameObjects.Units
             coordDest.Xf += 0.5f; // target centre of block
             coordDest.Zf += 0.5f; // target centre of block
             float turnRadians = (float)(Coords.Direction) - (float)Math.Atan2((float)(coordDest.Zf - Coords.Zf), (float)(coordDest.Xf - Coords.Xf));
-			while (turnRadians >= Constants.PI_TIMES_2 - 0.1) 
-				turnRadians -= Constants.PI_TIMES_2;
-			while (turnRadians <= -Constants.PI_TIMES_2 + 0.1) 
-				turnRadians += Constants.PI_TIMES_2;
+            while (turnRadians >= Constants.PI_TIMES_2 - 0.1) 
+                turnRadians -= Constants.PI_TIMES_2;
+            while (turnRadians <= -Constants.PI_TIMES_2 + 0.1) 
+                turnRadians += Constants.PI_TIMES_2;
 
             if (Math.Abs(turnRadians) > 0.1)
             {
