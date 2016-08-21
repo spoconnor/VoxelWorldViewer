@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Hexpoint.Blox.Hosts.World;
-using Hexpoint.Blox.Scripting;
+using Sean.WorldClient.Hosts.World;
+using Sean.WorldClient.Scripting;
 
 namespace AiKnowledgeEngine
 {
@@ -10,7 +10,7 @@ namespace AiKnowledgeEngine
 //        public string Execute(int characterId)
 //        {
 //            Console.WriteLine("Executing for Character {0}", characterId);
-//            Hexpoint.Blox.Scripting.ScriptHost.ChatMsg(1,"Hi");
+//            Sean.WorldClient.Scripting.ScriptHost.ChatMsg(1,"Hi");
 //            return "Ok";
 //        }
 //  

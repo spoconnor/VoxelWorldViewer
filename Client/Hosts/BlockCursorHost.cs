@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
-using Hexpoint.Blox.Hosts.Ui;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.Ui;
+using Sean.WorldClient.Hosts.World;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
-using Hexpoint.Blox.GameActions;
+using Sean.WorldClient.GameActions;
 
-namespace Hexpoint.Blox.Hosts
+namespace Sean.WorldClient.Hosts
 {
     internal class BlockCursorHost : IHost
     {

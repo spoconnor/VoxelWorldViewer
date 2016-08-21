@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using Hexpoint.Blox.Hosts.Ui;
+using Sean.WorldClient.Hosts.Ui;
 
-namespace Hexpoint.Blox.GameActions
+namespace Sean.WorldClient.GameActions
 {
     internal class ChatMsg : GameAction
     {

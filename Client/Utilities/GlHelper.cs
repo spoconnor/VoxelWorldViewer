@@ -2,7 +2,7 @@
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.Utilities
+namespace Sean.WorldClient.Utilities
 {
     internal static class GlHelper
     {

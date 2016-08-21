@@ -1,14 +1,14 @@
 ﻿using System;
-using Hexpoint.Blox.Hosts.World;
-using Hexpoint.Blox.Utilities;
+using Sean.WorldClient.Hosts.World;
+using Sean.WorldClient.Utilities;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using Hexpoint.Blox.Scripting;
+using Sean.WorldClient.Scripting;
 using AiKnowledgeEngine;
-using Hexpoint.Blox.GameActions;
-using Hexpoint.Blox.GameObjects.GameItems;
+using Sean.WorldClient.GameActions;
+using Sean.WorldClient.GameObjects.GameItems;
 
-namespace Hexpoint.Blox.GameObjects.Units
+namespace Sean.WorldClient.GameObjects.Units
 {
     internal class Character : Unit
     {

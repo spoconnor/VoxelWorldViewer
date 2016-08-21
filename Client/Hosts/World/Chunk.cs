@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Xml;
-using Hexpoint.Blox.GameActions;
-using Hexpoint.Blox.GameObjects;
-using Hexpoint.Blox.GameObjects.GameItems;
-using Hexpoint.Blox.GameObjects.Units;
-using Hexpoint.Blox.Hosts.World.Render;
-using Hexpoint.Blox.Textures;
+using Sean.WorldClient.GameActions;
+using Sean.WorldClient.GameObjects;
+using Sean.WorldClient.GameObjects.GameItems;
+using Sean.WorldClient.GameObjects.Units;
+using Sean.WorldClient.Hosts.World.Render;
+using Sean.WorldClient.Textures;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.Hosts.World
+namespace Sean.WorldClient.Hosts.World
 {
     public class Chunk
     {

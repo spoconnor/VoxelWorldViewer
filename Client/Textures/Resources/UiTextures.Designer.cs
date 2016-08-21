@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Hexpoint.Blox.Textures.Resources {
+namespace Sean.WorldClient.Textures.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Hexpoint.Blox.Textures.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Hexpoint.Blox.Textures.Resources.UiTextures", typeof(UiTextures).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sean.WorldClient.Textures.Resources.UiTextures", typeof(UiTextures).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

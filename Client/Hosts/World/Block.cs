@@ -1,6 +1,6 @@
-﻿using Hexpoint.Blox.Textures;
+﻿using Sean.WorldClient.Textures;
 
-namespace Hexpoint.Blox.Hosts.World
+namespace Sean.WorldClient.Hosts.World
 {
     public struct Block
     {

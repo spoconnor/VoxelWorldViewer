@@ -1,4 +1,4 @@
-﻿namespace Hexpoint.Blox
+﻿namespace Sean.WorldClient
 {
     [System.Reflection.Obfuscation(Exclude = true)] //gm: prevent obfuscation because these enum names are implicitly used with .ToString such as in string.Format
     public enum Face : byte { Front, Right, Top, Left, Bottom, Back }

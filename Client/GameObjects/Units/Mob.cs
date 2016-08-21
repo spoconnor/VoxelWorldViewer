@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Xml;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 using OpenTK;
 
-namespace Hexpoint.Blox.GameObjects.Units
+namespace Sean.WorldClient.GameObjects.Units
 {
     internal enum MobType
     {

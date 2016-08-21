@@ -4,7 +4,7 @@ using System.Linq;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.Hosts
+namespace Sean.WorldClient.Hosts
 {
     internal class PerformanceHost : IHost
     {

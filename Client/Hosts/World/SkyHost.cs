@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using Hexpoint.Blox.Hosts.World.Render;
-using Hexpoint.Blox.Utilities;
+using Sean.WorldClient.Hosts.World.Render;
+using Sean.WorldClient.Utilities;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.Hosts.World
+namespace Sean.WorldClient.Hosts.World
 {
     internal class SkyHost : IHost
     {

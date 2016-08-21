@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK;
 
-namespace Hexpoint.Blox.Hosts
+namespace Sean.WorldClient.Hosts
 {
     internal interface IHost : IDisposable
     {

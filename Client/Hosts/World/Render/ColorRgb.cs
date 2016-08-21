@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Hexpoint.Blox.Hosts.World.Render
+namespace Sean.WorldClient.Hosts.World.Render
 {
     /// <summary>Used for buffering color data to a VBO. Color component values can be 0-255.</summary>
     /// <remarks>Using byte uses the smallest amount of memory possible for color data.</remarks>

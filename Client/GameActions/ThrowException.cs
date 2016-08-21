@@ -1,4 +1,4 @@
-﻿namespace Hexpoint.Blox.GameActions
+﻿namespace Sean.WorldClient.GameActions
 {
     /// <summary>Test action used by client to get kicked off the server.</summary>
     internal class ThrowException : GameAction

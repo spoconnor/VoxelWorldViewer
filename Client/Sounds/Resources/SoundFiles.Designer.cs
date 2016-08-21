@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Hexpoint.Blox.Sounds.Resources {
+namespace Sean.WorldClient.Sounds.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Hexpoint.Blox.Sounds.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Hexpoint.Blox.Sounds.Resources.SoundFiles", typeof(SoundFiles).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sean.WorldClient.Sounds.Resources.SoundFiles", typeof(SoundFiles).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

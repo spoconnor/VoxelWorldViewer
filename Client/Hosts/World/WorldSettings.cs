@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.Text;
 using System.Xml;
-using Hexpoint.Blox.GameObjects.GameItems;
-using Hexpoint.Blox.GameObjects.Units;
+using Sean.WorldClient.GameObjects.GameItems;
+using Sean.WorldClient.GameObjects.Units;
 
-namespace Hexpoint.Blox.Hosts.World
+namespace Sean.WorldClient.Hosts.World
 {
     // ReSharper disable PossibleNullReferenceException
     internal static class WorldSettings

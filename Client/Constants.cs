@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hexpoint.Blox
+namespace Sean.WorldClient
 {
     /// <summary>
     /// Use Settings class for values that can be altered but not saved.

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Drawing;
-using Hexpoint.Blox.Hosts.Ui;
-using Hexpoint.Blox.Hosts.World;
-using Hexpoint.Blox.Hosts.World.Render;
-using Hexpoint.Blox.Textures;
+using Sean.WorldClient.Hosts.Ui;
+using Sean.WorldClient.Hosts.World;
+using Sean.WorldClient.Hosts.World.Render;
+using Sean.WorldClient.Textures;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.Utilities
+namespace Sean.WorldClient.Utilities
 {
     internal static class DisplayList
     {

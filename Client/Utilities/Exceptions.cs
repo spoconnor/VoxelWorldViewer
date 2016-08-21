@@ -1,7 +1,7 @@
 ﻿using System;
 
 // ReSharper disable CheckNamespace
-namespace Hexpoint.Blox
+namespace Sean.WorldClient
 // ReSharper restore CheckNamespace
 {
     public class ServerConnectException : ApplicationException

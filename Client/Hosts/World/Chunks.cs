@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using OpenTK;
 
-namespace Hexpoint.Blox.Hosts.World
+namespace Sean.WorldClient.Hosts.World
 {
     internal class Chunks : IEnumerable
     {

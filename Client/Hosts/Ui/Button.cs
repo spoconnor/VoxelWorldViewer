@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.Hosts.Ui
+namespace Sean.WorldClient.Hosts.Ui
 {
     internal enum ButtonType { Action, GridPicker, Tool, Character }
     /// <summary>Tools for right side bar. Only available in creative mode. Keep order same as on screen.</summary>

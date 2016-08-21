@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 
-namespace Hexpoint.Blox.GameActions
+namespace Sean.WorldClient.GameActions
 {
     internal class GetWorld : GameAction
     {

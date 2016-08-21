@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Xml;
-using Hexpoint.Blox.GameObjects.Units;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.GameObjects.Units;
+using Sean.WorldClient.Hosts.World;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.GameObjects
+namespace Sean.WorldClient.GameObjects
 {
     internal abstract class GameObject
     {

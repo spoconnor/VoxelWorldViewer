@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 
-namespace Hexpoint.Blox.GameActions
+namespace Sean.WorldClient.GameActions
 {
     public enum ServerCommandType : byte
     {

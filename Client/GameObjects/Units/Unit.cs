@@ -1,7 +1,7 @@
 ﻿using System.Xml;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 
-namespace Hexpoint.Blox.GameObjects.Units
+namespace Sean.WorldClient.GameObjects.Units
 {
     internal abstract class Unit : GameObject
     {

@@ -3,8 +3,8 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Collections.Generic;
-using Hexpoint.Blox.Hosts.World;
-using Hexpoint.Blox.GameObjects.Units;
+using Sean.WorldClient.Hosts.World;
+using Sean.WorldClient.GameObjects.Units;
 
 namespace AiKnowledgeEngine
 {

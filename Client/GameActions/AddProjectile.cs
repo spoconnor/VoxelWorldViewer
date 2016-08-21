@@ -1,9 +1,9 @@
 ﻿using System;
-using Hexpoint.Blox.GameObjects.GameItems;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.GameObjects.GameItems;
+using Sean.WorldClient.Hosts.World;
 using OpenTK;
 
-namespace Hexpoint.Blox.GameActions
+namespace Sean.WorldClient.GameActions
 {
     internal class AddProjectile : GameAction
     {

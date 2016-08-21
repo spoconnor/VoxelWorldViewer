@@ -2,7 +2,7 @@
 using OpenTK;
 using System;
 
-namespace Hexpoint.Blox.Hosts.World
+namespace Sean.WorldClient.Hosts.World
 {
     /// <summary>
     /// Used for mobs, objects, etc. that need more specific positioning then just block position.

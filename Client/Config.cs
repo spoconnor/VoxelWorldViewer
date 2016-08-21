@@ -2,12 +2,12 @@
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
-using Hexpoint.Blox.Hosts;
-using Hexpoint.Blox.Hosts.Input;
-using Hexpoint.Blox.Hosts.Ui;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts;
+using Sean.WorldClient.Hosts.Input;
+using Sean.WorldClient.Hosts.Ui;
+using Sean.WorldClient.Hosts.World;
 
-namespace Hexpoint.Blox
+namespace Sean.WorldClient
 {
     /// <summary>
     /// Use Settings class for values that can be altered but not saved.

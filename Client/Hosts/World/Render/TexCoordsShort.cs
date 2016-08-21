@@ -1,4 +1,4 @@
-﻿namespace Hexpoint.Blox.Hosts.World.Render
+﻿namespace Sean.WorldClient.Hosts.World.Render
 {
     /// <summary>Used for buffering tex coord data to a VBO.</summary>
     /// <remarks>Using short uses the smallest amount of memory possible for tex coord data.</remarks>

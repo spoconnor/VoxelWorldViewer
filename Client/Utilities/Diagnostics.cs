@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.Utilities
+namespace Sean.WorldClient.Utilities
 {
     /// <summary>OpenGL Diagnostics.</summary>
     /// <remarks>Some properties in this class will have no usages because they are only used in release mode.</remarks>

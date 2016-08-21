@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Xml;
-using Hexpoint.Blox.Hosts.World;
-using Hexpoint.Blox.Textures;
-using Hexpoint.Blox.Utilities;
+using Sean.WorldClient.Hosts.World;
+using Sean.WorldClient.Textures;
+using Sean.WorldClient.Utilities;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.GameObjects.GameItems
+namespace Sean.WorldClient.GameObjects.GameItems
 {
     internal enum LightSourceType { PlaceholderTorch, Lantern }
 

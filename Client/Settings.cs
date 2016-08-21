@@ -1,7 +1,7 @@
 ﻿using System;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 
-namespace Hexpoint.Blox
+namespace Sean.WorldClient
 {
     /// <summary>
     /// Use Settings class for values that can be altered but not saved.

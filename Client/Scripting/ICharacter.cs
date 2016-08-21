@@ -1,7 +1,7 @@
 using System;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 
-namespace Hexpoint.Blox.Scripting
+namespace Sean.WorldClient.Scripting
 {
   public interface ICharacter
   {

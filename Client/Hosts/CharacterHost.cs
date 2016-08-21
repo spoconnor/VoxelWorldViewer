@@ -4,13 +4,13 @@ using System.Linq;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
-using Hexpoint.Blox.GameObjects.Units;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.GameObjects.Units;
+using Sean.WorldClient.Hosts.World;
 using AiKnowledgeEngine;
-using Hexpoint.Blox.Hosts.Ui;
-using Hexpoint.Blox.Textures;
+using Sean.WorldClient.Hosts.Ui;
+using Sean.WorldClient.Textures;
 
-namespace Hexpoint.Blox.Hosts
+namespace Sean.WorldClient.Hosts
 {
     internal class CharacterHost : IHost
     {

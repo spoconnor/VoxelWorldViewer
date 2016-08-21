@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using Hexpoint.Blox.GameActions;
-using Hexpoint.Blox.Hosts.Input;
-using Hexpoint.Blox.Textures;
+using Sean.WorldClient.GameActions;
+using Sean.WorldClient.Hosts.Input;
+using Sean.WorldClient.Textures;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.Hosts.Ui
+namespace Sean.WorldClient.Hosts.Ui
 {
     internal class UiHost : IHost
     {

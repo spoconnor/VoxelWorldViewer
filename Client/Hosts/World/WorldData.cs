@@ -6,11 +6,11 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
-using Hexpoint.Blox.GameObjects.GameItems;
-using Hexpoint.Blox.GameObjects.Units;
-using Hexpoint.Blox.Hosts.Ui;
+using Sean.WorldClient.GameObjects.GameItems;
+using Sean.WorldClient.GameObjects.Units;
+using Sean.WorldClient.Hosts.Ui;
 
-namespace Hexpoint.Blox.Hosts.World
+namespace Sean.WorldClient.Hosts.World
 {
     /// <summary>
     /// World environment type. Integer value is saved in world settings XML, so these integer values cannot be changed without breaking existing worlds.

@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
-using Hexpoint.Blox.Hosts.World;
-using Hexpoint.Blox.Utilities;
+using Sean.WorldClient.Hosts.World;
+using Sean.WorldClient.Utilities;
 
-namespace Hexpoint.Blox
+namespace Sean.WorldClient
 {
     public partial class Launcher : Form
     {
@@ -32,10 +32,9 @@ namespace Hexpoint.Blox
             cbSoundEnabled.Checked = Config.SoundEnabled;
             cbMusic.Checked = Config.MusicEnabled;
         }
-
-        private const int TCP_LISTENER_PORT = 8080;
-        private IPAddress _serverIp;
-        private ushort _serverPort = TCP_LISTENER_PORT;
+			
+		private IPAddress _serverIp =  new IPAddress(new byte[]{127,0,0,1});
+        private ushort _serverPort = 8084;
         private void btnStart_Click(object sender, EventArgs e)
         {
             if (txtUserName.Enabled && txtUserName.Text.Trim().Length == 0) { Misc.MessageError("UserName is required."); return; }

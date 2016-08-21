@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Hexpoint.Blox.Hosts.World;
-using Hexpoint.Blox.GameObjects.Units;
-using Hexpoint.Blox.GameActions;
-using Hexpoint.Blox;
-using Hexpoint.Blox.Hosts;
+using Sean.WorldClient.Hosts.World;
+using Sean.WorldClient.GameObjects.Units;
+using Sean.WorldClient.GameActions;
+using Sean.WorldClient;
+using Sean.WorldClient.Hosts;
 using OpenTK;
-using Hexpoint.Blox.GameObjects.GameItems;
+using Sean.WorldClient.GameObjects.GameItems;
 
 namespace AiKnowledgeEngine
 {

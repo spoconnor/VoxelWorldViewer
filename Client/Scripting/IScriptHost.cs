@@ -1,10 +1,10 @@
 using System;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 using OpenTK;
-using Hexpoint.Blox.GameObjects.GameItems;
-using Hexpoint.Blox.GameActions;
+using Sean.WorldClient.GameObjects.GameItems;
+using Sean.WorldClient.GameActions;
 
-namespace Hexpoint.Blox.Scripting
+namespace Sean.WorldClient.Scripting
 {
   public interface IScriptHost
   {

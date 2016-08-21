@@ -5,11 +5,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Hexpoint.Blox.Hosts.World.Render;
+using Sean.WorldClient.Hosts.World.Render;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.Hosts.World
+namespace Sean.WorldClient.Hosts.World
 {
     internal class WorldHost : IHost
     {

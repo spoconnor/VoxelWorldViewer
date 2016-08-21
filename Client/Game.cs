@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using Hexpoint.Blox.GameObjects.Units;
-using Hexpoint.Blox.GameActions;
-using Hexpoint.Blox.Hosts;
-using Hexpoint.Blox.Hosts.Input;
-using Hexpoint.Blox.Hosts.Ui;
-using Hexpoint.Blox.Hosts.World;
-using Hexpoint.Blox.Utilities;
-using Hexpoint.Blox.Scripting;
+using Sean.WorldClient.GameObjects.Units;
+using Sean.WorldClient.GameActions;
+using Sean.WorldClient.Hosts;
+using Sean.WorldClient.Hosts.Input;
+using Sean.WorldClient.Hosts.Ui;
+using Sean.WorldClient.Hosts.World;
+using Sean.WorldClient.Utilities;
+using Sean.WorldClient.Scripting;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
 using AiKnowledgeEngine;
 
-namespace Hexpoint.Blox
+namespace Sean.WorldClient
 {
     internal class Game : GameWindow
     {

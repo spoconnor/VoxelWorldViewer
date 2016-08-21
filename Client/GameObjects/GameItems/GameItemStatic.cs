@@ -1,7 +1,7 @@
 ﻿using System.Xml;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 
-namespace Hexpoint.Blox.GameObjects.GameItems
+namespace Sean.WorldClient.GameObjects.GameItems
 {
     public enum StaticItemType { Clutter, LightSource }
 

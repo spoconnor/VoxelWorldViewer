@@ -6,7 +6,7 @@
     <ProjectGuid>{2034CE24-87CE-4049-B4C6-4D18820D269D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hexpoint.Blox</RootNamespace>
+    <RootNamespace>Sean.WorldClient</RootNamespace>
     <AssemblyName>VoxelGame</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -135,6 +135,12 @@
     <Reference Include="OpenTK">
       <HintPath>Libs\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="Google.ProtocolBuffers">
+      <HintPath>..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.ProtocolBuffers.Serialization">
+      <HintPath>..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.Serialization.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
@@ -193,7 +199,6 @@
     <Compile Include="GameActions\AddCuboid.cs" />
     <Compile Include="GameActions\AddStructure.cs" />
     <Compile Include="GameActions\ChatMsg.cs" />
-    <Compile Include="GameActions\Connect.cs" />
     <Compile Include="GameActions\Disconnect.cs" />
     <Compile Include="GameActions\GetWorld.cs" />
     <Compile Include="GameActions\GameAction.cs" />
@@ -305,6 +310,8 @@
     <Compile Include="Scripting\Knowledge.cs" />
     <Compile Include="Scripting\Construction.cs" />
     <Compile Include="Hosts\CharacterHost.cs" />
+    <Compile Include="ProtoBufs\CommsMessages.cs" />
+    <Compile Include="GameActions\Login.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -417,6 +424,8 @@
     <None Include="Textures\Ui\ToolCuboid.png" />
     <None Include="Textures\Ui\ToolTree.png" />
     <None Include="Textures\Ui\BaseCharacter.png" />
+    <None Include="ProtoBufs\CommsMessages.proto" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\Globe1.ico" />

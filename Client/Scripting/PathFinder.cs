@@ -3,9 +3,9 @@ using System.Text;
 using System.IO;
 using System.Drawing;
 using System.Collections.Generic;
-using Hexpoint.Blox.Hosts.World;
-using Hexpoint.Blox.GameObjects.Units;
-using Hexpoint.Blox.GameActions;
+using Sean.WorldClient.Hosts.World;
+using Sean.WorldClient.GameObjects.Units;
+using Sean.WorldClient.GameActions;
 
 namespace AiKnowledgeEngine
 {

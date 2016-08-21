@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using Hexpoint.Blox.GameActions;
-using Hexpoint.Blox.Hosts.World;
-using Hexpoint.Blox.Utilities;
+using Sean.WorldClient.GameActions;
+using Sean.WorldClient.Hosts.World;
+using Sean.WorldClient.Utilities;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.GameObjects.GameItems
+namespace Sean.WorldClient.GameObjects.GameItems
 {
     internal class Projectile : GameItemDynamic
     {

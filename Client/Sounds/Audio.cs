@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using Hexpoint.Blox.Hosts;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts;
+using Sean.WorldClient.Hosts.World;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 
-namespace Hexpoint.Blox.Sounds
+namespace Sean.WorldClient.Sounds
 {
     /// <summary>Sound types. The enum value matches the index of the source and buffer arrays. The sounds can be any order in the enum, but only a single enum should be maintained.</summary>
     /// <remarks>When adding a new sound, add it to this enum and add a line in Audio.LoadSounds to load it.</remarks>

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Xml;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 using OpenTK;
 
-namespace Hexpoint.Blox.GameObjects.GameItems
+namespace Sean.WorldClient.GameObjects.GameItems
 {
     internal enum GameItemType
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Hexpoint.Blox.GameObjects.GameItems;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.GameObjects.GameItems;
+using Sean.WorldClient.Hosts.World;
 
-namespace Hexpoint.Blox.GameActions
+namespace Sean.WorldClient.GameActions
 {
     internal class PickupBlockItem : GameAction
     {

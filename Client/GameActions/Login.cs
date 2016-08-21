@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Text;
-using Hexpoint.Blox.GameObjects.Units;
-using Hexpoint.Blox.Hosts.Ui;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.GameObjects.Units;
+using Sean.WorldClient.Hosts.Ui;
+using Sean.WorldClient.Hosts.World;
 
-namespace Hexpoint.Blox.GameActions
+namespace Sean.WorldClient.GameActions
 {
-    internal class Connect : GameAction
+    internal class Login : GameAction
     {
-        public Connect()
+        public Login()
         {
             DataLength = sizeof(int) + 16 + 20 + Coords.SIZE;
         }
 
-        public Connect(int playerId, string userName, Coords coords) : this()
+        public Login(int playerId, string userName) : this()
         {
             PlayerId = playerId;
             UserName = userName.Length > 16 ? userName.Substring(0, 16) : userName;
             if (Settings.VersionDisplay.Length > 20) throw new Exception("Version string cannot be more than 20 characters.");
             Version = Settings.VersionDisplay;
-            Coords = coords;
         }
 
         public override string ToString()
@@ -28,11 +27,10 @@ namespace Hexpoint.Blox.GameActions
             return string.Format("Connect ({0}) {1} v{2}", PlayerId, UserName, Version);
         }
 
-        internal override ActionType ActionType { get { return ActionType.Connect; } }
+		internal override CommsMessages.MsgType ActionType { get { return CommsMessages.MsgType.eLogin; } }
         internal int PlayerId;
         internal string UserName;
         internal string Version;
-        internal Coords Coords;
 
         protected override void Queue()
         {

@@ -6,11 +6,11 @@ using System.Drawing.Imaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.Utilities
+namespace Sean.WorldClient.Utilities
 {
     internal static class Misc
     {

@@ -1,5 +1,5 @@
 using System;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 using System.Collections.Generic;
 using AiKnowledgeEngine;
 

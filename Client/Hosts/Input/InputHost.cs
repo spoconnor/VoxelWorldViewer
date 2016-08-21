@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Drawing;
-using Hexpoint.Blox.GameActions;
-using Hexpoint.Blox.GameObjects.GameItems;
-using Hexpoint.Blox.Hosts.Ui;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.GameActions;
+using Sean.WorldClient.GameObjects.GameItems;
+using Sean.WorldClient.Hosts.Ui;
+using Sean.WorldClient.Hosts.World;
 using OpenTK;
 using OpenTK.Input;
 using AiKnowledgeEngine;
 
-namespace Hexpoint.Blox.Hosts.Input
+namespace Sean.WorldClient.Hosts.Input
 {
     internal class InputHost : IHost
     {

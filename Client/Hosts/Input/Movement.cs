@@ -1,10 +1,10 @@
 ﻿using System;
-using Hexpoint.Blox.GameActions;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.GameActions;
+using Sean.WorldClient.Hosts.World;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.Hosts.Input
+namespace Sean.WorldClient.Hosts.Input
 {
     internal static class Movement
     {

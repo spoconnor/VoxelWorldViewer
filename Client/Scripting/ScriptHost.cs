@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using Mono.CSharp;
 using OpenTK;
-using Block = Hexpoint.Blox.Hosts.World.Block;
-using Hexpoint.Blox.GameObjects.GameItems;
-using Hexpoint.Blox.GameActions;
-using Hexpoint.Blox.Hosts.World;
+using Block = Sean.WorldClient.Hosts.World.Block;
+using Sean.WorldClient.GameObjects.GameItems;
+using Sean.WorldClient.GameActions;
+using Sean.WorldClient.Hosts.World;
 using System.IO;
 using AiKnowledgeEngine;
 
-namespace Hexpoint.Blox.Scripting
+namespace Sean.WorldClient.Scripting
 {
     // A class to share context between our ScriptDriver and Mono's Evaluator
     public static class ScriptHost// : IScriptHost
@@ -113,7 +113,7 @@ namespace Hexpoint.Blox.Scripting
 //            //map.Dump(route);
 //        }
 //
-//        public void Execute (Hexpoint.Blox.GameObjects.Units.Character character)
+//        public void Execute (Sean.WorldClient.GameObjects.Units.Character character)
 //        {
 //            lock (mutex)
 //            {

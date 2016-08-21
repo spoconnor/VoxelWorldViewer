@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Timers;
-using Hexpoint.Blox.GameActions;
-using Hexpoint.Blox.GameObjects.GameItems;
-using Hexpoint.Blox.Hosts.World;
-using Hexpoint.Blox.Textures;
+using Sean.WorldClient.GameActions;
+using Sean.WorldClient.GameObjects.GameItems;
+using Sean.WorldClient.Hosts.World;
+using Sean.WorldClient.Textures;
 
-namespace Hexpoint.Blox.Hosts.Ui
+namespace Sean.WorldClient.Hosts.Ui
 {
     internal static class Buttons
     {

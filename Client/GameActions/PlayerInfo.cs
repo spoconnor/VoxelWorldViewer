@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hexpoint.Blox.GameActions
+namespace Sean.WorldClient.GameActions
 {
     internal class PlayerInfo : GameAction
     {

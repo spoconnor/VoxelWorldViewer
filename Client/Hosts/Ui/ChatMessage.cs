@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Hexpoint.Blox.Hosts.Ui
+namespace Sean.WorldClient.Hosts.Ui
 {
     public enum ChatMessageType : byte { Server, Global, Private, Team, SlashResult, Error }
 

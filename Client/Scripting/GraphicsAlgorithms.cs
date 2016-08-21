@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Hexpoint.Blox;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient;
+using Sean.WorldClient.Hosts.World;
 
 namespace AiKnowledgeEngine
 {

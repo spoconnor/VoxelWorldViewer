@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 
-namespace Hexpoint.Blox.GameActions
+namespace Sean.WorldClient.GameActions
 {
     internal class AddBlockMulti : GameAction
     {

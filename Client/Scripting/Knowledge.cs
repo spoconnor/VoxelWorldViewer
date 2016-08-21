@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.World;
 
 namespace AiKnowledgeEngine
 {

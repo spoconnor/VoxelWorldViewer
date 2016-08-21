@@ -1,4 +1,4 @@
-﻿namespace Hexpoint.Blox.Sounds
+﻿namespace Sean.WorldClient.Sounds
 {
     internal static class Music
     {

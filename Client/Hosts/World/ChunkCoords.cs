@@ -1,4 +1,4 @@
-﻿namespace Hexpoint.Blox.Hosts.World
+﻿namespace Sean.WorldClient.Hosts.World
 {
     public struct ChunkCoords
     {

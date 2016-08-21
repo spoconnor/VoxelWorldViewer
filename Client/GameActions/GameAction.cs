@@ -1,50 +1,23 @@
 ﻿using System;
 using System.Net.Sockets;
-using Hexpoint.Blox.Hosts.Ui;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.Hosts.Ui;
+using Sean.WorldClient.Hosts.World;
 using OpenTK;
 
-namespace Hexpoint.Blox.GameActions
+namespace Sean.WorldClient.GameActions
 {
-    internal enum ActionType : ushort
-    {
-        Error, //Reserve this to make debugging easier by letting unassigned 0 be an error
-        Connect, //Don't move this - Connect checks the connecting client's version. If it moves between versions that check won't work.
-        Disconnect,
-        GetWorld,
-        AddBlock,
-        AddBlockMulti,
-        AddCuboid,
-        AddStructure,
-        RemoveBlock,
-        RemoveBlockMulti,
-        PlayerMove,
-        ServerMsg,
-        ChatMsg,
-        ServerCommand,
-        PlayerInfo,
-        PlayerOption,
-        AddBlockItem,
-        RemoveBlockItem,
-        PickupBlockItem,
-        ThrowException,
-        AddProjectile,
-        ServerSync,
-        AddStaticItem
-    }
-
     internal abstract class GameAction
     {
         protected GameAction()
         {
-                //multiplayer client doesnt always need to pass this because we know how to get it
-                TcpClient = NetworkClient.TcpClient;
+            //multiplayer client doesnt always need to pass this because we know how to get it
+            TcpClient = NetworkClient.TcpClient;
         }
 
         public TcpClient TcpClient { get; protected set; }
-        internal abstract ActionType ActionType { get; }
         public abstract override string ToString();
         internal int DataLength;
+		internal abstract CommsMessages.MsgType ActionType { get; }
 
         #region Send
         private byte[] _byteQueue;
@@ -65,8 +38,8 @@ namespace Hexpoint.Blox.GameActions
                 Queue();
                 if (_byteQueueIndex != _byteQueue.Length) throw new Exception(string.Format("{0} DataLength {1} + {2} but queued {3}", ActionType, sizeof(ushort) + sizeof(int), DataLength, _byteQueueIndex));
 
-                    _isQueued = true;
-                    return;
+                _isQueued = true;
+                return;
             }
 
             try
@@ -78,11 +51,25 @@ namespace Hexpoint.Blox.GameActions
             }
             catch (Exception ex)
             {
-                    NetworkClient.HandleNetworkError(ex);
-                    throw new ServerDisconnectException(ex);
+                NetworkClient.HandleNetworkError(ex);
+                throw new ServerDisconnectException(ex);
             }
         }
+			
+		protected void SendMessage(CommsMessages.Message message, byte[] data)
+		{
+			var messageBytes = MessageParser.WriteMessage (message);
 
+			//byte[] msg = Encoding.ASCII.GetBytes ("This is a test<EOF>");
+			var msg = new byte[messageBytes.Length + data.Length];
+			//msg[0] = (byte)((messageBytes.Length + data.Length)/256);
+			//msg[1] = (byte)((messageBytes.Length + data.Length)%256);
+			messageBytes.CopyTo(msg, 0);
+			data.CopyTo(msg, messageBytes.Length);
+
+			Write(msg, msg.Length);
+		}
+			
         protected void Write(byte[] buffer, int count)
         {
             Buffer.BlockCopy(buffer, 0, _byteQueue, _byteQueueIndex, count);

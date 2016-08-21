@@ -1,10 +1,10 @@
 ﻿using System;
-using Hexpoint.Blox.Hosts.World;
-using Hexpoint.Blox.Utilities;
+using Sean.WorldClient.Hosts.World;
+using Sean.WorldClient.Utilities;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.GameObjects.Units
+namespace Sean.WorldClient.GameObjects.Units
 {
     internal class Player : Unit
     {

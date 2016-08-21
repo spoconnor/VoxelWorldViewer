@@ -5,7 +5,7 @@ using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Hexpoint.Blox.Hosts.World.Render
+namespace Sean.WorldClient.Hosts.World.Render
 {
     internal class ChunkVbo
     {

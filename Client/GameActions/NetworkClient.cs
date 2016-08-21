@@ -5,12 +5,12 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using Hexpoint.Blox.GameObjects.GameItems;
-using Hexpoint.Blox.GameObjects.Units;
-using Hexpoint.Blox.Hosts.Ui;
-using Hexpoint.Blox.Hosts.World;
+using Sean.WorldClient.GameObjects.GameItems;
+using Sean.WorldClient.GameObjects.Units;
+using Sean.WorldClient.Hosts.Ui;
+using Sean.WorldClient.Hosts.World;
 
-namespace Hexpoint.Blox.GameActions
+namespace Sean.WorldClient.GameActions
 {
     internal static class NetworkClient
     {
@@ -56,7 +56,7 @@ namespace Hexpoint.Blox.GameActions
             _tcpStream.ReadTimeout = 15000; //15s timeout during connect
 
             Settings.Launcher.UpdateProgressInvokable("Connected...", 0, 0);
-            var connect = new Connect(-1, Config.UserName, new Coords());
+            var connect = new Login(-1, Config.UserName, new Coords());
             try
             {
                 connect.Send();
@@ -92,7 +92,7 @@ namespace Hexpoint.Blox.GameActions
                     switch (actionType)
                     {
                         case ActionType.Connect:
-                            var recvPlayerList = new Connect();
+                            var recvPlayerList = new Login();
                             recvPlayerList.Receive();
                             break;
                         case ActionType.GetWorld:
@@ -143,7 +143,7 @@ namespace Hexpoint.Blox.GameActions
                         case ActionType.AddStaticItem: new AddStaticItem().Receive(); break;
                         case ActionType.AddStructure: new AddStructure().Receive(); break;
                         case ActionType.ChatMsg: new ChatMsg().Receive(); break;
-                        case ActionType.Connect: new Connect().Receive(); break;
+                        case ActionType.Connect: new Login().Receive(); break;
                         case ActionType.Disconnect: new Disconnect().Receive(); break;
                         case ActionType.PickupBlockItem: new PickupBlockItem().Receive(); break;
                         case ActionType.PlayerMove: new PlayerMove().Receive(); break;

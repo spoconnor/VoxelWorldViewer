@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 
-namespace Hexpoint.Blox
+namespace Sean.WorldClient
 {
     static class Program
     {
