@@ -7,14 +7,14 @@ using Sean.WorldClient.Hosts.World;
 
 namespace Sean.WorldClient.GameActions
 {
-    internal class Login : GameAction
+    internal class LoginAction : GameAction
     {
-        public Login()
+        public LoginAction()
         {
             DataLength = sizeof(int) + 16 + 20 + Coords.SIZE;
         }
 
-        public Login(int playerId, string userName) : this()
+        public LoginAction(int playerId, string userName) : this()
         {
             PlayerId = playerId;
             UserName = userName.Length > 16 ? userName.Substring(0, 16) : userName;

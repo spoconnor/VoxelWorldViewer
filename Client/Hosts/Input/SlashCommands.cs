@@ -35,10 +35,10 @@ namespace Sean.WorldClient.Hosts.Input
                     return;
                 case "admin":
                     if (ArgCountInvalid(2, args)) return;
-                    new PlayerOption(PlayerOption.OptionType.Admin, System.Text.Encoding.UTF8.GetBytes(args[1])).Send();
+                    //new PlayerOption(PlayerOption.OptionType.Admin, System.Text.Encoding.UTF8.GetBytes(args[1])).Send();
                     return;
                 case "broadcast":
-                    new ServerCommand(ServerCommandType.Broadcast).Send(); //this would still need a way to send the actual message
+                    //new ServerCommand(ServerCommandType.Broadcast).Send(); //this would still need a way to send the actual message
                     return;
                 case "clear":
                     Game.UiHost.ClearChatMessages();
@@ -68,7 +68,7 @@ namespace Sean.WorldClient.Hosts.Input
                     if (WorldData.IsValidStaticItemPosition(position))
                     {
                         var lantern = new LightSource(ref position, LightSourceType.Lantern, BlockCursorHost.SelectedFace.ToOpposite());
-                        new AddStaticItem(lantern).Send();
+                        //new AddStaticItem(lantern).Send();
                     }
                     return;
                 case "loc":
@@ -142,8 +142,8 @@ namespace Sean.WorldClient.Hosts.Input
                     return;
                 case "phack":
                 case "playerhack":
-                    NetworkClient.Players.TryAdd(5000, new Player(5000, "Tester McGee", new Coords(Game.Player.Coords.Xf - 1, Game.Player.Coords.Yf, Game.Player.Coords.Zf, Game.Player.Coords.Direction, Game.Player.Coords.Pitch)));
-                    NetworkClient.Players.TryAdd(5001, new Player(5001, "Tester McGee2", new Coords(Game.Player.Coords.Xf + 3, Game.Player.Coords.Yf, Game.Player.Coords.Zf, Game.Player.Coords.Direction + MathHelper.Pi, Game.Player.Coords.Pitch)));
+                    //NetworkClient.Players.TryAdd(5000, new Player(5000, "Tester McGee", new Coords(Game.Player.Coords.Xf - 1, Game.Player.Coords.Yf, Game.Player.Coords.Zf, Game.Player.Coords.Direction, Game.Player.Coords.Pitch)));
+                    //NetworkClient.Players.TryAdd(5001, new Player(5001, "Tester McGee2", new Coords(Game.Player.Coords.Xf + 3, Game.Player.Coords.Yf, Game.Player.Coords.Zf, Game.Player.Coords.Direction + MathHelper.Pi, Game.Player.Coords.Pitch)));
                     return;
                 case "raiseexception":
                     //-can be used to test the msgbox error handler in release mode
@@ -152,7 +152,7 @@ namespace Sean.WorldClient.Hosts.Input
                 case "server":
                     return;
                 case "serverversion":
-                    new ServerCommand(ServerCommandType.ServerVersion).Send();
+                    //new ServerCommand(ServerCommandType.ServerVersion).Send();
                     return;
                 case "sp":
                 case "speed":
@@ -160,16 +160,16 @@ namespace Sean.WorldClient.Hosts.Input
                     switch (args[1])
                     {
                         case "on":
-                            new PlayerOption(PlayerOption.OptionType.Speed, BitConverter.GetBytes(5)).Send();
+                            //new PlayerOption(PlayerOption.OptionType.Speed, BitConverter.GetBytes(5)).Send();
                             return;
                         case "off":
-                            new PlayerOption(PlayerOption.OptionType.Speed, BitConverter.GetBytes(1)).Send();
+                            //new PlayerOption(PlayerOption.OptionType.Speed, BitConverter.GetBytes(1)).Send();
                             return;
                         default:
                             int multiplier;
                             if (int.TryParse(args[1], out multiplier))
                             {
-                                new PlayerOption(PlayerOption.OptionType.Speed, BitConverter.GetBytes(multiplier)).Send();
+                                //new PlayerOption(PlayerOption.OptionType.Speed, BitConverter.GetBytes(multiplier)).Send();
                                 return;
                             }
                             break;
@@ -210,7 +210,7 @@ namespace Sean.WorldClient.Hosts.Input
                             ushort sunDegrees;
                             if (ushort.TryParse(args[2], out sunDegrees) && sunDegrees <= 360)
                             {
-                                new ServerCommand(ServerCommandType.MoveSun, sunDegrees).Send();
+                                //new ServerCommand(ServerCommandType.MoveSun, sunDegrees).Send();
                                 return;
                             }
                             AddSlashResult("Invalid degrees.");
@@ -242,7 +242,7 @@ namespace Sean.WorldClient.Hosts.Input
                     }
                     break;
                 case "throwexception":
-                    new ThrowException().Send();
+                    //new ThrowException().Send();
                     return;
                 case "time":
                     AddSlashResult(string.Format("Time in game: {0:h:mm tt}", SkyHost.Time));
@@ -274,13 +274,13 @@ namespace Sean.WorldClient.Hosts.Input
                     switch (args.Length)
                     {
                         case 1:
-                            if (NetworkClient.Players.Count > 1) AddSlashResult(string.Format("{0} players connected:", NetworkClient.Players.Count));
-                            foreach (var player in NetworkClient.Players.Values) AddSlashResult(player);
+                            //if (NetworkClient.Players.Count > 1) AddSlashResult(string.Format("{0} players connected:", NetworkClient.Players.Count));
+                            //foreach (var player in NetworkClient.Players.Values) AddSlashResult(player);
                             return;
                         case 2:
-                            foreach (var player in NetworkClient.Players.Values.Where(player => player.UserName.Equals(args[1], StringComparison.InvariantCultureIgnoreCase)))
+                            //foreach (var player in NetworkClient.Players.Values.Where(player => player.UserName.Equals(args[1], StringComparison.InvariantCultureIgnoreCase)))
                             {
-                                AddSlashResult(player);
+                                //AddSlashResult(player);
                                 return;
                             }
                             AddSlashResult("Player not found.");
@@ -297,7 +297,7 @@ namespace Sean.WorldClient.Hosts.Input
                     return;
                 case "worldsize":
                 case "size":
-                    new ServerCommand(ServerCommandType.WorldSize).Send();
+                    //new ServerCommand(ServerCommandType.WorldSize).Send();
                     return;
                 case "worldtype":
                     AddSlashResult(string.Format("World type: {0}", WorldData.WorldType));

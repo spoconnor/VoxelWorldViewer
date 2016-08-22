@@ -233,7 +233,7 @@ namespace Sean.WorldClient.Hosts.Ui
             }
             else //send this text to the server
             {
-                new ChatMsg(Game.Player.Id, CurrentChatText).Send();
+                //new ChatMsg(Game.Player.Id, CurrentChatText).Send();
             }
             CurrentChatText = "";
         }

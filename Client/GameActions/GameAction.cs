@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net.Sockets;
-using Sean.WorldClient.Hosts.Ui;
 using Sean.WorldClient.Hosts.World;
 using OpenTK;
+using System.Text;
 
 namespace Sean.WorldClient.GameActions
 {
@@ -58,7 +58,7 @@ namespace Sean.WorldClient.GameActions
 			
 		protected void SendMessage(CommsMessages.Message message, byte[] data)
 		{
-			var messageBytes = MessageParser.WriteMessage (message);
+			var messageBytes = WriteMessage (message);
 
 			//byte[] msg = Encoding.ASCII.GetBytes ("This is a test<EOF>");
 			var msg = new byte[messageBytes.Length + data.Length];
@@ -69,7 +69,39 @@ namespace Sean.WorldClient.GameActions
 
 			Write(msg, msg.Length);
 		}
-			
+
+        private static CommsMessages.Message ReadMessage(byte[] data)
+        {
+            byte[] msgBuffer = new byte[data[0]];
+            Array.Copy(data, 1, msgBuffer, 0, data[0]); // Skip length byte
+
+            {
+                var builder = new StringBuilder();
+                for (int i = 0; i < data[0]; i++)
+                {
+                    builder.Append(msgBuffer[i].ToString());
+                    builder.Append(",");
+                }
+                Console.WriteLine("{0}", builder.ToString());
+            }
+            var recv = CommsMessages.Message.ParseFrom(msgBuffer);
+            var msgType = (CommsMessages.MsgType)recv.Msgtype;
+            Console.WriteLine("Msg Type: {0}", msgType);
+            return recv;
+        }
+
+        public static byte[] WriteMessage(CommsMessages.Message message)
+        {
+            using (var memoryStream = new System.IO.MemoryStream())
+            {
+                memoryStream.WriteByte(0); // reserve for length
+                message.WriteTo(memoryStream);
+                var messageBytes = memoryStream.ToArray();
+                messageBytes[0] = (byte)(messageBytes.Length - 1); // ignore nul at end
+                return messageBytes;
+            }
+        }
+
         protected void Write(byte[] buffer, int count)
         {
             Buffer.BlockCopy(buffer, 0, _byteQueue, _byteQueueIndex, count);

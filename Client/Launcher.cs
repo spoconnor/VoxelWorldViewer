@@ -20,14 +20,6 @@ namespace Sean.WorldClient
         {
             Config.Load();
 
-            //video settings
-            cbVSync.Checked = Config.VSync;
-            cbMipmapping.Checked = Config.Mipmapping;
-            cbFog.Checked = Config.Fog;
-            cbLinearMagnificationFilter.Checked = Config.LinearMagnificationFilter;
-            cbSmoothLighting.Checked = Config.SmoothLighting;
-            cbWindowed.Checked = Config.Windowed;
-
             //other settings
             cbSoundEnabled.Checked = Config.SoundEnabled;
             cbMusic.Checked = Config.MusicEnabled;
@@ -157,12 +149,6 @@ namespace Sean.WorldClient
             Config.UserName = txtUserName.Text.Trim();
             Config.Server = ddlServerIp.Text;
             Config.Port = ushort.Parse(txtPort.Text);
-            Config.VSync = cbVSync.Checked;
-            Config.Mipmapping = cbMipmapping.Checked;
-            Config.Fog = cbFog.Checked;
-            Config.LinearMagnificationFilter = cbLinearMagnificationFilter.Checked;
-            Config.SmoothLighting = cbSmoothLighting.Checked;
-            Config.Windowed = cbWindowed.Checked;
             Config.SoundEnabled = cbSoundEnabled.Checked;
             Config.MusicEnabled = cbMusic.Checked;
             Config.Save();

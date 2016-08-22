@@ -91,7 +91,7 @@ namespace Sean.WorldClient.Hosts.Input
                 else
                 {
                     Game.Player.Coords.Yf += jumpDist;
-                    NetworkClient.SendPlayerLocation(Game.Player.Coords);
+                    //NetworkClient.SendPlayerLocation(Game.Player.Coords);
                     if (_jumpVelocity <= 0) IsJumping = false; //at the top of the jump arc
                 }
             }
@@ -113,7 +113,7 @@ namespace Sean.WorldClient.Hosts.Input
                 {
                     IsStandingOnSolidGround = false; //gm: needed in the case the player walks off a cliff without jumping and then tries to jump mid air
                     Game.Player.Coords.Yf -= Game.Player.FallVelocity;
-                    NetworkClient.SendPlayerLocation(Game.Player.Coords);
+                    //NetworkClient.SendPlayerLocation(Game.Player.Coords);
                 }
                 else //player is either standing on a solid block or will now land on one
                 {
@@ -121,7 +121,7 @@ namespace Sean.WorldClient.Hosts.Input
                     {
                         Game.Player.Coords.Yf = Game.Player.Coords.Yblock + Constants.PLAYER_GROUNDED_VERTICAL_BUFFER;
                         if (!Game.Player.FeetUnderWater) Sounds.Audio.PlaySound(Sounds.SoundType.PlayerLanding, Game.Player.FallVelocity * 1.5f); //plays sound louder based on the velocity at time of landing
-                        NetworkClient.SendPlayerLocation(Game.Player.Coords, true); //forcefully send to server so other players are always seen "grounded"
+                        //NetworkClient.SendPlayerLocation(Game.Player.Coords, true); //forcefully send to server so other players are always seen "grounded"
                     }
                     IsStandingOnSolidGround = true; //gm: cant set inside the above block only because if trying to jump while in a 2 block high tunnel it could get toggled off, this must be set after the sound so the fallVelocity hasnt been reset yet
                 }
@@ -183,7 +183,7 @@ namespace Sean.WorldClient.Hosts.Input
                     if (destCoords.IsValidPlayerLocation)
                     {
                         Game.Player.Coords.Yf += distance;
-                        NetworkClient.SendPlayerLocation(Game.Player.Coords);
+                        //NetworkClient.SendPlayerLocation(Game.Player.Coords);
                     }
                 }
                 else if (!IsJumping && (IsStandingOnSolidGround || Game.Player.FeetUnderWater)) //jump
@@ -202,7 +202,7 @@ namespace Sean.WorldClient.Hosts.Input
                     Settings.Random.Next(10, 30) * (float)Math.Sin(Game.Player.Coords.Direction) * (float)Math.Cos(Game.Player.Coords.Pitch));
                 var c = Game.Player.Coords;
                 c.Yf += 0.5f;
-                new AddProjectile(ref c, ref v, Block.BlockType.Lava, true).Send();
+                //new AddProjectile(ref c, ref v, Block.BlockType.Lava, true).Send();
             }
         }
 
@@ -227,7 +227,7 @@ namespace Sean.WorldClient.Hosts.Input
                 if (WorldData.IsValidStaticItemPosition(position))
                 {
                     var lightSource = new LightSource(ref position, lightSourceType.Value, BlockCursorHost.SelectedFace.ToOpposite());
-                    new AddStaticItem(lightSource).Send();
+                    //new AddStaticItem(lightSource).Send();
                 }
             }
         }
@@ -265,11 +265,11 @@ namespace Sean.WorldClient.Hosts.Input
                 case Key.C:
                     if (isCtrlPressed) 
                     {
-                        new PlayerOption(PlayerOption.OptionType.Creative, BitConverter.GetBytes(1)).Send();
+                        //new PlayerOption(PlayerOption.OptionType.Creative, BitConverter.GetBytes(1)).Send();
                     }
                     break;
                 case Key.S:
-                    if (isCtrlPressed) new PlayerOption(PlayerOption.OptionType.Speed, BitConverter.GetBytes(Math.Abs(Settings.MoveSpeed - Constants.MOVE_SPEED_DEFAULT) < 0.1 ? 5 : 1)).Send();
+                    //if (isCtrlPressed) new PlayerOption(PlayerOption.OptionType.Speed, BitConverter.GetBytes(Math.Abs(Settings.MoveSpeed - Constants.MOVE_SPEED_DEFAULT) < 0.1 ? 5 : 1)).Send();
                     break;
                 case Key.T: //bouncing bomb
                 case Key.Y: //sticky bomb
@@ -278,7 +278,7 @@ namespace Sean.WorldClient.Hosts.Input
                         Settings.Random.Next(32, 40) * (float)Math.Sin(Game.Player.Coords.Direction) * (float)Math.Cos(Game.Player.Coords.Pitch));
                     var c = Game.Player.Coords;
                     c.Yf += 0.5f;
-                    new AddProjectile(ref c, ref v, Block.BlockType.Lava, e.Key == Key.T).Send();
+                    //new AddProjectile(ref c, ref v, Block.BlockType.Lava, e.Key == Key.T).Send();
                     break;
                 case Key.V:
                     if (isCtrlPressed)
@@ -422,7 +422,7 @@ namespace Sean.WorldClient.Hosts.Input
                 }
             }
             Position pos = blockType == Block.BlockType.Air || (blockType != Block.BlockType.Water && blockAtCursor.Type == Block.BlockType.Water) ? BlockCursorHost.Position : BlockCursorHost.PositionAdd;
-            NetworkClient.SendAddOrRemoveBlock(pos, blockType);
+            //NetworkClient.SendAddOrRemoveBlock(pos, blockType);
             Construction.Instance.AddOrRemoveBlock(pos, blockType);
         }
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -145,6 +145,7 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="GameActions\NetworkClient.cs" />
     <Compile Include="Hosts\BlockCursorHost.cs" />
     <Compile Include="Hosts\IHost.cs" />
     <Compile Include="Hosts\Input\InputHost.cs" />
@@ -172,15 +173,6 @@
     <Compile Include="Hosts\World\WorldSettings.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GameActions\AddBlockItem.cs" />
-    <Compile Include="GameActions\AddProjectile.cs" />
-    <Compile Include="GameActions\AddBlockMulti.cs" />
-    <Compile Include="GameActions\AddStaticItem.cs" />
-    <Compile Include="GameActions\RemoveBlockMulti.cs" />
-    <Compile Include="GameActions\PickupBlockItem.cs" />
-    <Compile Include="GameActions\PlayerOption.cs" />
-    <Compile Include="GameActions\RemoveBlockItem.cs" />
-    <Compile Include="GameActions\ThrowException.cs" />
     <Compile Include="GameObjects\GameItems\Clutter.cs" />
     <Compile Include="GameObjects\GameItems\BlockItem.cs" />
     <Compile Include="GameObjects\GameItems\GameItemDynamic.cs" />
@@ -194,18 +186,7 @@
     <Compile Include="Launcher.Designer.cs">
       <DependentUpon>Launcher.cs</DependentUpon>
     </Compile>
-    <Compile Include="GameActions\NetworkClient.cs" />
-    <Compile Include="GameActions\AddBlock.cs" />
-    <Compile Include="GameActions\AddCuboid.cs" />
-    <Compile Include="GameActions\AddStructure.cs" />
-    <Compile Include="GameActions\ChatMsg.cs" />
-    <Compile Include="GameActions\Disconnect.cs" />
-    <Compile Include="GameActions\GetWorld.cs" />
     <Compile Include="GameActions\GameAction.cs" />
-    <Compile Include="GameActions\PlayerInfo.cs" />
-    <Compile Include="GameActions\PlayerMove.cs" />
-    <Compile Include="GameActions\RemoveBlock.cs" />
-    <Compile Include="GameActions\ServerCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
@@ -311,7 +292,7 @@
     <Compile Include="Scripting\Construction.cs" />
     <Compile Include="Hosts\CharacterHost.cs" />
     <Compile Include="ProtoBufs\CommsMessages.cs" />
-    <Compile Include="GameActions\Login.cs" />
+    <Compile Include="GameActions\LoginAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -433,7 +414,6 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Textures\Unit\" />
-    <Folder Include="Scripting\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -56,7 +56,7 @@ namespace Sean.WorldClient.GameActions
             _tcpStream.ReadTimeout = 15000; //15s timeout during connect
 
             Settings.Launcher.UpdateProgressInvokable("Connected...", 0, 0);
-            var connect = new Login(-1, Config.UserName, new Coords());
+            var connect = new LoginAction(-1, Config.UserName, new Coords());
             try
             {
                 connect.Send();
@@ -92,7 +92,7 @@ namespace Sean.WorldClient.GameActions
                     switch (actionType)
                     {
                         case ActionType.Connect:
-                            var recvPlayerList = new Login();
+                            var recvPlayerList = new LoginAction();
                             recvPlayerList.Receive();
                             break;
                         case ActionType.GetWorld:
@@ -143,7 +143,7 @@ namespace Sean.WorldClient.GameActions
                         case ActionType.AddStaticItem: new AddStaticItem().Receive(); break;
                         case ActionType.AddStructure: new AddStructure().Receive(); break;
                         case ActionType.ChatMsg: new ChatMsg().Receive(); break;
-                        case ActionType.Connect: new Login().Receive(); break;
+                        case ActionType.Connect: new LoginAction().Receive(); break;
                         case ActionType.Disconnect: new Disconnect().Receive(); break;
                         case ActionType.PickupBlockItem: new PickupBlockItem().Receive(); break;
                         case ActionType.PlayerMove: new PlayerMove().Receive(); break;

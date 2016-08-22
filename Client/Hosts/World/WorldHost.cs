@@ -56,20 +56,20 @@ namespace Sean.WorldClient.Hosts.World
 
         private static void RenderPlayers (FrameEventArgs e)
         {
-            if (GameActions.NetworkClient.Players.Count <= 1)
-                return; //skip if theres no other players
-            foreach (var player in GameActions.NetworkClient.Players.Values.Where(player => player.Id != Game.Player.Id))
-                player.Render (e);
-            GameObjects.GameObject.ResetColor ();
+            //if (GameActions.NetworkClient.Players.Count <= 1)
+            //    return; //skip if theres no other players
+            //foreach (var player in GameActions.NetworkClient.Players.Values.Where(player => player.Id != Game.Player.Id))
+            //    player.Render (e);
+            //GameObjects.GameObject.ResetColor ();
         }
     
         /// <summary>Render player nameplates. Done after world rendering so there are never any blending issues for nameplates. As a result, nameplates will 'show through' other transparent blocks.</summary>
         private static void RenderPlayerNameplates ()
         {
-            if (GameActions.NetworkClient.Players.Count <= 1)
-                return; //skip if theres no other players
-            foreach (var player in GameActions.NetworkClient.Players.Values.Where(player => player.Id != Game.Player.Id))
-                player.RenderNameplate ();
+            //if (GameActions.NetworkClient.Players.Count <= 1)
+            //    return; //skip if theres no other players
+            //foreach (var player in GameActions.NetworkClient.Players.Values.Where(player => player.Id != Game.Player.Id))
+            //    player.RenderNameplate ();
         }
 
         private static void RenderWorld (FrameEventArgs e)

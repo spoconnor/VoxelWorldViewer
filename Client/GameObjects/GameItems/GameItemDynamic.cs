@@ -219,7 +219,7 @@ namespace Sean.WorldClient.GameObjects.GameItems
                 switch (decayItem.Type)
                 {
                     case GameItemType.BlockItem:
-                        new GameActions.RemoveBlockItem(decayItem.Id, true).Receive();
+                        //new GameActions.RemoveBlockItem(decayItem.Id, true).Receive();
                         break;
                     case GameItemType.Projectile:
                         var chunk = WorldData.Chunks[decayItem.Coords];
