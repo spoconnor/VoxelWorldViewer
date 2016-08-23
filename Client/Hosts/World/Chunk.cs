@@ -12,6 +12,7 @@ using Sean.WorldClient.Hosts.World.Render;
 using Sean.WorldClient.Textures;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Hosts.World
 {
@@ -842,14 +843,14 @@ namespace Sean.WorldClient.Hosts.World
                 return;
             }
 
-            var addBlocks = new List<AddBlock>();
-            Settings.ChunkUpdatesDisabled = true; //change blocks while updates are disabled so chunk is only rebuilt once
-            foreach (var newWaterPosition in newWater.Where(newWaterCoords => newWaterCoords.GetBlock().Type != Block.BlockType.Water))
-            {
-                WorldData.PlaceBlock(newWaterPosition, Block.BlockType.Water);
-                    var temp = newWaterPosition;
-                    addBlocks.Add(new AddBlock(ref temp, Block.BlockType.Water));
-            }
+            //var addBlocks = new List<AddBlock>();
+            //Settings.ChunkUpdatesDisabled = true; //change blocks while updates are disabled so chunk is only rebuilt once
+            //foreach (var newWaterPosition in newWater.Where(newWaterCoords => newWaterCoords.GetBlock().Type != Block.BlockType.Water))
+            //{
+            //    WorldData.PlaceBlock(newWaterPosition, Block.BlockType.Water);
+            //        var temp = newWaterPosition;
+            //        addBlocks.Add(new AddBlock(ref temp, Block.BlockType.Water));
+            //}
             Settings.ChunkUpdatesDisabled = false;
         }
 

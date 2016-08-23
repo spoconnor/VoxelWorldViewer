@@ -20,6 +20,7 @@ using System;
 using Sean.WorldClient.Utilities;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Hosts.World.Render
 {

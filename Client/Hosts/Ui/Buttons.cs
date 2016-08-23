@@ -7,6 +7,7 @@ using Sean.WorldClient.GameActions;
 using Sean.WorldClient.GameObjects.GameItems;
 using Sean.WorldClient.Hosts.World;
 using Sean.WorldClient.Textures;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Hosts.Ui
 {
@@ -316,7 +317,7 @@ namespace Sean.WorldClient.Hosts.Ui
                     if (WorldData.IsValidStaticItemPosition(position))
                     {
                         var lightSource = new LightSource(ref position, buttonToolBlockType.LightSourceType.Value, BlockCursorHost.SelectedFace.ToOpposite());
-                        new AddStaticItem(lightSource).Send();
+                        //new AddStaticItem(lightSource).Send();
                     }
                 }
             }

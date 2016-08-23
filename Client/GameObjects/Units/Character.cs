@@ -7,6 +7,7 @@ using Sean.WorldClient.Scripting;
 using AiKnowledgeEngine;
 using Sean.WorldClient.GameActions;
 using Sean.WorldClient.GameObjects.GameItems;
+using Sean.Shared;
 
 namespace Sean.WorldClient.GameObjects.Units
 {
@@ -104,12 +105,12 @@ namespace Sean.WorldClient.GameObjects.Units
             //render lower body
             GL.PushMatrix ();
             GL.Translate (Coords.Xf, Coords.Yf, Coords.Zf);
-            GL.Rotate (MathHelper.RadiansToDegrees (Coords.Direction), -Vector3.UnitY);
+            GL.Rotate (OpenTK.MathHelper.RadiansToDegrees (Coords.Direction), -Vector3.UnitY);
             GL.CallList (DisplayList.TorsoId);
 
             //render upper body
             GL.Translate (Vector3.UnitY * Constants.PLAYER_EYE_LEVEL); //moves to eye level and render head
-            GL.Rotate (Math.Max (MathHelper.RadiansToDegrees (Coords.Pitch), -40), Vector3.UnitZ); //pitch head up and down, doesnt need to be turned because the body already turned. cap at -40degrees or it looks weird
+            GL.Rotate (Math.Max (OpenTK.MathHelper.RadiansToDegrees (Coords.Pitch), -40), Vector3.UnitZ); //pitch head up and down, doesnt need to be turned because the body already turned. cap at -40degrees or it looks weird
             GL.CallList (DisplayList.HeadId);
             GL.PopMatrix ();
         }
@@ -136,7 +137,7 @@ namespace Sean.WorldClient.GameObjects.Units
             GL.Translate (Coords.Xf, Coords.Yf + Constants.PLAYER_EYE_LEVEL + 0.8f, Coords.Zf); //nameplate goes above players head
             GL.Scale (scale, scale, scale);
             GL.Rotate (180, Vector3.UnitZ);
-            GL.Rotate (MathHelper.RadiansToDegrees (Game.Player.Coords.Direction) - 90, Vector3.UnitY);
+            GL.Rotate (OpenTK.MathHelper.RadiansToDegrees (Game.Player.Coords.Direction) - 90, Vector3.UnitY);
 
             GL.Translate (-(UserName.Length / 2f * CHAR_WIDTH), 0, 0); //centers the name
             foreach (char t in UserName)
@@ -171,15 +172,15 @@ namespace Sean.WorldClient.GameObjects.Units
             {
                 if (moveForward)
                 {
-                    direction += strafeLeft ? -MathHelper.PiOver4 : MathHelper.PiOver4; //move forward diagonally while strafing
+                    direction += strafeLeft ? -OpenTK.MathHelper.PiOver4 : OpenTK.MathHelper.PiOver4; //move forward diagonally while strafing
                 }
                 else if (moveBack)
                 {
-                    direction += strafeLeft ? MathHelper.PiOver4 : -MathHelper.PiOver4; //move back diagonally while strafing
+                    direction += strafeLeft ? OpenTK.MathHelper.PiOver4 : -OpenTK.MathHelper.PiOver4; //move back diagonally while strafing
                 }
                 else //strafing only
                 {
-                    direction += strafeLeft ? -MathHelper.PiOver2 : MathHelper.PiOver2;
+                    direction += strafeLeft ? -OpenTK.MathHelper.PiOver2 : OpenTK.MathHelper.PiOver2;
                 }
             }
             
@@ -271,7 +272,7 @@ namespace Sean.WorldClient.GameObjects.Units
                 {
                     if (Coords.GetDistanceExact (ref gameItem.Coords) <= 2) 
                     {
-                        new PickupBlockItem (Game.Player.Id, gameItem.Id).Send (); // TODO - pick up, for this character
+                        //new PickupBlockItem (Game.Player.Id, gameItem.Id).Send (); // TODO - pick up, for this character
                     } 
                 }
             }

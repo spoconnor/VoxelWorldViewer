@@ -113,6 +113,9 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Shared">
+      <HintPath>Libs\Shared.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -155,23 +158,18 @@
     <Compile Include="Hosts\Ui\ChatMessage.cs" />
     <Compile Include="Hosts\Input\SlashCommands.cs" />
     <Compile Include="Hosts\Ui\UiHost.cs" />
-    <Compile Include="Hosts\World\Block.cs" />
     <Compile Include="Hosts\World\Render\BlockRender.cs" />
     <Compile Include="Hosts\World\Blocks.cs" />
     <Compile Include="Hosts\World\Chunk.cs" />
-    <Compile Include="Hosts\World\ChunkCoords.cs" />
     <Compile Include="Hosts\World\Chunks.cs" />
     <Compile Include="Hosts\World\Render\ChunkVbo.cs" />
     <Compile Include="Hosts\World\Render\ColorRgb.cs" />
-    <Compile Include="Hosts\World\Coords.cs" />
     <Compile Include="Hosts\World\Lighting.cs" />
-    <Compile Include="Hosts\World\Position.cs" />
     <Compile Include="Hosts\World\Render\TexCoordsShort.cs" />
     <Compile Include="Hosts\World\SkyHost.cs" />
     <Compile Include="Hosts\World\WorldData.cs" />
     <Compile Include="Hosts\World\WorldHost.cs" />
     <Compile Include="Hosts\World\WorldSettings.cs" />
-    <Compile Include="Enums.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameObjects\GameItems\Clutter.cs" />
     <Compile Include="GameObjects\GameItems\BlockItem.cs" />

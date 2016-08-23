@@ -12,6 +12,7 @@ using Sean.WorldClient.GameActions;
 using Sean.WorldClient.Hosts.World;
 using System.IO;
 using AiKnowledgeEngine;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Scripting
 {
@@ -38,10 +39,10 @@ namespace Sean.WorldClient.Scripting
             Console.WriteLine ("AddStaticItem");
         }
 
-        public static void AddStructure (int characterId, Position position, StructureType structureType, Facing frontFace)
-        {
-            Console.WriteLine ("AddStructure");
-        }
+        //public static void AddStructure (int characterId, Position position, StructureType structureType, Facing frontFace)
+        //{
+        //    Console.WriteLine ("AddStructure");
+        //}
 
         public static void ChatMsg (int characterId, string message)
         {

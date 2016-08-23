@@ -9,6 +9,7 @@ using Sean.WorldClient.Hosts.World;
 using AiKnowledgeEngine;
 using Sean.WorldClient.Hosts.Ui;
 using Sean.WorldClient.Textures;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Hosts
 {

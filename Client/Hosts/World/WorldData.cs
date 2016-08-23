@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Sean.WorldClient.GameObjects.GameItems;
 using Sean.WorldClient.GameObjects.Units;
 using Sean.WorldClient.Hosts.Ui;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Hosts.World
 {

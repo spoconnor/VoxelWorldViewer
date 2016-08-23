@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Sean.WorldClient.Hosts.World.Render;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Hosts.World
 {

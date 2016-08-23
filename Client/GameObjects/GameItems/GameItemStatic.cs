@@ -1,5 +1,6 @@
 ﻿using System.Xml;
 using Sean.WorldClient.Hosts.World;
+using Sean.Shared;
 
 namespace Sean.WorldClient.GameObjects.GameItems
 {

@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using Sean.WorldClient.Hosts.World;
 using OpenTK.Graphics.OpenGL;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Hosts.Ui
 {

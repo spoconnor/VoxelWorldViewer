@@ -4,6 +4,7 @@ using System.Text;
 using Sean.WorldClient.GameObjects.Units;
 using Sean.WorldClient.Hosts.Ui;
 using Sean.WorldClient.Hosts.World;
+using Sean.Shared;
 
 namespace Sean.WorldClient.GameActions
 {

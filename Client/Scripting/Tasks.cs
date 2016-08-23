@@ -7,6 +7,7 @@ using Sean.WorldClient;
 using Sean.WorldClient.Hosts;
 using OpenTK;
 using Sean.WorldClient.GameObjects.GameItems;
+using Sean.Shared;
 
 namespace AiKnowledgeEngine
 {

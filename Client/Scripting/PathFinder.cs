@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Sean.WorldClient.Hosts.World;
 using Sean.WorldClient.GameObjects.Units;
 using Sean.WorldClient.GameActions;
+using Sean.Shared;
 
 namespace AiKnowledgeEngine
 {

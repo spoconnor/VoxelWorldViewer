@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sean.Shared;
+using System;
 
 namespace Sean.WorldClient.Hosts.World
 {

@@ -9,6 +9,7 @@ using Sean.WorldClient.GameObjects.GameItems;
 using Sean.WorldClient.GameObjects.Units;
 using Sean.WorldClient.Hosts.Ui;
 using Sean.WorldClient.Hosts.World;
+using Sean.Shared;
 
 namespace Sean.WorldClient.GameActions
 {
@@ -135,27 +136,27 @@ namespace Sean.WorldClient.GameActions
                     var actionType = (ActionType)BitConverter.ToUInt16(actionTypeBytes, 0);
                     switch (actionType)
                     {
-                        case ActionType.AddBlock: new AddBlock().Receive(); break;
-                        case ActionType.AddBlockItem: new AddBlockItem().Receive(); break;
-                        case ActionType.AddBlockMulti: new AddBlockMulti().Receive(); break;
-                        case ActionType.AddCuboid: new AddCuboid().Receive(); break;
-                        case ActionType.AddProjectile: new AddProjectile().Receive(); break;
-                        case ActionType.AddStaticItem: new AddStaticItem().Receive(); break;
-                        case ActionType.AddStructure: new AddStructure().Receive(); break;
-                        case ActionType.ChatMsg: new ChatMsg().Receive(); break;
+                        //case ActionType.AddBlock: new AddBlock().Receive(); break;
+                        //case ActionType.AddBlockItem: new AddBlockItem().Receive(); break;
+                        //case ActionType.AddBlockMulti: new AddBlockMulti().Receive(); break;
+                        //case ActionType.AddCuboid: new AddCuboid().Receive(); break;
+                        //case ActionType.AddProjectile: new AddProjectile().Receive(); break;
+                        //case ActionType.AddStaticItem: new AddStaticItem().Receive(); break;
+                        //case ActionType.AddStructure: new AddStructure().Receive(); break;
+                        //case ActionType.ChatMsg: new ChatMsg().Receive(); break;
                         case ActionType.Connect: new LoginAction().Receive(); break;
-                        case ActionType.Disconnect: new Disconnect().Receive(); break;
-                        case ActionType.PickupBlockItem: new PickupBlockItem().Receive(); break;
-                        case ActionType.PlayerMove: new PlayerMove().Receive(); break;
-                        case ActionType.PlayerOption: new PlayerOption().Receive(); break;
-                        case ActionType.RemoveBlock: new RemoveBlock().Receive(); break;
-                        case ActionType.RemoveBlockItem: new RemoveBlockItem().Receive(); break;
-                        case ActionType.RemoveBlockMulti: new RemoveBlockMulti().Receive(); break;
-                        case ActionType.ServerCommand:
-                        case ActionType.PlayerInfo:
-                        case ActionType.Error:
-                        case ActionType.GetWorld:
-                            throw new Exception(string.Format("Client should not receive action type: {0}", actionType));
+                        //case ActionType.Disconnect: new Disconnect().Receive(); break;
+                        //case ActionType.PickupBlockItem: new PickupBlockItem().Receive(); break;
+                        //case ActionType.PlayerMove: new PlayerMove().Receive(); break;
+                        //case ActionType.PlayerOption: new PlayerOption().Receive(); break;
+                        //case ActionType.RemoveBlock: new RemoveBlock().Receive(); break;
+                        //case ActionType.RemoveBlockItem: new RemoveBlockItem().Receive(); break;
+                        //case ActionType.RemoveBlockMulti: new RemoveBlockMulti().Receive(); break;
+                        //case ActionType.ServerCommand:
+                        //case ActionType.PlayerInfo:
+                        //case ActionType.Error:
+                        //case ActionType.GetWorld:
+                        //    throw new Exception(string.Format("Client should not receive action type: {0}", actionType));
                         default:
                             throw new Exception(string.Format("Unhandled action type: {0}", actionType));
                     }

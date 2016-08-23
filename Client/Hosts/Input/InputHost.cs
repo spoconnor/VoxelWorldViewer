@@ -7,6 +7,7 @@ using Sean.WorldClient.Hosts.World;
 using OpenTK;
 using OpenTK.Input;
 using AiKnowledgeEngine;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Hosts.Input
 {

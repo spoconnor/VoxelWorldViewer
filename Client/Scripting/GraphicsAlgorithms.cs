@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Sean.WorldClient;
 using Sean.WorldClient.Hosts.World;
+using Sean.Shared;
 
 namespace AiKnowledgeEngine
 {

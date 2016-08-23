@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Sean.WorldClient.Hosts.World;
+using Sean.Shared;
 
 namespace AiKnowledgeEngine
 {

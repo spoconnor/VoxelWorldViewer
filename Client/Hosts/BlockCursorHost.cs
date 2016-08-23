@@ -6,6 +6,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using Sean.WorldClient.GameActions;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Hosts
 {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sean.Shared;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;

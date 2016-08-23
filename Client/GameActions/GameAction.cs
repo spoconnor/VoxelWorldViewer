@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using Sean.WorldClient.Hosts.World;
 using OpenTK;
 using System.Text;
+using Sean.Shared;
 
 namespace Sean.WorldClient.GameActions
 {

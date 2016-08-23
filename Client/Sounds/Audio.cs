@@ -4,6 +4,7 @@ using Sean.WorldClient.Hosts;
 using Sean.WorldClient.Hosts.World;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Sounds
 {
