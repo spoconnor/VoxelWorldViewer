@@ -8,6 +8,7 @@ using Sean.WorldClient.GameObjects.GameItems;
 using Sean.WorldClient.Hosts.World;
 using Sean.WorldClient.Textures;
 using Sean.Shared;
+using Sean.Shared.Textures;
 
 namespace Sean.WorldClient.Hosts.Ui
 {

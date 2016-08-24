@@ -377,7 +377,7 @@ namespace Sean.WorldClient.Hosts.Input
                 if(_rightMouseDownLocation.X != System.Windows.Forms.Cursor.Position.X)
                 {
                     //mouse x changed, rotate direction
-                    Movement.RotateDirection(MathHelper.DegreesToRadians((System.Windows.Forms.Cursor.Position.X - _rightMouseDownLocation.X) / 4f));
+                    Movement.RotateDirection(OpenTK.MathHelper.DegreesToRadians((System.Windows.Forms.Cursor.Position.X - _rightMouseDownLocation.X) / 4f));
                 }
                 if (_rightMouseDownLocation.Y != System.Windows.Forms.Cursor.Position.Y)
                 {

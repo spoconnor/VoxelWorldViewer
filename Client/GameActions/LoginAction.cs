@@ -32,6 +32,7 @@ namespace Sean.WorldClient.GameActions
         internal int PlayerId;
         internal string UserName;
         internal string Version;
+        internal Coords Coords;
 
         protected override void Queue()
         {

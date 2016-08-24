@@ -4,6 +4,7 @@ using Sean.WorldClient.GameObjects.Units;
 using Sean.WorldClient.Hosts.World;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using Sean.Shared;
 
 namespace Sean.WorldClient.GameObjects
 {

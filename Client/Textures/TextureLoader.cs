@@ -2,64 +2,13 @@
 using System.Drawing;
 using Sean.WorldClient.Textures.Resources;
 using OpenTK.Graphics.OpenGL;
+using Sean.Shared.Textures;
 
 namespace Sean.WorldClient.Textures
 {
     #region Texture Enums
     /// <summary>Block texture index. The order can be changed without affecting anything, so keep this alphabetical with Air always at 0 and water last.</summary>
-    public enum BlockTextureType
-    {
-        Air, //not actually a texture, nothing will be rendered
-        Bricks,
-        Coal,
-        Cobble,
-        Copper,
-        Crate,
-        CrateSide,
-        Dirt,
-        ElmTree,
-        FancyBlack,
-        FancyGreen,
-        FancyRed,
-        FancyWhite,
-        Gold,
-        Grass,
-        GrassSide,
-        Gravel,
-        Ice,
-        Iron,
-        Lava,
-        LavaRock,
-        Leaves,
-        Oil,
-        PrisonBars,
-        Sand,
-        SandDark,
-        Shelf1,
-        Snow,
-        SnowLeaves,
-        SnowSide,
-        Speaker,
-        SteelDoorBottom,
-        SteelDoorTop,
-        SteelPlate,
-        SteelPlate2,
-        Rock,
-        Tree,
-        TreeTrunk,
-        WoodTile1,
-        WoodTile2,
-        /// <summary>First texture in the water animation. All water VBOs are always assigned to this texture id.</summary>
-        Water,
-        /// <summary>Used for water animation only. No VBO will be assigned to this texture id.</summary>
-        Water2,
-        /// <summary>Used for water animation only. No VBO will be assigned to this texture id.</summary>
-        Water3,
-        /// <summary>Used for water animation only. No VBO will be assigned to this texture id.</summary>
-        Water4
-    }
-
-    /// <summary>Clutter texture index. The order can be changed without affecting anything.</summary>
+     /// <summary>Clutter texture index. The order can be changed without affecting anything.</summary>
     public enum ClutterTextureType
     {
         Bush,

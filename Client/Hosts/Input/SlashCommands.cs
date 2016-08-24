@@ -9,6 +9,7 @@ using Sean.WorldClient.Hosts.Ui;
 using Sean.WorldClient.Hosts.World;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Hosts.Input
 {
@@ -76,7 +77,7 @@ namespace Sean.WorldClient.Hosts.Input
                     AddSlashResult(string.Format("{0}:", Game.Player.UserName));
                     AddSlashResult(string.Format(" Block {0}", Game.Player.Coords));
                     AddSlashResult(string.Format(" Coords (x={0}, y={1}, z={2})", Game.Player.Coords.Xf, Game.Player.Coords.Yf, Game.Player.Coords.Zf));
-                    AddSlashResult(string.Format(" Dir ({0}) Pitch ({1})", MathHelper.RadiansToDegrees(Game.Player.Coords.Direction), MathHelper.RadiansToDegrees(Game.Player.Coords.Pitch)));
+                    AddSlashResult(string.Format(" Dir ({0}) Pitch ({1})", OpenTK.MathHelper.RadiansToDegrees(Game.Player.Coords.Direction), MathHelper.RadiansToDegrees(Game.Player.Coords.Pitch)));
                     return;
                 case "maxtexturesize":
                     int mts;
@@ -202,7 +203,7 @@ namespace Sean.WorldClient.Hosts.Input
                         case "info":
                         case "position":
                         case "speed":
-                            AddSlashResult(string.Format("Sun: Degrees {0}, Strength {1}, Speed {2}", MathHelper.RadiansToDegrees(SkyHost.SunAngleRadians), SkyHost.SunLightStrength, SkyHost.SpeedMultiplier));
+                            AddSlashResult(string.Format("Sun: Degrees {0}, Strength {1}, Speed {2}", OpenTK.MathHelper.RadiansToDegrees(SkyHost.SunAngleRadians), SkyHost.SunLightStrength, SkyHost.SpeedMultiplier));
                             return;
                         case "move":
                         case "degrees":

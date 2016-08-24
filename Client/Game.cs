@@ -14,6 +14,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
 using AiKnowledgeEngine;
+using Sean.Shared;
 
 namespace Sean.WorldClient
 {
@@ -64,7 +65,7 @@ namespace Sean.WorldClient
         public static Player Player;
         public static Coords CameraCoords = new Coords();
         public static float cameraRange = 40.0f;
-        public static float cameraAngle = MathHelper.PiOver4;
+        public static float cameraAngle = OpenTK.MathHelper.PiOver4;
 
 
         //public static ScriptDriver scriptDriver = new ScriptDriver ();

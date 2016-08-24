@@ -6,6 +6,7 @@ using Sean.WorldClient.Hosts.World.Render;
 using Sean.WorldClient.Textures;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Utilities
 {
@@ -97,8 +98,8 @@ namespace Sean.WorldClient.Utilities
             GL.Translate(x, y, z);
 
             //rotate the face to directly face the player
-            GL.Rotate(MathHelper.RadiansToDegrees(Game.Player.Coords.Direction) - 90, Vector3.UnitY);
-            GL.Rotate(MathHelper.RadiansToDegrees(Game.Player.Coords.Pitch), Vector3.UnitX);
+            GL.Rotate(OpenTK.MathHelper.RadiansToDegrees(Game.Player.Coords.Direction) - 90, Vector3.UnitY);
+            GL.Rotate(OpenTK.MathHelper.RadiansToDegrees(Game.Player.Coords.Pitch), Vector3.UnitX);
     
             GL.CallList(displayListId);
             GL.PopMatrix();

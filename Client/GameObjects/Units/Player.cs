@@ -59,12 +59,12 @@ namespace Sean.WorldClient.GameObjects.Units
             //render lower body
             GL.PushMatrix();
             GL.Translate(Coords.Xf, Coords.Yf, Coords.Zf);
-            GL.Rotate(MathHelper.RadiansToDegrees(Coords.Direction), -Vector3.UnitY);
+            GL.Rotate(OpenTK.MathHelper.RadiansToDegrees(Coords.Direction), -Vector3.UnitY);
             GL.CallList(DisplayList.TorsoId);
 
             //render upper body
             GL.Translate(Vector3.UnitY * Constants.PLAYER_EYE_LEVEL); //moves to eye level and render head
-            GL.Rotate(Math.Max(MathHelper.RadiansToDegrees(Coords.Pitch), -40), Vector3.UnitZ); //pitch head up and down, doesnt need to be turned because the body already turned. cap at -40degrees or it looks weird
+            GL.Rotate(Math.Max(OpenTK.MathHelper.RadiansToDegrees(Coords.Pitch), -40), Vector3.UnitZ); //pitch head up and down, doesnt need to be turned because the body already turned. cap at -40degrees or it looks weird
             GL.CallList(DisplayList.HeadId);
             GL.PopMatrix();
         }
@@ -90,7 +90,7 @@ namespace Sean.WorldClient.GameObjects.Units
             GL.Translate(Coords.Xf, Coords.Yf + Constants.PLAYER_EYE_LEVEL + 0.8f, Coords.Zf); //nameplate goes above players head
             GL.Scale(scale, scale, scale);
             GL.Rotate(180, Vector3.UnitZ);
-            GL.Rotate(MathHelper.RadiansToDegrees(Game.Player.Coords.Direction) - 90, Vector3.UnitY);
+            GL.Rotate(OpenTK.MathHelper.RadiansToDegrees(Game.Player.Coords.Direction) - 90, Vector3.UnitY);
 
             GL.Translate(-(UserName.Length / 2f * CHAR_WIDTH), 0, 0); //centers the name
             foreach (char t in UserName)

@@ -1,5 +1,6 @@
 using System;
 using Sean.WorldClient.Hosts.World;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Scripting
 {

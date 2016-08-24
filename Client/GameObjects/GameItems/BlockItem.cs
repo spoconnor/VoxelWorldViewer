@@ -51,7 +51,7 @@ namespace Sean.WorldClient.GameObjects.GameItems
 
             GL.PushMatrix();
             var degrees = (_rotationDegreesRandom + WorldHost.RotationCounter) % 360;
-            GL.Translate(Coords.Xf, Coords.Yf + Math.Sin(MathHelper.DegreesToRadians(degrees)) / 24f, Coords.Zf);
+            GL.Translate(Coords.Xf, Coords.Yf + Math.Sin(OpenTK.MathHelper.DegreesToRadians(degrees)) / 24f, Coords.Zf);
             GL.Rotate(degrees, -Vector3.UnitY);
             switch (BlockType)
             {

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Diagnostics;
 using OpenTK;
+using Sean.Shared;
 
 namespace Sean.WorldClient.Hosts.World
 {
