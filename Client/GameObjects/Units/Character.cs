@@ -190,11 +190,11 @@ namespace Sean.WorldClient.GameObjects.Units
             //move along the X plane
             var destCoords = Coords;
             destCoords.Xf += (float)(Math.Cos(direction) * collisionTestDistance);
-            if (!destCoords.IsValidPlayerLocation)
+            //if (!destCoords.IsValidPlayerLocation)
             {
                 //IsJumping = false; // cancel jump due to collision
             }
-            else
+            //else
             {
                 Coords.Xf += (float)(Math.Cos(direction) * distance);
                 moved = true;
@@ -203,11 +203,11 @@ namespace Sean.WorldClient.GameObjects.Units
             //move along the Z plane
             destCoords = Coords;
             destCoords.Zf += (float)(Math.Sin(direction) * collisionTestDistance);
-            if (!destCoords.IsValidPlayerLocation)
+            //if (!destCoords.IsValidPlayerLocation)
             {
                 //IsJumping = false; // cancel jump due to collision
             }
-            else
+            //else
             {
                 Coords.Zf += (float)(Math.Sin(direction) * distance);
                 moved = true;
@@ -223,11 +223,11 @@ namespace Sean.WorldClient.GameObjects.Units
                 destCoords = Coords;
                 collisionTestDistance = jumpDist + Math.Sign(jumpDist) * Constants.MOVE_COLLISION_BUFFER;
                 destCoords.Yf += (float)collisionTestDistance;
-                if (!destCoords.IsValidBlockLocation)
+                //if (!destCoords.IsValidBlockLocation)
                 {
                     IsJumping = false; // cancel jump due to collision
                 }
-                else
+                //else
                 {
                     Coords.Yf += jumpDist;
                 }
@@ -382,8 +382,8 @@ namespace Sean.WorldClient.GameObjects.Units
             //}
             foreach (Position position in MapManager.Instance.GetSurrounding(Coords.ToPosition(), 5))
             {
-                Block block = position.GetBlock ();
-                KnownMap.UpdateLocation (position, block);
+                //Block block = position.GetBlock ();
+                //KnownMap.UpdateLocation (position, block);
             }
         }
 

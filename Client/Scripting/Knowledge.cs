@@ -33,7 +33,7 @@ namespace AiKnowledgeEngine
 
         public void Add (Position position, Position accessFrom, int distance)
         {
-            Block.BlockType blockType = position.GetBlock ().Type;
+            /*Block.BlockType blockType = position.GetBlock ().Type;
             if (!knownBlockLocations.ContainsKey (blockType))
                 knownBlockLocations.Add (blockType, new List<KnownBlockLocation> ());
 
@@ -54,7 +54,7 @@ namespace AiKnowledgeEngine
             if (distance < knownBlockLocation.closestDistance) {
                 knownBlockLocation.closestDistance = distance;
                 knownBlockLocation.closestBlock = position;
-            }
+            }*/
         }
 
         /// <summary>

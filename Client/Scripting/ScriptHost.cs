@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using Mono.CSharp;
 using OpenTK;
-using Block = Sean.WorldClient.Hosts.World.Block;
 using Sean.WorldClient.GameObjects.GameItems;
 using Sean.WorldClient.GameActions;
 using Sean.WorldClient.Hosts.World;
@@ -19,17 +18,17 @@ namespace Sean.WorldClient.Scripting
     // A class to share context between our ScriptDriver and Mono's Evaluator
     public static class ScriptHost// : IScriptHost
     {
-        public static void AddBlock (int characterId, Position position, Block.BlockType blockType)
+        public static void AddBlock (int characterId, Position position, Sean.Shared.Block.BlockType blockType)
         {
             Console.WriteLine ("AddBlock");
         }
 
-        public static void AddBlockItem (int characterId, Coords coords, Vector3 velocity, Block.BlockType blockType, int gameObjectId)
+		public static void AddBlockItem (int characterId, Coords coords, Vector3 velocity, Sean.Shared.Block.BlockType blockType, int gameObjectId)
         {
             Console.WriteLine ("AddBlockItem");
         }
 
-        public static void AddProjectile (int characterId, Coords coords, Vector3 velocity, Block.BlockType blockType, bool allowBounce, int gameObjectId)
+		public static void AddProjectile (int characterId, Coords coords, Vector3 velocity, Sean.Shared.Block.BlockType blockType, bool allowBounce, int gameObjectId)
         {
             Console.WriteLine ("AddProjectile");
         }

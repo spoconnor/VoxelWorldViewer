@@ -47,7 +47,6 @@ namespace Sean.WorldClient.Hosts.Input
                 case "ci":
                 case "chunk":
                     var chunk = WorldData.Chunks[Game.Player.Coords];
-                    AddSlashResult(string.Format("Chunk {0}: VBOs {1}; Primitives {2}; Deepest transparent level {3}; Highest non air level {4}", chunk.Coords, chunk.VboCount, chunk.PrimitiveCount, chunk.DeepestTransparentLevel, chunk.HighestNonAirLevel));
                     return;
                 case "cu":
                 case "chunkupdates":
@@ -77,7 +76,7 @@ namespace Sean.WorldClient.Hosts.Input
                     AddSlashResult(string.Format("{0}:", Game.Player.UserName));
                     AddSlashResult(string.Format(" Block {0}", Game.Player.Coords));
                     AddSlashResult(string.Format(" Coords (x={0}, y={1}, z={2})", Game.Player.Coords.Xf, Game.Player.Coords.Yf, Game.Player.Coords.Zf));
-                    AddSlashResult(string.Format(" Dir ({0}) Pitch ({1})", OpenTK.MathHelper.RadiansToDegrees(Game.Player.Coords.Direction), MathHelper.RadiansToDegrees(Game.Player.Coords.Pitch)));
+                    AddSlashResult(string.Format(" Dir ({0}) Pitch ({1})", OpenTK.MathHelper.RadiansToDegrees(Game.Player.Coords.Direction), OpenTK.MathHelper.RadiansToDegrees(Game.Player.Coords.Pitch)));
                     return;
                 case "maxtexturesize":
                     int mts;
@@ -98,7 +97,7 @@ namespace Sean.WorldClient.Hosts.Input
                     }
                     if (!newCoords.Equals(Game.Player.Coords))
                     {
-                        if (newCoords.IsValidPlayerLocation) { Game.Player.Coords = newCoords; return; }
+                        //if (newCoords.IsValidPlayerLocation) { Game.Player.Coords = newCoords; return; }
                         AddSlashResult("Invalid location.");
                         return;
                     }
@@ -109,7 +108,7 @@ namespace Sean.WorldClient.Hosts.Input
                     byte chunkX, chunkZ;
                     if (!byte.TryParse(args[1], out chunkX) || !byte.TryParse(args[2], out chunkZ)) break;
                     var newChunkMoveCoords = new Coords(chunkX * Chunk.CHUNK_SIZE + Chunk.CHUNK_SIZE / 2, Chunk.CHUNK_HEIGHT, chunkZ * Chunk.CHUNK_SIZE + Chunk.CHUNK_SIZE / 2, Game.Player.Coords.Direction, Game.Player.Coords.Pitch);
-                    if (newChunkMoveCoords.IsValidPlayerLocation) { Game.Player.Coords = newChunkMoveCoords; return; }
+                    //if (newChunkMoveCoords.IsValidPlayerLocation) { Game.Player.Coords = newChunkMoveCoords; return; }
                     break;
                 case "music":
                     if (ArgCountInvalid(2, args)) return;

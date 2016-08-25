@@ -245,7 +245,7 @@ namespace AiKnowledgeEngine
 
                 foreach (Position neighbour in NeighbourBlocks(current))
                 {
-                    if (neighbour.GetBlock().Type == stopAtType)
+                    //if (neighbour.GetBlock().Type == stopAtType)
                     {
                         Console.WriteLine ("Found route from {0} to {1} after checking {2} locations", start, current, searched);
                         List<Position> route = new List<Position>();
@@ -338,7 +338,7 @@ namespace AiKnowledgeEngine
         {
             foreach (Position check in ListBlocksByRange(start))
             {
-                if (check.GetBlock().Type == target)
+                //if (check.GetBlock().Type == target)
                     yield return check;
             }
         }
@@ -456,13 +456,13 @@ namespace AiKnowledgeEngine
         {
             foreach (Position pt in GraphicsAlgorithms.FindIntersectingBlocks(start.ToPosition(), end.ToPosition()))
             {
-                if (!pt.IsValidBlockLocation)
+                //if (!pt.IsValidBlockLocation)
                 {
-                    return end.ToPosition();
+                //    return end.ToPosition();
                 }
-                if (pt.GetBlock().IsSolid)
+                //if (pt.GetBlock().IsSolid)
                 {
-                    return pt;
+                //    return pt;
                 }
             }
             return end.ToPosition();
@@ -537,7 +537,7 @@ namespace AiKnowledgeEngine
 
         private bool NextToTarget(Position loc, Block.BlockType target)
         {
-            return
+			return true;/*
                 ((loc + new Position (-1, 0, -1)).GetBlock().Type == target)
                     || ((loc + new Position (-1, 0, 0)).GetBlock().Type == target)
                     || ((loc + new Position (-1, 0, 1)).GetBlock().Type == target)
@@ -545,7 +545,7 @@ namespace AiKnowledgeEngine
                     || ((loc + new Position (1, 0, 1)).GetBlock().Type == target)
                     || ((loc + new Position (1, 0, 0)).GetBlock().Type == target)
                     || ((loc + new Position (1, 0, -1)).GetBlock().Type == target)
-                    || ((loc + new Position (0, 0, -1)).GetBlock().Type == target);
+                    || ((loc + new Position (0, 0, -1)).GetBlock().Type == target); */
         }
 
         /*
@@ -641,7 +641,7 @@ namespace AiKnowledgeEngine
             Position dn1 = pos + new Position (0, -1, 0);
             Position dn2 = pos + new Position (0, -2, 0);
             Position dn3 = pos + new Position(0,-3,0);
-
+			/*
             if (up3.GetBlock ().IsSolid)
                 yield return up3;
             if (up2.GetBlock ().IsSolid)
@@ -670,7 +670,8 @@ namespace AiKnowledgeEngine
             {
                 yield return dn3;
                 yield break;
-            }
+            }*/
+			return null;
         }
  
 
@@ -700,7 +701,7 @@ namespace AiKnowledgeEngine
             Position dn1 = pos + new Position(0,-1,0);
             Position dn2 = pos + new Position(0,-2,0);
             //Position dn3 = pos + new Position(0,-3,0);
-
+			/*
             if (dn1.GetBlock().IsSolid && pos.GetBlock().IsTransparent && up1.GetBlock().IsTransparent)
             {
                 // Walk straight
@@ -718,7 +719,7 @@ namespace AiKnowledgeEngine
                 // Drop down one
                 neighbours.Add(dn1);
                 return;
-            }
+            }*/
             // TODO - drop down 2
             // TODO - Jump across gap
             // TODO - climb

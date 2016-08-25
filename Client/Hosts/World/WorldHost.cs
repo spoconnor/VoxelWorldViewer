@@ -24,9 +24,9 @@ namespace Sean.WorldClient.Hosts.World
 
         private static void PerformanceHost_OnHalfSecondElapsed ()
         {
-            WaterCycleTextureId++;
-            if (WaterCycleTextureId > (int)Textures.BlockTextureType.Water4)
-                WaterCycleTextureId = (int)Textures.BlockTextureType.Water;
+            //WaterCycleTextureId++;
+            //if (WaterCycleTextureId > (int)Textures.BlockTextureType.Water4)
+            //    WaterCycleTextureId = (int)Textures.BlockTextureType.Water;
         }
    #endregion
 
@@ -41,7 +41,7 @@ namespace Sean.WorldClient.Hosts.World
 
         internal static int RotationCounter;
         /// <summary>Current water texture id for the water animation cycle. Incremented in the performance host.</summary>
-        internal static int WaterCycleTextureId = (int)Textures.BlockTextureType.Water;
+        //internal static int WaterCycleTextureId = (int)Textures.BlockTextureType.Water;
    #endregion
 
    #region Render
@@ -105,7 +105,7 @@ namespace Sean.WorldClient.Hosts.World
                 {
                     for (int j = 0; j < WorldData.SizeInChunksZ; j++)
                     { //todo: work outside-in toward player if there are still blending issues
-                        WorldData.Chunks [i, j].RenderTransparentFaces ();
+                    //    WorldData.Chunks [i, j].RenderTransparentFaces ();
                     }
                 }
                 break;
@@ -135,7 +135,7 @@ namespace Sean.WorldClient.Hosts.World
                 {
                     for (int i = 0; i < WorldData.SizeInChunksX; i++)
                     { //todo: work outside-in toward player if there are still blending issues
-                        WorldData.Chunks [i, j].RenderTransparentFaces ();
+                    //    WorldData.Chunks [i, j].RenderTransparentFaces ();
                     }
                 }
                 break;

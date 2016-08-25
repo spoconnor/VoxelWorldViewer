@@ -75,7 +75,7 @@ namespace Sean.WorldClient.Hosts.World
                 if (!chunksAffected.Contains(chunkBackRight)) chunksAffected.Enqueue(chunkBackRight);
 
                 //adjacent chunks need to be queued first for block removes on a chunk border, otherwise we would briefly see a blank face on the adjacent block
-                if (isRemove && position.IsOnChunkBorder) chunksAffected.Enqueue(chunksAffected.Dequeue()); //dequeue the first chunk and requeue it last
+                //if (isRemove && position.IsOnChunkBorder) chunksAffected.Enqueue(chunksAffected.Dequeue()); //dequeue the first chunk and requeue it last
             }
             else //cuboid change
             {
@@ -95,13 +95,13 @@ namespace Sean.WorldClient.Hosts.World
                 var chunk1 = WorldData.Chunks[x1Inner / Chunk.CHUNK_SIZE, z1Inner / Chunk.CHUNK_SIZE];
                 var chunk2 = WorldData.Chunks[x2Inner / Chunk.CHUNK_SIZE, z2Inner / Chunk.CHUNK_SIZE];
                 //loop through and add every chunk contained in the inner light box to the queue of affected chunks
-                for (int x = chunk1.Coords.X; x <= chunk2.Coords.X; x++)
-                {
-                    for (int z = chunk1.Coords.Z; z <= chunk2.Coords.Z; z++)
-                    {
-                        chunksAffected.Enqueue(WorldData.Chunks[x, z]);
-                    }
-                }
+                //for (int x = chunk1.Coords.X; x <= chunk2.Coords.X; x++)
+                //{
+                    //for (int z = chunk1.Coords.Z; z <= chunk2.Coords.Z; z++)
+                    //{
+                        //chunksAffected.Enqueue(WorldData.Chunks[x, z]);
+                    //}
+                //}
             }
 
             //outer box is the same for single block or cuboid
@@ -314,231 +314,6 @@ namespace Sean.WorldClient.Hosts.World
         /// </summary>
         internal static void InitializeCrossChunkPulling(Chunk chunk)
         {
-            for (int x = 0; x < Chunk.CHUNK_SIZE; x++)
-            {
-                if (chunk.Coords.Z > 0) //can skip when on this world edge
-                {
-                    var adjacentChunk = WorldData.Chunks[chunk.Coords.X, chunk.Coords.Z - 1];
-                    for (int y = Chunk.CHUNK_HEIGHT - 1; y > 0; y--) //note: this used to loop from the heightmap down, however that wouldnt work with item light sources and because this is for initial pulling on edges only, it was only a tiny benefit
-                    {
-                        if (!chunk.Blocks[x, y, 0].IsTransparent) continue; //no need to pull light for non transparent blocks
-
-                        var skyLightStrength = chunk.SkyLightMapInitial[x, y, 0];
-                        if (skyLightStrength < 14) //no need to pull light for blocks that already have at least 14 light strength
-                        {
-                            var adjacentSkyLightStrength = adjacentChunk.SkyLightMapInitial[x, y, Chunk.CHUNK_SIZE - 1]; //pull light from neighbor chunk
-                            if (adjacentSkyLightStrength > 1 && adjacentSkyLightStrength > skyLightStrength - 1) //can only propagate if adjacent > 1
-                            {
-                                PropagateLightInitial(x, y, 0, (byte)(adjacentSkyLightStrength - 1), chunk, chunk.SkyLightMapInitial);
-                            }
-                        }
-
-                        var itemLightStrength = chunk.ItemLightMapInitial[x, y, 0];
-                        if (itemLightStrength < 14) //no need to pull light for blocks that already have at least 14 light strength
-                        {
-                            var adjacentItemLightStrength = adjacentChunk.ItemLightMapInitial[x, y, Chunk.CHUNK_SIZE - 1]; //pull light from neighbor chunk
-                            if (adjacentItemLightStrength > 1 && adjacentItemLightStrength > itemLightStrength - 1) //can only propagate if adjacent > 1
-                            {
-                                PropagateLightInitial(x, y, 0, (byte)(adjacentItemLightStrength - 1), chunk, chunk.ItemLightMapInitial);
-                            }
-                        }
-                    }
-                }
-
-                if (chunk.Coords.Z < WorldData.SizeInChunksZ - 1) //can skip when on this world edge
-                {
-                    var adjacentChunk = WorldData.Chunks[chunk.Coords.X, chunk.Coords.Z + 1];
-                    for (int y = Chunk.CHUNK_HEIGHT - 1; y > 0; y--) //note: this used to loop from the heightmap down, however that wouldnt work with item light sources and because this is for initial pulling on edges only, it was only a tiny benefit
-                    {
-                        if (!chunk.Blocks[x, y, Chunk.CHUNK_SIZE - 1].IsTransparent) continue; //no need to pull light for non transparent blocks
-
-                        var skyLightStrength = chunk.SkyLightMapInitial[x, y, Chunk.CHUNK_SIZE - 1];
-                        if (skyLightStrength < 14) //no need to pull light for blocks that already have at least 14 light strength
-                        {
-                            var adjacentSkyLightStrength = adjacentChunk.SkyLightMapInitial[x, y, 0]; //pull light from neighbor chunk
-                            if (adjacentSkyLightStrength > 1 && adjacentSkyLightStrength > skyLightStrength - 1) //can only propagate if adjacent > 1
-                            {
-                                PropagateLightInitial(x, y, Chunk.CHUNK_SIZE - 1, (byte)(adjacentSkyLightStrength - 1), chunk, chunk.SkyLightMapInitial);
-                            }
-                        }
-
-                        var itemLightStrength = chunk.ItemLightMapInitial[x, y, Chunk.CHUNK_SIZE - 1];
-                        if (itemLightStrength < 14) //no need to pull light for blocks that already have at least 14 light strength
-                        {
-                            var adjacentItemLightStrength = adjacentChunk.ItemLightMapInitial[x, y, 0]; //pull light from neighbor chunk
-                            if (adjacentItemLightStrength > 1 && adjacentItemLightStrength > itemLightStrength - 1) //can only propagate if adjacent > 1
-                            {
-                                PropagateLightInitial(x, y, Chunk.CHUNK_SIZE - 1, (byte)(adjacentItemLightStrength - 1), chunk, chunk.ItemLightMapInitial);
-                            }
-                        }
-                    }
-                }
-            }
-
-            for (int z = 0; z < Chunk.CHUNK_SIZE; z++)
-            {
-                if (chunk.Coords.X > 0) //can skip when on this world edge
-                {
-                    var adjacentChunk = WorldData.Chunks[chunk.Coords.X - 1, chunk.Coords.Z];
-                    for (int y = Chunk.CHUNK_HEIGHT - 1; y > 0; y--) //note: this used to loop from the heightmap down, however that wouldnt work with item light sources and because this is for initial pulling on edges only, it was only a tiny benefit
-                    {
-                        if (!chunk.Blocks[0, y, z].IsTransparent) continue; //no need to pull light for non transparent blocks
-
-                        var skyLightStrength = chunk.SkyLightMapInitial[0, y, z];
-                        if (skyLightStrength < 14) //no need to pull light for blocks that already have at least 14 light strength
-                        {
-                            var adjacentSkyLightStrength = adjacentChunk.SkyLightMapInitial[Chunk.CHUNK_SIZE - 1, y, z]; //pull light from neighbor chunk
-                            if (adjacentSkyLightStrength > 1 && adjacentSkyLightStrength > skyLightStrength - 1) //can only propagate if adjacent > 1
-                            {
-                                PropagateLightInitial(0, y, z, (byte)(adjacentSkyLightStrength - 1), chunk, chunk.SkyLightMapInitial);
-                            }
-                        }
-
-                        var itemLightStrength = chunk.ItemLightMapInitial[0, y, z];
-                        if (itemLightStrength < 14) //no need to pull light for blocks that already have at least 14 light strength
-                        {
-                            var adjacentItemLightStrength = adjacentChunk.ItemLightMapInitial[Chunk.CHUNK_SIZE - 1, y, z];
-                            if (adjacentItemLightStrength > 1 && adjacentItemLightStrength > itemLightStrength - 1) //can only propagate if adjacent > 1
-                            {
-                                PropagateLightInitial(0, y, z, (byte)(adjacentItemLightStrength - 1), chunk, chunk.ItemLightMapInitial);
-                            }
-                        }
-                    }
-                }
-
-                if (chunk.Coords.X < WorldData.SizeInChunksX - 1) //can skip when on this world edge
-                {
-                    var adjacentChunk = WorldData.Chunks[chunk.Coords.X + 1, chunk.Coords.Z];
-                    for (int y = Chunk.CHUNK_HEIGHT - 1; y > 0; y--) //note: this used to loop from the heightmap down, however that wouldnt work with item light sources and because this is for initial pulling on edges only, it was only a tiny benefit
-                    {
-                        if (!chunk.Blocks[Chunk.CHUNK_SIZE - 1, y, z].IsTransparent) continue; //no need to pull light for non transparent blocks
-
-                        var skyLightStrength = chunk.SkyLightMapInitial[Chunk.CHUNK_SIZE - 1, y, z];
-                        if (skyLightStrength < 14) //no need to pull light for blocks that already have at least 14 light strength
-                        {
-                            var adjacentSkyLightStrength = adjacentChunk.SkyLightMapInitial[0, y, z]; //pull light from neighbor chunk
-                            if (adjacentSkyLightStrength > 1 && adjacentSkyLightStrength > skyLightStrength - 1) //can only propagate if adjacent > 1
-                            {
-                                PropagateLightInitial(Chunk.CHUNK_SIZE - 1, y, z, (byte)(adjacentSkyLightStrength - 1), chunk, chunk.SkyLightMapInitial);
-                            }
-                        }
-
-                        var itemLightStrength = chunk.ItemLightMapInitial[Chunk.CHUNK_SIZE - 1, y, z];
-                        if (itemLightStrength < 14)  //no need to pull light for blocks that already have at least 14 light strength
-                        {
-                            var adjacentItemLightStrength = adjacentChunk.ItemLightMapInitial[0, y, z]; //pull light from neighbor chunk
-                            if (adjacentItemLightStrength > 1 && adjacentItemLightStrength > itemLightStrength - 1) //can only propagate if adjacent > 1
-                            {
-                                PropagateLightInitial(Chunk.CHUNK_SIZE - 1, y, z, (byte)(adjacentItemLightStrength - 1), chunk, chunk.ItemLightMapInitial);
-                            }
-                        }
-                    }
-                }
-            }
-
-            #region Diagonal Corners
-            //need to look over up to 4 diagonal corners to potentially pull from those chunks
-            //subtract 2 from light strengths when looking diagonally because light does not spread directly diagonally
-            if (chunk.Coords.X > 0)
-            {
-                if (chunk.Coords.Z > 0)
-                {
-                    //check left/back diagonal
-                    var chunkDiagonal = WorldData.Chunks[chunk.Coords.X - 1, chunk.Coords.Z - 1];
-                    for (int y = Chunk.CHUNK_HEIGHT - 1; y > 0; y--)
-                    {
-                        var diagonalSkyLightStrength = chunkDiagonal.SkyLightMapInitial[Chunk.CHUNK_SIZE - 1, y, Chunk.CHUNK_SIZE - 1];
-                        if (diagonalSkyLightStrength > 2 && diagonalSkyLightStrength > chunk.SkyLightMapInitial[0, y, 0] - 2)
-                        {
-                            PropagateLightInitial(0, y, 0, (byte)(diagonalSkyLightStrength - 2), chunk, chunk.SkyLightMapInitial);
-                        }
-
-                        var diagonalItemLightStrength = chunkDiagonal.ItemLightMapInitial[Chunk.CHUNK_SIZE - 1, y, Chunk.CHUNK_SIZE - 1];
-                        if (diagonalItemLightStrength > 2 && diagonalItemLightStrength > chunk.ItemLightMapInitial[0, y, 0] - 2)
-                        {
-                            PropagateLightInitial(0, y, 0, (byte)(diagonalItemLightStrength - 2), chunk, chunk.ItemLightMapInitial);
-                        }
-                    }
-                }
-                if (chunk.Coords.Z < WorldData.SizeInChunksZ - 1)
-                {
-                    //check left/front diagonal
-                    var chunkDiagonal = WorldData.Chunks[chunk.Coords.X - 1, chunk.Coords.Z + 1];
-                    for (int y = Chunk.CHUNK_HEIGHT - 1; y > 0; y--)
-                    {
-                        var diagonalSkyLightStrength = chunkDiagonal.SkyLightMapInitial[Chunk.CHUNK_SIZE - 1, y, 0];
-                        if (diagonalSkyLightStrength > 2 && diagonalSkyLightStrength > chunk.SkyLightMapInitial[0, y, Chunk.CHUNK_SIZE - 1] - 2)
-                        {
-                            PropagateLightInitial(0, y, Chunk.CHUNK_SIZE - 1, (byte)(diagonalSkyLightStrength - 2), chunk, chunk.SkyLightMapInitial);
-                        }
-
-                        var diagonalItemLightStrength = chunkDiagonal.ItemLightMapInitial[Chunk.CHUNK_SIZE - 1, y, 0];
-                        if (diagonalItemLightStrength > 2 && diagonalItemLightStrength > chunk.ItemLightMapInitial[0, y, Chunk.CHUNK_SIZE - 1] - 2)
-                        {
-                            PropagateLightInitial(0, y, Chunk.CHUNK_SIZE - 1, (byte)(diagonalItemLightStrength - 2), chunk, chunk.ItemLightMapInitial);
-                        }
-                    }
-                }
-            }
-            if (chunk.Coords.X < WorldData.SizeInChunksX - 1)
-            {
-                if (chunk.Coords.Z > 0)
-                {
-                    //check right/back diagonal
-                    var chunkDiagonal = WorldData.Chunks[chunk.Coords.X + 1, chunk.Coords.Z - 1];
-                    for (int y = Chunk.CHUNK_HEIGHT - 1; y > 0; y--)
-                    {
-                        var diagonalSkyLightStrength = chunkDiagonal.SkyLightMapInitial[0, y, Chunk.CHUNK_SIZE - 1];
-                        if (diagonalSkyLightStrength > 2 && diagonalSkyLightStrength > chunk.SkyLightMapInitial[Chunk.CHUNK_SIZE - 1, y, 0] - 2)
-                        {
-                            PropagateLightInitial(Chunk.CHUNK_SIZE - 1, y, 0, (byte)(diagonalSkyLightStrength - 2), chunk, chunk.SkyLightMapInitial);
-                        }
-
-                        var diagonalItemLightStrength = chunkDiagonal.ItemLightMapInitial[0, y, Chunk.CHUNK_SIZE - 1];
-                        if (diagonalItemLightStrength > 2 && diagonalItemLightStrength > chunk.ItemLightMapInitial[Chunk.CHUNK_SIZE - 1, y, 0] - 2)
-                        {
-                            PropagateLightInitial(Chunk.CHUNK_SIZE - 1, y, 0, (byte)(diagonalItemLightStrength - 2), chunk, chunk.ItemLightMapInitial);
-                        }
-                    }
-                }
-                if (chunk.Coords.Z < WorldData.SizeInChunksZ - 1)
-                {
-                    //check right/front diagonal
-                    var chunkDiagonal = WorldData.Chunks[chunk.Coords.X + 1, chunk.Coords.Z + 1];
-                    for (int y = Chunk.CHUNK_HEIGHT - 1; y > 0; y--)
-                    {
-                        var diagonalSkyLightStrength = chunkDiagonal.SkyLightMapInitial[0, y, 0];
-                        if (diagonalSkyLightStrength > 2 && diagonalSkyLightStrength > chunk.SkyLightMapInitial[Chunk.CHUNK_SIZE - 1, y, Chunk.CHUNK_SIZE - 1] - 2)
-                        {
-                            PropagateLightInitial(Chunk.CHUNK_SIZE - 1, y, Chunk.CHUNK_SIZE - 1, (byte)(diagonalSkyLightStrength - 2), chunk, chunk.SkyLightMapInitial);
-                        }
-
-                        var diagonalItemLightStrength = chunkDiagonal.ItemLightMapInitial[0, y, 0];
-                        if (diagonalItemLightStrength > 2 && diagonalItemLightStrength > chunk.ItemLightMapInitial[Chunk.CHUNK_SIZE - 1, y, Chunk.CHUNK_SIZE - 1] - 2)
-                        {
-                            PropagateLightInitial(Chunk.CHUNK_SIZE - 1, y, Chunk.CHUNK_SIZE - 1, (byte)(diagonalItemLightStrength - 2), chunk, chunk.ItemLightMapInitial);
-                        }
-                    }
-                }
-            }
-            #endregion
-
-            //at this point the lighting in this chunk is finished, so add to gigantic world light map
-            //-couldnt do it before now because lighting isnt finalized until the cross chunk pulling is done
-            //-this is essentially a copy of an array into a larger array
-            for (int x = 0; x < Chunk.CHUNK_SIZE; x++)
-            {
-                int worldX = chunk.Coords.WorldCoordsX + x;
-                for (int z = 0; z < Chunk.CHUNK_SIZE; z++)
-                {
-                    int worldZ = chunk.Coords.WorldCoordsZ + z;
-                    for (int y = 0; y < Chunk.CHUNK_HEIGHT; y++)
-                    {
-                        WorldData.SkyLightMap[worldX, y, worldZ] = chunk.SkyLightMapInitial[x, y, z];
-                        WorldData.ItemLightMap[worldX, y, worldZ] = chunk.ItemLightMapInitial[x, y, z];
-                    }
-                }
-            }
         }
     }
 }

@@ -44,7 +44,7 @@ namespace Sean.WorldClient.Hosts.Input
             //move along the X plane
             var destCoords = Game.Player.Coords;
             destCoords.Xf += (float)(Math.Cos(direction) * collisionTestDistance);
-            if (destCoords.IsValidPlayerLocation)
+            ///if (destCoords.IsValidPlayerLocation)
             {
                 Game.Player.Coords.Xf += (float)(Math.Cos(direction) * distance);
                 moved = true;
@@ -53,7 +53,7 @@ namespace Sean.WorldClient.Hosts.Input
             //move along the Z plane
             destCoords = Game.Player.Coords;
             destCoords.Zf += (float)(Math.Sin(direction) * collisionTestDistance);
-            if (destCoords.IsValidPlayerLocation)
+            //if (destCoords.IsValidPlayerLocation)
             {
                 Game.Player.Coords.Zf += (float)(Math.Sin(direction) * distance);
                 moved = true;

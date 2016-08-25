@@ -17,7 +17,7 @@ namespace Sean.WorldClient.GameObjects
 
         protected GameObject(ref Coords coords, int id = -1)
         {
-            if (!(this is Player) && !coords.IsValidItemLocation) throw new Exception(string.Format("Invalid item location: {0}", coords));
+            //if (!(this is Player) && !coords.IsValidItemLocation) throw new Exception(string.Format("Invalid item location: {0}", coords));
             Id = WorldData.NextGameObjectId; //if this is a server we need to select our own IDs, ignore what the client said
             Coords = coords;
         }
@@ -59,10 +59,10 @@ namespace Sean.WorldClient.GameObjects
             if (IsAffectedByLight)
             {
                 //sets GL color for game objects that should be drawn according to the light of the block they are in
-                byte color = Coords.LightColor;
-                if (_currentLightColor.HasValue && _currentLightColor.Value == color) return; //this color is already set, no need to set it again
-                _currentLightColor = color;
-                GL.Color3(color, color, color);
+                //byte color = Coords.LightColor;
+                //if (_currentLightColor.HasValue && _currentLightColor.Value == color) return; //this color is already set, no need to set it again
+                //_currentLightColor = color;
+                //GL.Color3(color, color, color);
             }
         }
         

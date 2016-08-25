@@ -85,11 +85,11 @@ namespace Sean.WorldClient.Hosts.Input
                 if (Math.Abs(jumpDist) > 1) jumpDist = Math.Sign(jumpDist);
                 var destCoords = Game.Player.Coords;
                 destCoords.Yf += jumpDist;
-                if (!destCoords.IsValidPlayerLocation) //cancel jump due to collision
+                //if (!destCoords.IsValidPlayerLocation) //cancel jump due to collision
                 {
                     IsJumping = false;
                 }
-                else
+                //else
                 {
                     Game.Player.Coords.Yf += jumpDist;
                     //NetworkClient.SendPlayerLocation(Game.Player.Coords);
@@ -181,7 +181,7 @@ namespace Sean.WorldClient.Hosts.Input
                     var distance = (float)(Settings.MoveSpeed * e.Time);
                     if (Game.Player.EyesUnderWater) distance *= 0.5f; //ascend slower under water
                     destCoords.Yf += distance;
-                    if (destCoords.IsValidPlayerLocation)
+                    //if (destCoords.IsValidPlayerLocation)
                     {
                         Game.Player.Coords.Yf += distance;
                         //NetworkClient.SendPlayerLocation(Game.Player.Coords);
@@ -402,7 +402,7 @@ namespace Sean.WorldClient.Hosts.Input
 
         public void AddOrRemoveBlock(Block.BlockType blockType)
         {
-            if (!BlockCursorHost.Position.IsValidBlockLocation)
+           /* if (!BlockCursorHost.Position.IsValidBlockLocation)
             {
                 Game.UiHost.AddChatMessage(new ChatMessage(ChatMessageType.Error, "Invalid block location."));
                 return;
@@ -425,6 +425,7 @@ namespace Sean.WorldClient.Hosts.Input
             Position pos = blockType == Block.BlockType.Air || (blockType != Block.BlockType.Water && blockAtCursor.Type == Block.BlockType.Water) ? BlockCursorHost.Position : BlockCursorHost.PositionAdd;
             //NetworkClient.SendAddOrRemoveBlock(pos, blockType);
             Construction.Instance.AddOrRemoveBlock(pos, blockType);
+            */
         }
 
         public void Render(FrameEventArgs e)

@@ -112,9 +112,9 @@ namespace Sean.WorldClient.Hosts.Ui
                 WriteString(TextLocation.TopLeft, string.Format("X:{0}", BlockCursorHost.Position.X));
                 WriteString(TextLocation.TopLeft, string.Format("Y:{0}", BlockCursorHost.Position.Y));
                 WriteString(TextLocation.TopLeft, string.Format("Z:{0}", BlockCursorHost.Position.Z));
-                WriteString(TextLocation.TopLeft, string.Format("L:{0}", BlockCursorHost.PositionAdd.LightStrength));
-                WriteString(TextLocation.TopLeft, string.Format("F:{0}", BlockCursorHost.Position.IsValidBlockLocation ? BlockCursorHost.SelectedFace.ToString() : "NA"));
-                WriteString(TextLocation.TopLeft, string.Format("T:{0}", BlockCursorHost.Position.IsValidBlockLocation ? BlockCursorHost.Position.GetBlock().Type.ToString() : "NA"));
+                //WriteString(TextLocation.TopLeft, string.Format("L:{0}", BlockCursorHost.PositionAdd.LightStrength));
+                //WriteString(TextLocation.TopLeft, string.Format("F:{0}", BlockCursorHost.Position.IsValidBlockLocation ? BlockCursorHost.SelectedFace.ToString() : "NA"));
+                //WriteString(TextLocation.TopLeft, string.Format("T:{0}", BlockCursorHost.Position.IsValidBlockLocation ? BlockCursorHost.Position.GetBlock().Type.ToString() : "NA"));
 
                 WriteBlankLine(TextLocation.TopLeft);
                 WriteString(TextLocation.TopLeft, Utilities.DisplayList.TextPerformanceId);

@@ -132,7 +132,7 @@ namespace Sean.WorldClient.Hosts.Ui
             }
             foreach (LightSourceType lightSourceType in Enum.GetValues(typeof(LightSourceType)))
             {
-                AddButtonToPickerGrid(ref buttonColumn, ref buttonY, lightSourceType.ToString(), TextureLoader.GetItemTexture(ItemTextureType.Lantern), lightSourceType: lightSourceType);
+                //AddButtonToPickerGrid(ref buttonColumn, ref buttonY, lightSourceType.ToString(), TextureLoader.GetItemTexture(Sean.Shared.Textures.ItemTextureType.Lantern), lightSourceType: lightSourceType);
             }
 
             //load tool buttons

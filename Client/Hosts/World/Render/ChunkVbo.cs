@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using Sean.Shared;
+using Sean.Shared.Textures;
 
 namespace Sean.WorldClient.Hosts.World.Render
 {
@@ -39,7 +41,7 @@ namespace Sean.WorldClient.Hosts.World.Render
         internal void Render()
         {
             //bind to the texture id for this vbo except for water bind to the correct water texture in the animation cycle
-            GL.BindTexture(TextureTarget.Texture2D, _textureId == (int)Textures.BlockTextureType.Water ? WorldHost.WaterCycleTextureId : _textureId);
+//            GL.BindTexture(TextureTarget.Texture2D, _textureId == (int)BlockTextureType.Water ? WorldHost.WaterCycleTextureId : _textureId);
 
             //position array buffer
             GL.BindBuffer(BufferTarget.ArrayBuffer, _positionId); //bind to the Array Buffer ID

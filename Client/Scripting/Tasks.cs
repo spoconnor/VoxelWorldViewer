@@ -84,12 +84,12 @@ namespace AiKnowledgeEngine
         internal override void DoTask (Character chr, FrameEventArgs e)
         {
             Position moveTo = route [index];
-            if (moveTo.GetBlock().IsSolid)
+            //if (moveTo.GetBlock().IsSolid)
             {
                 Console.WriteLine ("{0}:Route blocked", chr.Id);
                 chr.RemoveTask (this);
             }
-            else
+            //else
             {
                 //Console.WriteLine ("Moving to {0}", moveTo);
                 chr.MoveTo (moveTo, e);
@@ -217,7 +217,7 @@ namespace AiKnowledgeEngine
             Console.WriteLine ("{0}:ChopBlocksAtPosTask {1}", chr.Id, position);
             foreach (Position pos in chr.path.NeighbourBlocks(position))
             {
-                if (pos.GetBlock().Type == blockType)
+                //if (pos.GetBlock().Type == blockType)
                 {
                     chr.AddTask (new ChopBlockTask(blockType, pos));
                 }
@@ -239,7 +239,7 @@ namespace AiKnowledgeEngine
         
         internal override void DoTask (Character chr, FrameEventArgs e)
         {
-            if (position.GetBlock().Type == blockType)
+            //if (position.GetBlock().Type == blockType)
             {
                 Console.WriteLine ("{0}:Chopping {1}", chr.Id, blockType);
                 AddOrRemoveBlock(chr, position, Block.BlockType.Air); // replace with air
@@ -249,7 +249,7 @@ namespace AiKnowledgeEngine
         
         private void AddOrRemoveBlock(Character chr, Position position, Block.BlockType blockType)
         {
-            if (!position.IsValidBlockLocation)
+            //if (!position.IsValidBlockLocation)
             {
                 Console.WriteLine("{0}:Invalid block location", chr.Id);
                 return;

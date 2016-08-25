@@ -70,7 +70,7 @@ namespace Sean.WorldClient.Hosts
             SelectedCharacters.Clear();
             foreach (var character in Characters)
             {
-                if (character.Position.WithinBounds(start, end))
+                //if (character.Position.WithinBounds(start, end))
                 {
                     Console.WriteLine ("Selected {0}", character.Id);
                     SelectedCharacters.Add(new CharacterButton(character, 5, 5 + (CharacterButton.BUTTON_SIZE + 5) * SelectedCharacters.Count));

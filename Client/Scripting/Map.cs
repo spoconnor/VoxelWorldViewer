@@ -88,8 +88,8 @@ namespace AiKnowledgeEngine
 
         public void UpdateLocation (Position pos, Block block)
         {
-            if (!pos.IsValidBlockLocation)
-                return;
+            //if (!pos.IsValidBlockLocation)
+            //    return;
 
             gameMap [pos] = block;
         }
@@ -126,7 +126,7 @@ namespace AiKnowledgeEngine
                     for (int x = origin.X - range; x < origin.X + range; x++)
                     {
                         Position pt = new Position (x, y, z);
-                        if (pt.IsValidBlockLocation)
+                        //if (pt.IsValidBlockLocation)
                             yield return pt;
                     }
                 }
@@ -142,8 +142,8 @@ namespace AiKnowledgeEngine
             {
                 foreach (Position cell in GraphicsAlgorithms.DrawLineOn2dPlane(origin, farCell))
                 {
-                    if (!cell.IsValidBlockLocation)
-                        continue;
+                    //if (!cell.IsValidBlockLocation)
+                    //    continue;
 
                     if (cells.Contains (cell))
                         continue;
@@ -151,9 +151,9 @@ namespace AiKnowledgeEngine
                     cells.Add (cell);
                     yield return cell;
 
-                    Block block = cell.GetBlock();
-                    if (block.IsSolid)
-                        break;
+                    //Block block = cell.GetBlock();
+                    //if (block.IsSolid)
+                    //    break;
                 }
             }
         }

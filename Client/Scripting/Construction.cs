@@ -53,8 +53,8 @@ namespace AiKnowledgeEngine
                 {
                     for (test.Y=y; test.Y<(y+height); test.Y++)
                     {
-                        Block block = test.GetBlock();
-                        if (block.IsSolid && !Block.IsBlockTypeTree(block.Type))
+                        //Block block = test.GetBlock();
+                        //if (block.IsSolid && !Block.IsBlockTypeTree(block.Type))
                         {
                             needsRemoving++;
                         }

@@ -7,6 +7,7 @@ using Sean.WorldClient.Textures;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using Sean.Shared;
+using Sean.Shared.Textures;
 
 namespace Sean.WorldClient.Utilities
 {
@@ -90,7 +91,7 @@ namespace Sean.WorldClient.Utilities
         }
 
         /// <summary>Render display list using supplied environment texture and position.</summary>
-        public static void RenderDisplayList(int displayListId, float x, float y, float z, EnvironmentTextureType texture)
+        public static void RenderDisplayList(int displayListId, float x, float y, float z, Sean.WorldClient.Textures.EnvironmentTextureType texture)
         {
             GL.BindTexture(TextureTarget.Texture2D, TextureLoader.GetEnvironmentTexture(texture));
             GL.PushMatrix();

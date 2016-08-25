@@ -57,7 +57,8 @@ namespace Sean.WorldClient.GameActions
             _tcpStream.ReadTimeout = 15000; //15s timeout during connect
 
             Settings.Launcher.UpdateProgressInvokable("Connected...", 0, 0);
-            var connect = new LoginAction(-1, Config.UserName, new Coords());
+            /*
+			var connect = new LoginAction(-1, Config.UserName, new Coords());
             try
             {
                 connect.Send();
@@ -110,16 +111,16 @@ namespace Sean.WorldClient.GameActions
                 //HandleNetworkError(ex);
                 throw new ServerConnectException(ex);
             }
-
+*/
             _tcpStream.ReadTimeout = -1;
             TcpClient.NoDelay = true;
             var listenerThread = new Thread(ListenForServerMessageThread) { IsBackground = true, Name = "ListenForServerMessageThread" };
             listenerThread.Start();
 
             //send misc player information to server periodically (ie fps, memory).
-            _playerInfoTimer = new System.Timers.Timer(PlayerInfo.PLAYER_INFO_SEND_INTERVAL);
-            _playerInfoTimer.Start();
-            _playerInfoTimer.Elapsed += _playerInfoTimer_Elapsed; //wire elapsed event handler
+            //_playerInfoTimer = new System.Timers.Timer(PlayerInfo.PLAYER_INFO_SEND_INTERVAL);
+            //_playerInfoTimer.Start();
+            //_playerInfoTimer.Elapsed += _playerInfoTimer_Elapsed; //wire elapsed event handler
         }
 
         //runs in a thread
@@ -133,8 +134,8 @@ namespace Sean.WorldClient.GameActions
                     var actionTypeBytes = new byte[sizeof(ushort)];
                     var bytesRead = 0;
                     while (bytesRead < actionTypeBytes.Length) bytesRead += _tcpStream.Read(actionTypeBytes, bytesRead, actionTypeBytes.Length - bytesRead);
-                    var actionType = (ActionType)BitConverter.ToUInt16(actionTypeBytes, 0);
-                    switch (actionType)
+                    //var actionType = (ActionType)BitConverter.ToUInt16(actionTypeBytes, 0);
+                    //switch (actionType)
                     {
                         //case ActionType.AddBlock: new AddBlock().Receive(); break;
                         //case ActionType.AddBlockItem: new AddBlockItem().Receive(); break;
@@ -144,7 +145,7 @@ namespace Sean.WorldClient.GameActions
                         //case ActionType.AddStaticItem: new AddStaticItem().Receive(); break;
                         //case ActionType.AddStructure: new AddStructure().Receive(); break;
                         //case ActionType.ChatMsg: new ChatMsg().Receive(); break;
-                        case ActionType.Connect: new LoginAction().Receive(); break;
+                        //case ActionType.Connect: new LoginAction().Receive(); break;
                         //case ActionType.Disconnect: new Disconnect().Receive(); break;
                         //case ActionType.PickupBlockItem: new PickupBlockItem().Receive(); break;
                         //case ActionType.PlayerMove: new PlayerMove().Receive(); break;
@@ -157,8 +158,8 @@ namespace Sean.WorldClient.GameActions
                         //case ActionType.Error:
                         //case ActionType.GetWorld:
                         //    throw new Exception(string.Format("Client should not receive action type: {0}", actionType));
-                        default:
-                            throw new Exception(string.Format("Unhandled action type: {0}", actionType));
+                        //default:
+                        //    throw new Exception(string.Format("Unhandled action type: {0}", actionType));
                     }
                 }
             }
@@ -177,14 +178,14 @@ namespace Sean.WorldClient.GameActions
             var minAngleToBeDiff = (Players.Count >= 5 ? Constants.PI_OVER_6 : Constants.PI_OVER_12);
             if (forceSend || Math.Abs(_prevCoords.Xf - newCoords.Xf) > minDeltaToBeDiff || Math.Abs(_prevCoords.Yf - newCoords.Yf) > minDeltaToBeDiff || Math.Abs(_prevCoords.Zf - newCoords.Zf) > minDeltaToBeDiff || Math.Abs(_prevCoords.Direction - newCoords.Direction) > minAngleToBeDiff || Math.Abs(_prevCoords.Pitch - newCoords.Pitch) > minAngleToBeDiff)
             {
-                new PlayerMove(newCoords, Game.Player.Id).Send();
+                //new PlayerMove(newCoords, Game.Player.Id).Send();
 
                 var chunk = WorldData.Chunks[newCoords];
                 foreach (var gameItem in chunk.GameItems.Values)
                 {
                     if (gameItem.Type == GameItemType.BlockItem && newCoords.GetDistanceExact(ref gameItem.Coords) <= 2)
                     {
-                            new PickupBlockItem(Game.Player.Id, gameItem.Id).Send();
+                  //          new PickupBlockItem(Game.Player.Id, gameItem.Id).Send();
                     }
                 }
 
@@ -197,11 +198,11 @@ namespace Sean.WorldClient.GameActions
         /// <param name="blockType">block type to add</param>
         public static void SendAddOrRemoveBlock(Position position, Block.BlockType blockType)
         {
-            if (!position.IsValidBlockLocation) return;
+            //if (!position.IsValidBlockLocation) return;
             if (blockType == Block.BlockType.Air) //remove block
             {
                 if (position.Y == 0) { Game.UiHost.AddChatMessage(new ChatMessage(ChatMessageType.Error, "Cannot remove a block at the base of the world. Block cancelled.")); return; }
-                new RemoveBlock(ref position).Send();
+              //  new RemoveBlock(ref position).Send();
             }
             else //add block
             {
@@ -215,7 +216,7 @@ namespace Sean.WorldClient.GameActions
                     if (!Block.IsBlockTypeSolid(blockType) || (!position.IsOnBlock(ref player.Coords) && !position.IsOnBlock(ref head))) continue;
                     Game.UiHost.AddChatMessage(new ChatMessage(ChatMessageType.Error, "Attempted to build solid block on other player. Not nice. Block cancelled.")); return;
                 }
-                new AddBlock(ref position, blockType).Send();
+                //new AddBlock(ref position, blockType).Send();
                 Game.Player.Inventory[(int)blockType]--;
             }
         }
@@ -224,7 +225,7 @@ namespace Sean.WorldClient.GameActions
         {
             lock (TcpClient)
             {
-                new Disconnect(Game.Player.Id, "Quit").Send();
+                //new Disconnect(Game.Player.Id, "Quit").Send();
                 if (TcpClient.Connected)
                 {
                     _tcpStream.Close();
@@ -240,7 +241,7 @@ namespace Sean.WorldClient.GameActions
                 Debug.WriteLine("Performance Host not initialized yet");
                 return;
             }
-            new PlayerInfo(Game.PerformanceHost.Fps, Game.PerformanceHost.Memory).Send();
+            //new PlayerInfo(Game.PerformanceHost.Fps, Game.PerformanceHost.Memory).Send();
         }
         #endregion
 

@@ -1,11 +1,7 @@
 ﻿<Properties StartupItem="Client/Client.csproj">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Client/GameActions/Login.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Client/GameActions/NetworkClient.cs">
     <Files>
-      <File FileName="Client/Game.cs" Line="94" Column="31" />
-      <File FileName="Client/GameActions/Login.cs" Line="40" Column="10" />
-      <File FileName="Client/GameActions/GameAction.cs" Line="20" Column="42" />
-      <File FileName="Client/ProtoBufs/CommsMessages.cs" Line="4" Column="1" />
-      <File FileName="Client/GameActions/AddBlockItem.cs" Line="28" Column="27" />
+      <File FileName="Client/GameActions/NetworkClient.cs" Line="249" Column="10" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

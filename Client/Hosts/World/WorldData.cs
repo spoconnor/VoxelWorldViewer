@@ -165,6 +165,7 @@ namespace Sean.WorldClient.Hosts.World
         /// <param name="isMultipleBlockPlacement">Use this when placing multiple blocks at once so lighting and chunk queueing only happens once.</param>
         internal static void PlaceBlock(Position position, Block.BlockType type, bool isMultipleBlockPlacement = false)
         {
+            /*
             if (!position.IsValidBlockLocation || position.Y <= 0) return;
 
             //this was a multiple block placement, prevent placing blocks on yourself and getting stuck; used to be able to place cuboids on yourself and get stuck
@@ -188,55 +189,9 @@ namespace Sean.WorldClient.Hosts.World
             chunk.UpdateHeightMap(ref block, position.X % Chunk.CHUNK_SIZE, position.Y, position.Z % Chunk.CHUNK_SIZE);
 
             if (!isTransparentBlock || type == Block.BlockType.Water)
-            {
-                var below = position;
-                below.Y--;
-                if (below.Y > 0)
-                {
-                    if (below.GetBlock().Type == Block.BlockType.Grass || below.GetBlock().Type == Block.BlockType.Snow)
-                    {
-                        PlaceBlock(below, Block.BlockType.Dirt, true); //dont queue with this dirt block change, the source block changing takes care of it, prevents double queueing the chunk and playing sound twice
-                    }
-                }
-            }
-
+      
             if (!chunk.WaterExpanding) //water is not expanding, check if this change should make it start
-            {
-                switch (type)
-                {
-                    case Block.BlockType.Water:
-                        chunk.WaterExpanding = true;
-                        break;
-                    case Block.BlockType.Air:
-                        for (var q = 0; q < 5; q++)
-                        {
-                            Position adjacent;
-                            switch (q)
-                            {
-                                case 0:
-                                    adjacent = new Position(position.X + 1, position.Y, position.Z);
-                                    break;
-                                case 1:
-                                    adjacent = new Position(position.X - 1, position.Y, position.Z);
-                                    break;
-                                case 2:
-                                    adjacent = new Position(position.X, position.Y + 1, position.Z);
-                                    break;
-                                case 3:
-                                    adjacent = new Position(position.X, position.Y, position.Z + 1);
-                                    break;
-                                default:
-                                    adjacent = new Position(position.X, position.Y, position.Z - 1);
-                                    break;
-                            }
-                            if (adjacent.IsValidBlockLocation && adjacent.GetBlock().Type == Block.BlockType.Water)
-                            {
-                                Chunks[adjacent].WaterExpanding = true;
-                            }
-                        }
-                        break;
-                }
-            }
+      
 
             //its easier to just set .GrassGrowing on all affected chunks to true, and then let that logic figure it out and turn it off, this way the logic is contained in one spot
             //and also the logic here doesnt need to run every time a block gets placed. ie: someone is building a house, its running through this logic for every block placement;
@@ -244,31 +199,9 @@ namespace Sean.WorldClient.Hosts.World
             //gm: an additional optimization, grass could never start growing unless this is an air block and its replacing a non transparent block
             //OR this is a non transparent block filling in a previously transparent block to cause grass to die
             if (!isTransparentBlock || (type == Block.BlockType.Air && !isTransparentOldBlock))
-            {
-                chunk.GrassGrowing = true;
-                if (position.IsOnChunkBorder)
-                {
-                    foreach (var adjacentChunk in position.BorderChunks) adjacentChunk.GrassGrowing = true;
-                }
-            }
-
+      
             //determine if any static game items need to be removed as a result of this block placement
             if (type != Block.BlockType.Air)
-            {
-                lock (chunk.Clutters) //lock because clutter is stored in a HashSet
-                {
-                    //if theres clutter on this block then destroy it to place the block (FirstOrDefault returns null if no match is found)
-                    var clutterToRemove = chunk.Clutters.FirstOrDefault(clutter => position.IsOnBlock(ref clutter.Coords));
-                    if (clutterToRemove != null) chunk.Clutters.Remove(clutterToRemove);
-                }
-
-                var lightSourceToRemove = chunk.LightSources.FirstOrDefault(lightSource => position.IsOnBlock(ref lightSource.Value.Coords));
-                if (lightSourceToRemove.Value != null)
-                {
-                    LightSource temp;
-                    chunk.LightSources.TryRemove(lightSourceToRemove.Key, out temp);
-                }
-            }
             else //destroying block
             {
                 lock (chunk.Clutters) //lock because clutter is stored in a HashSet
@@ -280,19 +213,7 @@ namespace Sean.WorldClient.Hosts.World
 
                 //look on ALL 6 adjacent blocks for static items, and those only get destroyed if its on the matching opposite attached to face
                 var adjacentPositions = position.AdjacentPositionFaces;
-                foreach (var tuple in adjacentPositions)
-                {
-                    var adjBlock = tuple.Item1.GetBlock();
-                    if (adjBlock.Type != Block.BlockType.Air) continue; //position cannot contain an item if the block is not air
-                    var adjChunk = tuple.Item2 == Face.Top || tuple.Item2 == Face.Bottom ? chunk : Chunks[tuple.Item1]; //get the chunk in case the adjacent position crosses a chunk boundary
-                    var lightSourceToRemove = adjChunk.LightSources.FirstOrDefault(lightSource => tuple.Item1.IsOnBlock(ref lightSource.Value.Coords));
-                    if (lightSourceToRemove.Value != null && lightSourceToRemove.Value.AttachedToFace == tuple.Item2.ToOpposite()) //remove the light source
-                    {
-                        LightSource temp;
-                        chunk.LightSources.TryRemove(lightSourceToRemove.Key, out temp);
-                    }
-                }
-
+      
                 //if theres a dynamic item on top of this block then let it fall
                 foreach (var item in chunk.GameItems.Values)
                 {
@@ -309,28 +230,8 @@ namespace Sean.WorldClient.Hosts.World
                 ModifyLightAndQueueChunksForBlockChange(position, isTransparentOldBlock != isTransparentBlock, type);
 
                 //sounds dont play for multi/cuboid placements; they are responsible for their own sounds; prevents sound spam
-                switch (type)
-                {
-                    case Block.BlockType.Air:
-                        switch (oldType)
-                        {
-                            case Block.BlockType.Water: //remove water
-                                Sounds.Audio.PlaySound(Sounds.SoundType.JumpOutOfWater, ref position);
-                                break;
-                            default: //remove another type
-                                Sounds.Audio.PlaySound(Sounds.SoundType.RemoveBlock, ref position);
-                                break;
-                        }
-                        break;
-                    case Block.BlockType.Water: //place water
-                        Sounds.Audio.PlaySound(Sounds.SoundType.JumpOutOfWater, ref position);
-                        break;
-                    default:
-                        //only play the add block sound if the old type was air; the only way blocks can change otherwise are the auto changes in chunks for grass/snow/dirt/etc.
-                        if (oldType == Block.BlockType.Air) Sounds.Audio.PlaySound(Sounds.SoundType.AddBlock, ref position);
-                        break;
-                }
             }
+            */
         }
 
         /// <summary>Place multiple blocks in the world of the same type.</summary>
@@ -338,7 +239,7 @@ namespace Sean.WorldClient.Hosts.World
         /// <param name="endPosition">stop placing blocks at</param>
         /// <param name="type">type of block to place</param>
         /// <param name="isMultipleCuboidPlacement">Use this when placing multiple cuboids at once so lighting and chunk queueing only happens once.</param>
-        internal static void PlaceCuboid(Position startPosition, Position endPosition, Block.BlockType type, bool isMultipleCuboidPlacement = false)
+/*        internal static void PlaceCuboid(Position startPosition, Position endPosition, Block.BlockType type, bool isMultipleCuboidPlacement = false)
         {
             for (var x = Math.Min(startPosition.X, endPosition.X); x <= Math.Max(startPosition.X, endPosition.X); x++)
             {
@@ -352,7 +253,8 @@ namespace Sean.WorldClient.Hosts.World
             }
             if (!isMultipleCuboidPlacement) ModifyLightAndQueueChunksForCuboidChange(startPosition, endPosition);
         }
-        #endregion
+ */
+		#endregion
 
         #region Lighting
         /// <summary>Sky lightmap of the entire world.</summary>
@@ -412,6 +314,7 @@ namespace Sean.WorldClient.Hosts.World
         /// <param name="blockType">New block type being placed. Will be Air for block remove.</param>
         private static void ModifyLightAndQueueChunksForBlockChange(Position position, bool changeInTransparency, Block.BlockType blockType)
         {
+			/*
             if (!changeInTransparency) //transparency did not change; no effect on lighting
             {
                 if (position.IsOnChunkBorder)
@@ -431,7 +334,7 @@ namespace Sean.WorldClient.Hosts.World
             else
             {
                 Task<Queue<Chunk>>.Factory.StartNew(() => Lighting.UpdateLightBox(ref position, null, true, blockType == Block.BlockType.Air)).ContinueWith(task => QueueAffectedChunks(task.Result));
-            }
+            }*/
         }
 
         /// <summary>

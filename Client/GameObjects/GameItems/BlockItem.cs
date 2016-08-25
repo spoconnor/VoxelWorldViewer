@@ -15,7 +15,7 @@ namespace Sean.WorldClient.GameObjects.GameItems
             Coords.Xf = (float)Math.Floor(Coords.Xf) + Constants.HALF_BLOCK_SIZE; //spawn in the middle of the block
             Coords.Yf += Constants.HALF_BLOCK_SIZE;
             Coords.Zf = (float)Math.Floor(Coords.Zf) + Constants.HALF_BLOCK_SIZE;
-            if (!Coords.IsValidItemLocation) throw new Exception(string.Format("Invalid BlockItem location: {0}", Coords));
+            //if (!Coords.IsValidItemLocation) throw new Exception(string.Format("Invalid BlockItem location: {0}", Coords));
 
             switch (blockType)
             {

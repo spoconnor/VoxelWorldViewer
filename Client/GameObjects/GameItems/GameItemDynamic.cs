@@ -119,7 +119,7 @@ namespace Sean.WorldClient.GameObjects.GameItems
             if (!Equals(Velocity.X, 0f))
             {
                 proposedCoords.Xf += Velocity.X * (float)e.Time;
-                if (!proposedCoords.IsValidItemLocation || (proposedCoords.IsValidBlockLocation && WorldData.GetBlock(ref proposedCoords).IsSolid))
+                //if (!proposedCoords.IsValidItemLocation || (proposedCoords.IsValidBlockLocation && WorldData.GetBlock(ref proposedCoords).IsSolid))
                 {
                     //Bounce
                     bounced = true;
@@ -132,7 +132,7 @@ namespace Sean.WorldClient.GameObjects.GameItems
             if (!Equals(Velocity.Z, 0f))
             {
                 proposedCoords.Zf += Velocity.Z * (float)e.Time;
-                if (!proposedCoords.IsValidItemLocation || (proposedCoords.IsValidBlockLocation && WorldData.GetBlock(ref proposedCoords).IsSolid))
+                //if (!proposedCoords.IsValidItemLocation || (proposedCoords.IsValidBlockLocation && WorldData.GetBlock(ref proposedCoords).IsSolid))
                 {
                     //Bounce
                     bounced = true;
@@ -144,7 +144,7 @@ namespace Sean.WorldClient.GameObjects.GameItems
 
             Velocity.Y += Constants.GRAVITY * (float)e.Time;
             proposedCoords.Yf = proposedCoords.Yf + Velocity.Y * (float)e.Time;
-            if (!proposedCoords.IsValidItemLocation || (proposedCoords.IsValidBlockLocation && WorldData.GetBlock(ref proposedCoords).IsSolid))
+           // if (!proposedCoords.IsValidItemLocation || (proposedCoords.IsValidBlockLocation && WorldData.GetBlock(ref proposedCoords).IsSolid))
             {
                 var currentVelocityY = Velocity.Y + Constants.GRAVITY * (float)e.Time;
                 if (Velocity.LengthFast > 3f)
@@ -167,16 +167,16 @@ namespace Sean.WorldClient.GameObjects.GameItems
                 else
                 {
                     //Hit ground, stop
-                    do
-                    {
+                   // do
+                   // {
                         proposedCoords.Yf++;
-                    } while (!proposedCoords.IsValidItemLocation || (proposedCoords.IsValidBlockLocation && WorldData.GetBlock(ref proposedCoords).IsSolid));
+                   // } while (!proposedCoords.IsValidItemLocation || (proposedCoords.IsValidBlockLocation && WorldData.GetBlock(ref proposedCoords).IsSolid));
                     proposedCoords.Yf = (float)Math.Floor(proposedCoords.Yf) + Constants.ITEM_HOVER_DIST;
                     IsMoving = false;
                     if (Stop != null) Stop(e);
                 }
             }
-            if (new ChunkCoords(ref Coords) != new ChunkCoords(ref proposedCoords))
+            //if (new ChunkCoords(ref Coords) != new ChunkCoords(ref proposedCoords))
             {
                 //Moving to a new chunk
                 var oldChunk = WorldData.Chunks[Coords];

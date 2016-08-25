@@ -2,6 +2,7 @@
 using System.Xml;
 using Sean.WorldClient.Hosts.World;
 using OpenTK;
+using Sean.Shared;
 
 namespace Sean.WorldClient.GameObjects.Units
 {

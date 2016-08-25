@@ -13,6 +13,7 @@ using Sean.WorldClient.Textures;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using Sean.Shared;
+using Sean.Shared.Textures;
 
 namespace Sean.WorldClient.Hosts.World
 {
@@ -21,7 +22,7 @@ namespace Sean.WorldClient.Hosts.World
         #region Constructors
         internal Chunk(int x, int z)
         {
-            Coords = new ChunkCoords(x, z);
+            //Coords = new ChunkCoords(x, z);
             Blocks = new Blocks(CHUNK_SIZE, CHUNK_HEIGHT, CHUNK_SIZE);
             HeightMap = new int[CHUNK_SIZE, CHUNK_SIZE];
             Clutters = new HashSet<Clutter>();
@@ -41,7 +42,7 @@ namespace Sean.WorldClient.Hosts.World
         private const int CLUTTER_RENDER_DISTANCE = CHUNK_SIZE * 4;
         private const int GAME_ITEM_RENDER_DISTANCE = CLUTTER_RENDER_DISTANCE;
 
-        public ChunkCoords Coords;
+		//public ChunkCoords Coords;
         public Blocks Blocks;
 
         /// <summary>Heighest level in each vertical column containing a non transparent block. Sky light does not shine through this point. Used in rendering and lighting calculations.</summary>
@@ -66,7 +67,8 @@ namespace Sean.WorldClient.Hosts.World
         /// <summary>Distance of the chunk from the player in number of blocks.</summary>
         public double DistanceFromPlayer()
         {
-            return Math.Sqrt(Math.Pow(Game.Player.Coords.Xf - Coords.WorldCoordsX, 2) + Math.Pow(Game.Player.Coords.Zf - Coords.WorldCoordsZ, 2));
+            //return Math.Sqrt(Math.Pow(Game.Player.Coords.Xf - Coords.WorldCoordsX, 2) + Math.Pow(Game.Player.Coords.Zf - Coords.WorldCoordsZ, 2));
+			return 0;
         }
         
         /// <summary>Lookup for the Chunk Vbo containing the position, normal and texCoords Vbo's for this chunk and texture type.</summary>
@@ -156,7 +158,7 @@ namespace Sean.WorldClient.Hosts.World
                 GameObject.ResetColor();
             }
 
-            if (ChunkBufferState == BufferState.VboNotBuffered || !IsInFrustum) return;
+            //if (ChunkBufferState == BufferState.VboNotBuffered || !IsInFrustum) return;
 
             foreach (var chunkVbo in _chunkVbos)
             {
@@ -166,52 +168,6 @@ namespace Sean.WorldClient.Hosts.World
             Game.PerformanceHost.ChunksRendered++;
         }
 
-        /// <summary>Render all transparent faces in the chunk by looping through each texture vbo in the chunk, binding that texture and then rendering all of the applicable faces.</summary>
-        /// <remarks>The vbo will be null if this chunk does not contain any faces with the corresponding texture.</remarks>
-        public void RenderTransparentFaces()
-        {
-            if (ChunkBufferState == BufferState.VboNotBuffered || !IsInFrustum) return;
-
-            bool isUnderWater = Game.Player.EyesUnderWater;
-            var waterChunkVbo = _chunkVbos[(int)BlockTextureType.Water];
-            if (waterChunkVbo != null && !isUnderWater) waterChunkVbo.Render(); //if this chunk contains water and the player is not under water then draw the water before anything else
-
-            //render clutter / light sources
-            //we already know this chunk is in the frustum if we make it here, now check its within a certain distance
-            //also we know clutter / light source are likely to be on the surface, so render before other transparent faces such as leaves (not including water)
-            if (DistanceFromPlayer() < CLUTTER_RENDER_DISTANCE)
-            {
-                GL.PushMatrix();
-                var previousCoords = new Coords(0, 0, 0);
-                foreach (var clutter in Clutters)
-                {
-                    //translate to each piece of clutter relative to the last so we only need to push the matrix stack once
-                    GL.Translate(clutter.Coords.Xf - previousCoords.Xf, clutter.Coords.Yf - previousCoords.Yf, clutter.Coords.Zf - previousCoords.Zf);
-                    clutter.Render(null);
-                    previousCoords = clutter.Coords;
-                }
-
-                foreach (var lightSource in LightSources)
-                {
-                    //translate to each light source relative to the last so we only need to push the matrix stack once
-                    GL.Translate(lightSource.Value.Coords.Xf - previousCoords.Xf, lightSource.Value.Coords.Yf - previousCoords.Yf, lightSource.Value.Coords.Zf - previousCoords.Zf);
-                    lightSource.Value.Render(null);
-                    previousCoords = lightSource.Value.Coords;
-                }
-
-                GL.PopMatrix();
-                GameObject.ResetColor();
-            }
-
-            foreach (var chunkVbo in _chunkVbos)
-            {
-                if (chunkVbo == null) continue;
-                if (!chunkVbo.IsTransparent || chunkVbo.BlockType == Block.BlockType.Water) continue;
-                chunkVbo.Render();
-            }
-
-            if (waterChunkVbo != null && isUnderWater) waterChunkVbo.Render(); //if this chunk contains water and the player is under water then draw the water last
-        }
         #endregion
 
         #region Build
@@ -235,133 +191,21 @@ namespace Sean.WorldClient.Hosts.World
             BuildState initialState;
             lock (this) //bm: multiple threads building a chunk at once can mess up the VBOs. contention ought to be rare.
             {
-                initialState = ChunkBuildState;
-                ChunkBuildState = BuildState.Building;
-
-                //these are used in frustum checks
-                _shortestFaceHeightTemp = CHUNK_HEIGHT + 1;
-
-                #region Add faces needed to fill holes below the DeepestTransparentLevel where adjacent chunks have transparent blocks on the chunk edge
-                if (Coords.X > 0) //get west (left) chunk x-
-                {
-                    var adjacentChunk = WorldData.Chunks[Coords.X - 1, Coords.Z];
-                    if (adjacentChunk.DeepestTransparentLevel < DeepestTransparentLevel - 1) //holes are only possible if adjacent chunk DTL is lower than DTL - 1
-                    {
-                        //loop through all edge blocks on adjacent chunk between the DTL's, for any transparent block, add the adjacent face to this chunk
-                        //we know we have to add it because everything at these levels in this chunk are non transparent as they are below the DTL
-                        for (int y = adjacentChunk.DeepestTransparentLevel; y < DeepestTransparentLevel - 1; y++)
-                        {
-                            for (int z = 0; z < CHUNK_SIZE; z++)
-                            {
-                                if (!adjacentChunk.Blocks[CHUNK_SIZE - 1, y, z].IsTransparent) continue;
-                                var block = Blocks[0, y, z]; //make copy to pass by ref
-                                AddBlockFace(ref block, Face.Left, Coords.WorldCoordsX, y, Coords.WorldCoordsZ + z);
-                            }
-                        }
-                    }
-                }
-                if (Coords.X < WorldData.SizeInChunksX - 1) //get east (right) chunk x+
-                {
-                    var adjacentChunk = WorldData.Chunks[Coords.X + 1, Coords.Z];
-                    if (adjacentChunk.DeepestTransparentLevel < DeepestTransparentLevel - 1) //holes are only possible if adjacent chunk DTL is lower than DTL - 1
-                    {
-                        //loop through all edge blocks on adjacent chunk between the DTL's, for any transparent block, add the adjacent face to this chunk
-                        //we know we have to add it because everything at these levels in this chunk are non transparent as they are below the DTL
-                        for (int y = adjacentChunk.DeepestTransparentLevel; y < DeepestTransparentLevel - 1; y++)
-                        {
-                            for (int z = 0; z < CHUNK_SIZE; z++)
-                            {
-                                if (!adjacentChunk.Blocks[0, y, z].IsTransparent) continue;
-                                var block = Blocks[CHUNK_SIZE - 1, y, z]; //make copy to pass by ref
-                                AddBlockFace(ref block, Face.Right, Coords.WorldCoordsX + CHUNK_SIZE - 1, y, Coords.WorldCoordsZ + z);
-                            }
-                        }
-                    }
-                }
-                if (Coords.Z > 0) //get south (front) chunk z+
-                {
-                    var adjacentChunk = WorldData.Chunks[Coords.X, Coords.Z - 1];
-                    if (adjacentChunk.DeepestTransparentLevel < DeepestTransparentLevel - 1) //holes are only possible if adjacent chunk DTL is lower than DTL - 1
-                    {
-                        //loop through all edge blocks on adjacent chunk between the DTL's, for any transparent block, add the adjacent face to this chunk
-                        //we know we have to add it because everything at these levels in this chunk are non transparent as they are below the DTL
-                        for (int y = adjacentChunk.DeepestTransparentLevel; y < DeepestTransparentLevel - 1; y++)
-                        {
-                            for (int x = 0; x < CHUNK_SIZE; x++)
-                            {
-                                if (!adjacentChunk.Blocks[x, y, CHUNK_SIZE - 1].IsTransparent) continue;
-                                var block = Blocks[x, y, 0]; //make copy to pass by ref
-                                AddBlockFace(ref block, Face.Back, Coords.WorldCoordsX + x, y, Coords.WorldCoordsZ);
-                            }
-                        }
-                    }
-                }
-                if (Coords.Z < WorldData.SizeInChunksZ - 1) //get north (back) chunk z-
-                {
-                    var adjacentChunk = WorldData.Chunks[Coords.X, Coords.Z + 1];
-                    if (adjacentChunk.DeepestTransparentLevel < DeepestTransparentLevel - 1) //holes are only possible if adjacent chunk DTL is lower than DTL - 1
-                    {
-                        //loop through all edge blocks on adjacent chunk between the DTL's, for any transparent block, add the adjacent face to this chunk
-                        //we know we have to add it because everything at these levels in this chunk are non transparent as they are below the DTL
-                        for (int y = adjacentChunk.DeepestTransparentLevel; y < DeepestTransparentLevel - 1; y++)
-                        {
-                            for (int x = 0; x < CHUNK_SIZE; x++)
-                            {
-                                if (!adjacentChunk.Blocks[x, y, 0].IsTransparent) continue;
-                                var block = Blocks[x, y, CHUNK_SIZE - 1]; //make copy to pass by ref
-                                AddBlockFace(ref block, Face.Front, Coords.WorldCoordsX + x, y, Coords.WorldCoordsZ + CHUNK_SIZE - 1);
-                            }
-                        }
-                    }
-                }
-                #endregion
-
-                for (var x = 0; x < CHUNK_SIZE; x++)
-                {
-                    var worldX = Coords.WorldCoordsX + x;
-                    for (var z = 0; z < CHUNK_SIZE; z++)
-                    {
-                        var worldZ = Coords.WorldCoordsZ + z;
-                        //only build from the DeepestTransparentLevel - 1 upwards, needs - 1 so that faces on the top of the block below still get added to the vbo (ie: the deepest possible face to stand on in the chunk)
-                        //no need to loop higher then HighestNonAirLevel as its only air and nothing to render above that
-                        for (var y = DeepestTransparentLevel - 1; y <= HighestNonAirLevel; y++)
-                        {
-                            var block = Blocks[x, y, z];
-                            if (block.Type == Block.BlockType.Air) continue;
-
-                            AddBlockFace(ref block, Face.Front, worldX, y, worldZ);
-                            AddBlockFace(ref block, Face.Right, worldX, y, worldZ);
-                            AddBlockFace(ref block, Face.Top, worldX, y, worldZ);
-                            AddBlockFace(ref block, Face.Left, worldX, y, worldZ);
-                            AddBlockFace(ref block, Face.Bottom, worldX, y, worldZ);
-                            AddBlockFace(ref block, Face.Back, worldX, y, worldZ);
-                        }
-                    }
-                }
-
-                //note: in benchmarking, the time to loop through chunk vbos and write lists to arrays is <1% of the time to build a chunk, no point in trying to optimize it
-                foreach (var chunkVbo in _chunkVbos.Where(chunkVbo => chunkVbo != null))
-                {
-                    chunkVbo.WriteListsToArrays();
-                }
-
-                ChunkBuildState = BuildState.Built;
             }
 
             //monitor chunk build times, for now ignore initial chunk builds, can be easily modified
-            switch (initialState)
-            {
+            //switch (initialState)
+            //{
                 //case BuildState.QueuedInitialFrustum: //ignore to prevent debug spam
                 //case BuildState.QueuedInitialFar: //ignore to prevent debug spam
                 //case BuildState.QueuedDayNight: //ignore to prevent debug spam
-                case BuildState.Built: //gm: i wouldnt expect to see this status here, but now we will know (as it turns out this was showing up when there were too many auto grass changes too fast for example)
-                case BuildState.Building: //gm: i wouldnt expect this status here, but now we will know
-                case BuildState.NotLoaded: //gm: i wouldnt expect this status here, but now we will know
-                case BuildState.Queued:
-                case BuildState.QueuedFar:
-                    Debug.WriteLine("Chunk {0} built in {1}ms ({2})", Coords, stopwatch.ElapsedMilliseconds, initialState);
-                    break;
-            }
+                //case BuildState.Built: //gm: i wouldnt expect to see this status here, but now we will know (as it turns out this was showing up when there were too many auto grass changes too fast for example)
+                //case BuildState.Building: //gm: i wouldnt expect this status here, but now we will know
+                //case BuildState.NotLoaded: //gm: i wouldnt expect this status here, but now we will know
+                //case BuildState.Queued:
+                //case BuildState.QueuedFar:
+                //    break;
+            //}
         }
 
         /// <summary>Buffer the chunks data to a vbo so it can be rendered.</summary>
@@ -372,7 +216,7 @@ namespace Sean.WorldClient.Hosts.World
             {
                 chunkVbo.BufferData();
             }
-            _shortestFaceHeight = _shortestFaceHeightTemp;
+            //_shortestFaceHeight = _shortestFaceHeightTemp;
             ChunkBufferState = BufferState.VboBuffered;
         }
 
@@ -426,7 +270,7 @@ namespace Sean.WorldClient.Hosts.World
             //we need position 4 no matter what, so retrieve it here, position 4 is used for the lighting values of all 4 vertices of this face when smooth lighting is off
             byte lightColor = WorldData.GetBlockLightColor(adjacentX, adjacentY, adjacentZ);
 
-            _shortestFaceHeightTemp = Math.Min(_shortestFaceHeightTemp, y);
+            //_shortestFaceHeightTemp = Math.Min(_shortestFaceHeightTemp, y);
 
             if (block.Type == Block.BlockType.Leaves || block.Type == Block.BlockType.SnowLeaves)
             {
@@ -448,89 +292,8 @@ namespace Sean.WorldClient.Hosts.World
                 var xyz = new Position[9];
                 var smoothLighting = new byte[9];
                 smoothLighting[4] = lightColor; //we already have the directly adjacent color which goes in position 4
-                switch (face)
-                {
-                    case Face.Right: //X is constant
-                        xyz[0] = new Position(adjacentX, adjacentY + 1, adjacentZ + 1);
-                        xyz[1] = new Position(adjacentX, adjacentY + 1, adjacentZ);
-                        xyz[2] = new Position(adjacentX, adjacentY + 1, adjacentZ - 1);
-                        xyz[3] = new Position(adjacentX, adjacentY, adjacentZ + 1);
-                        xyz[5] = new Position(adjacentX, adjacentY, adjacentZ - 1);
-                        xyz[6] = new Position(adjacentX, adjacentY - 1, adjacentZ + 1);
-                        xyz[7] = new Position(adjacentX, adjacentY - 1, adjacentZ);
-                        xyz[8] = new Position(adjacentX, adjacentY - 1, adjacentZ - 1);
-                        break;
-                    case Face.Left: //X is constant
-                        xyz[0] = new Position(adjacentX, adjacentY + 1, adjacentZ - 1);
-                        xyz[1] = new Position(adjacentX, adjacentY + 1, adjacentZ);
-                        xyz[2] = new Position(adjacentX, adjacentY + 1, adjacentZ + 1);
-                        xyz[3] = new Position(adjacentX, adjacentY, adjacentZ - 1);
-                        xyz[5] = new Position(adjacentX, adjacentY, adjacentZ + 1);
-                        xyz[6] = new Position(adjacentX, adjacentY - 1, adjacentZ - 1);
-                        xyz[7] = new Position(adjacentX, adjacentY - 1, adjacentZ);
-                        xyz[8] = new Position(adjacentX, adjacentY - 1, adjacentZ + 1);
-                        break;
-                    case Face.Top: //Y is constant
-                        xyz[0] = new Position(adjacentX - 1, adjacentY, adjacentZ - 1);
-                        xyz[1] = new Position(adjacentX, adjacentY, adjacentZ - 1);
-                        xyz[2] = new Position(adjacentX + 1, adjacentY, adjacentZ - 1);
-                        xyz[3] = new Position(adjacentX - 1, adjacentY, adjacentZ);
-                        xyz[5] = new Position(adjacentX + 1, adjacentY, adjacentZ);
-                        xyz[6] = new Position(adjacentX - 1, adjacentY, adjacentZ + 1);
-                        xyz[7] = new Position(adjacentX, adjacentY, adjacentZ + 1);
-                        xyz[8] = new Position(adjacentX + 1, adjacentY, adjacentZ + 1);
-                        break;
-                    case Face.Bottom: //Y is constant
-                        xyz[0] = new Position(adjacentX - 1, adjacentY, adjacentZ + 1);
-                        xyz[1] = new Position(adjacentX, adjacentY, adjacentZ + 1);
-                        xyz[2] = new Position(adjacentX + 1, adjacentY, adjacentZ + 1);
-                        xyz[3] = new Position(adjacentX - 1, adjacentY, adjacentZ);
-                        xyz[5] = new Position(adjacentX + 1, adjacentY, adjacentZ);
-                        xyz[6] = new Position(adjacentX - 1, adjacentY, adjacentZ - 1);
-                        xyz[7] = new Position(adjacentX, adjacentY, adjacentZ - 1);
-                        xyz[8] = new Position(adjacentX + 1, adjacentY, adjacentZ - 1);
-                        break;
-                    case Face.Front: //Z is constant
-                        xyz[0] = new Position(adjacentX - 1, adjacentY + 1, adjacentZ);
-                        xyz[1] = new Position(adjacentX, adjacentY + 1, adjacentZ);
-                        xyz[2] = new Position(adjacentX + 1, adjacentY + 1, adjacentZ);
-                        xyz[3] = new Position(adjacentX - 1, adjacentY, adjacentZ);
-                        xyz[5] = new Position(adjacentX + 1, adjacentY, adjacentZ);
-                        xyz[6] = new Position(adjacentX - 1, adjacentY - 1, adjacentZ);
-                        xyz[7] = new Position(adjacentX, adjacentY - 1, adjacentZ);
-                        xyz[8] = new Position(adjacentX + 1, adjacentY - 1, adjacentZ);
-                        break;
-                    default: //Back; Z is constant
-                        xyz[0] = new Position(adjacentX + 1, adjacentY + 1, adjacentZ);
-                        xyz[1] = new Position(adjacentX, adjacentY + 1, adjacentZ);
-                        xyz[2] = new Position(adjacentX - 1, adjacentY + 1, adjacentZ);
-                        xyz[3] = new Position(adjacentX + 1, adjacentY, adjacentZ);
-                        xyz[5] = new Position(adjacentX - 1, adjacentY, adjacentZ);
-                        xyz[6] = new Position(adjacentX + 1, adjacentY - 1, adjacentZ);
-                        xyz[7] = new Position(adjacentX, adjacentY - 1, adjacentZ);
-                        xyz[8] = new Position(adjacentX - 1, adjacentY - 1, adjacentZ);
-                        break;
-                }
 
-                //need to know if blocks on positions 1,3,5,7 are transparent, each value is used twice
-                //-for example neither 1 or 5 are transparent, then vertex0 should not have any influence from light at position 2 and should use the darkest value instead for a dark corner
-                //        -position 2 might be on the other side of a wall and then we get sunlight coming into ceiling corners etc
-                //-if the coords of any of these positions are outside the world then consider them transparent
-                bool transparent1 = !xyz[1].IsValidBlockLocation || xyz[1].GetBlock().IsTransparent;
-                bool transparent3 = !xyz[3].IsValidBlockLocation || xyz[3].GetBlock().IsTransparent;
-                bool transparent5 = !xyz[5].IsValidBlockLocation || xyz[5].GetBlock().IsTransparent;
-                bool transparent7 = !xyz[7].IsValidBlockLocation || xyz[7].GetBlock().IsTransparent;
-
-                smoothLighting[0] = transparent1 || transparent3 ? xyz[0].LightColor : Lighting.DARKEST_COLOR;
-                smoothLighting[1] = xyz[1].LightColor;
-                smoothLighting[2] = transparent1 || transparent5 ? xyz[2].LightColor : Lighting.DARKEST_COLOR;
-                smoothLighting[3] = xyz[3].LightColor;
-                smoothLighting[5] = xyz[5].LightColor;
-                smoothLighting[6] = transparent3 || transparent7 ? xyz[6].LightColor : Lighting.DARKEST_COLOR;
-                smoothLighting[7] = xyz[7].LightColor;
-                smoothLighting[8] = transparent5 || transparent7 ? xyz[8].LightColor : Lighting.DARKEST_COLOR;
-
-                //average 4 colors to get the color for each vertex
+				//average 4 colors to get the color for each vertex
                 var v0Color = (byte)((smoothLighting[1] + smoothLighting[2] + smoothLighting[4] + smoothLighting[5]) / 4);
                 var v1Color = (byte)((smoothLighting[0] + smoothLighting[1] + smoothLighting[3] + smoothLighting[4]) / 4);
                 var v2Color = (byte)((smoothLighting[3] + smoothLighting[4] + smoothLighting[6] + smoothLighting[7]) / 4);
@@ -638,127 +401,6 @@ namespace Sean.WorldClient.Hosts.World
         }
         #endregion
 
-        #region Frustum
-        /// <summary>
-        /// Shortest face height. Used in frustum checks. Calculated while building vbo's.
-        /// Use for frustum logic instead of DeepestTransparentLevel because this will also account for faces drawn below the
-        /// DeepestTransparentLevel to be visible from adjacent chunks.
-        /// </summary>
-        private int _shortestFaceHeight;
-        private int _shortestFaceHeightTemp;
-
-        /// <summary>Is this chunk in the players view frustum.</summary>
-        /// <seealso cref="http://www.crownandcutlass.com/features/technicaldetails/frustum.html"/>
-        internal bool IsInFrustum
-        {
-            get
-            {
-                float minX = Coords.WorldCoordsX;
-                var maxX = minX + CHUNK_SIZE;
-                float minZ = Coords.WorldCoordsZ;
-                var maxZ = minZ + CHUNK_SIZE;
-
-                var nfXmin = Game.NearFrustum.X * minX;
-                var nfXmax = Game.NearFrustum.X * maxX;
-                var nfYmin = Game.NearFrustum.Y * _shortestFaceHeight;
-                var nfYmax = Game.NearFrustum.Y * HighestNonAirLevel;
-                var nfZmin = Game.NearFrustum.Z * minZ;
-                var nfZmax = Game.NearFrustum.Z * maxZ;
-
-                if (nfXmin + nfYmax + nfZmin + Game.NearFrustum.W < -0.005f
-                    && nfXmin + nfYmax + nfZmax + Game.NearFrustum.W < -0.005f
-                    && nfXmax + nfYmax + nfZmin + Game.NearFrustum.W < -0.005f
-                    && nfXmax + nfYmax + nfZmax + Game.NearFrustum.W < -0.005f
-                    && nfXmin + nfYmin + nfZmin + Game.NearFrustum.W < -0.005f
-                    && nfXmin + nfYmin + nfZmax + Game.NearFrustum.W < -0.005f
-                    && nfXmax + nfYmin + nfZmin + Game.NearFrustum.W < -0.005f
-                    && nfXmax + nfYmin + nfZmax + Game.NearFrustum.W < -0.005f) return false;
-
-                var ffXmin = Game.FarFrustum.X * minX;
-                var ffXmax = Game.FarFrustum.X * maxX;
-                var ffYmin = Game.FarFrustum.Y * _shortestFaceHeight;
-                var ffYmax = Game.FarFrustum.Y * HighestNonAirLevel;
-                var ffZmin = Game.FarFrustum.Z * minZ;
-                var ffZmax = Game.FarFrustum.Z * maxZ;
-
-                if (ffXmin + ffYmax + ffZmin + Game.FarFrustum.W < -0.005f
-                    && ffXmin + ffYmax + ffZmax + Game.FarFrustum.W < -0.005f
-                    && ffXmax + ffYmax + ffZmin + Game.FarFrustum.W < -0.005f
-                    && ffXmax + ffYmax + ffZmax + Game.FarFrustum.W < -0.005f
-                    && ffXmin + ffYmin + ffZmin + Game.FarFrustum.W < -0.005f
-                    && ffXmin + ffYmin + ffZmax + Game.FarFrustum.W < -0.005f
-                    && ffXmax + ffYmin + ffZmin + Game.FarFrustum.W < -0.005f
-                    && ffXmax + ffYmin + ffZmax + Game.FarFrustum.W < -0.005f) return false;
-
-                var lfXmin = Game.LeftFrustum.X * minX;
-                var lfXmax = Game.LeftFrustum.X * maxX;
-                var lfYmin = Game.LeftFrustum.Y * _shortestFaceHeight;
-                var lfYmax = Game.LeftFrustum.Y * HighestNonAirLevel;
-                var lfZmin = Game.LeftFrustum.Z * minZ;
-                var lfZmax = Game.LeftFrustum.Z * maxZ;
-
-                if (lfXmin + lfYmax + lfZmin + Game.LeftFrustum.W < -0.005f
-                    && lfXmin + lfYmax + lfZmax + Game.LeftFrustum.W < -0.005f
-                    && lfXmax + lfYmax + lfZmin + Game.LeftFrustum.W < -0.005f
-                    && lfXmax + lfYmax + lfZmax + Game.LeftFrustum.W < -0.005f
-                    && lfXmin + lfYmin + lfZmin + Game.LeftFrustum.W < -0.005f
-                    && lfXmin + lfYmin + lfZmax + Game.LeftFrustum.W < -0.005f
-                    && lfXmax + lfYmin + lfZmin + Game.LeftFrustum.W < -0.005f
-                    && lfXmax + lfYmin + lfZmax + Game.LeftFrustum.W < -0.005f) return false;
-
-                var rfXmin = Game.RightFrustum.X * minX;
-                var rfXmax = Game.RightFrustum.X * maxX;
-                var rfYmin = Game.RightFrustum.Y * _shortestFaceHeight;
-                var rfYmax = Game.RightFrustum.Y * HighestNonAirLevel;
-                var rfZmin = Game.RightFrustum.Z * minZ;
-                var rfZmax = Game.RightFrustum.Z * maxZ;
-
-                if (rfXmin + rfYmax + rfZmin + Game.RightFrustum.W < -0.005f
-                    && rfXmin + rfYmax + rfZmax + Game.RightFrustum.W < -0.005f
-                    && rfXmax + rfYmax + rfZmin + Game.RightFrustum.W < -0.005f
-                    && rfXmax + rfYmax + rfZmax + Game.RightFrustum.W < -0.005f
-                    && rfXmin + rfYmin + rfZmin + Game.RightFrustum.W < -0.005f
-                    && rfXmin + rfYmin + rfZmax + Game.RightFrustum.W < -0.005f
-                    && rfXmax + rfYmin + rfZmin + Game.RightFrustum.W < -0.005f
-                    && rfXmax + rfYmin + rfZmax + Game.RightFrustum.W < -0.005f) return false;
-
-                var tfXmin = Game.TopFrustum.X * minX;
-                var tfXmax = Game.TopFrustum.X * maxX;
-                var tfYmin = Game.TopFrustum.Y * _shortestFaceHeight;
-                var tfYmax = Game.TopFrustum.Y * HighestNonAirLevel;
-                var tfZmin = Game.TopFrustum.Z * minZ;
-                var tfZmax = Game.TopFrustum.Z * maxZ;
-
-                if (tfXmin + tfYmax + tfZmin + Game.TopFrustum.W < -0.005f
-                    && tfXmin + tfYmax + tfZmax + Game.TopFrustum.W < -0.005f
-                    && tfXmax + tfYmax + tfZmin + Game.TopFrustum.W < -0.005f
-                    && tfXmax + tfYmax + tfZmax + Game.TopFrustum.W < -0.005f
-                    && tfXmin + tfYmin + tfZmin + Game.TopFrustum.W < -0.005f
-                    && tfXmin + tfYmin + tfZmax + Game.TopFrustum.W < -0.005f
-                    && tfXmax + tfYmin + tfZmin + Game.TopFrustum.W < -0.005f
-                    && tfXmax + tfYmin + tfZmax + Game.TopFrustum.W < -0.005f) return false;
-
-                var bfXmin = Game.BottomFrustum.X * minX;
-                var bfXmax = Game.BottomFrustum.X * maxX;
-                var bfYmin = Game.BottomFrustum.Y * _shortestFaceHeight;
-                var bfYmax = Game.BottomFrustum.Y * HighestNonAirLevel;
-                var bfZmin = Game.BottomFrustum.Z * minZ;
-                var bfZmax = Game.BottomFrustum.Z * maxZ;
-
-                if (bfXmin + bfYmax + bfZmin + Game.BottomFrustum.W < -0.005f
-                    && bfXmin + bfYmax + bfZmax + Game.BottomFrustum.W < -0.005f
-                    && bfXmax + bfYmax + bfZmin + Game.BottomFrustum.W < -0.005f
-                    && bfXmax + bfYmax + bfZmax + Game.BottomFrustum.W < -0.005f
-                    && bfXmin + bfYmin + bfZmin + Game.BottomFrustum.W < -0.005f
-                    && bfXmin + bfYmin + bfZmax + Game.BottomFrustum.W < -0.005f
-                    && bfXmax + bfYmin + bfZmin + Game.BottomFrustum.W < -0.005f
-                    && bfXmax + bfYmin + bfZmax + Game.BottomFrustum.W < -0.005f) return false;
-
-                return true;
-            }
-        }
-        #endregion
-
         #region Updates
         internal void Update(FrameEventArgs e)
         {
@@ -793,7 +435,6 @@ namespace Sean.WorldClient.Hosts.World
         /// <summary>Only called for SinglePlayer and Servers.</summary>
         private void WaterExpand()
         {
-            Debug.WriteLine("Water expanding in chunk {0}...", Coords);
             var newWater = new List<Position>();
             for (var i = 0; i < CHUNK_SIZE; i++)
             {
@@ -806,31 +447,9 @@ namespace Sean.WorldClient.Hosts.World
                         for (var q = 0; q < 5; q++)
                         {
                             Position adjacent;
-                            switch (q)
-                            {
-                                case 0:
-                                    adjacent = new Position(Coords.WorldCoordsX + i, j - 1, Coords.WorldCoordsZ + k);
-                                    belowCurrent = adjacent;
-                                    break;
-                                case 1:
-                                    adjacent = new Position(Coords.WorldCoordsX + i + 1, j, Coords.WorldCoordsZ + k);
-                                    break;
-                                case 2:
-                                    adjacent = new Position(Coords.WorldCoordsX + i - 1, j, Coords.WorldCoordsZ + k);
-                                    break;
-                                case 3:
-                                    adjacent = new Position(Coords.WorldCoordsX + i, j, Coords.WorldCoordsZ + k + 1);
-                                    break;
-                                default:
-                                    adjacent = new Position(Coords.WorldCoordsX + i, j, Coords.WorldCoordsZ + k - 1);
-                                    break;
-                            }
 
-                            if (newWater.Contains(adjacent)) continue;
+                            //if (newWater.Contains(adjacent)) continue;
 
-                            //if there's air or water below the current block, don't spread sideways
-                            if (q != 0 && belowCurrent.IsValidBlockLocation && (Blocks[belowCurrent].Type == Block.BlockType.Air || Blocks[belowCurrent].Type == Block.BlockType.Water)) continue;
-                            if (adjacent.IsValidBlockLocation && adjacent.GetBlock().Type == Block.BlockType.Air) newWater.Add(adjacent);
                         }
                     }
                 }
@@ -839,7 +458,6 @@ namespace Sean.WorldClient.Hosts.World
             if (newWater.Count == 0)
             {
                 WaterExpanding = false;
-                Debug.WriteLine("Water finished expanding in chunk {0}", Coords);
                 return;
             }
 
@@ -861,122 +479,15 @@ namespace Sean.WorldClient.Hosts.World
         private void GrassGrow()
         {
             var possibleChanges = new List<Tuple<Block.BlockType, Position>>();
-            for (var x = 0; x < CHUNK_SIZE; x++)
-            {
-                int worldX = Coords.WorldCoordsX + x;
-                for (var z = 0; z < CHUNK_SIZE; z++)
-                {
-                    int worldZ = Coords.WorldCoordsZ + z;
-                    for (var y = 0; y <= Math.Min(CHUNK_HEIGHT - 1, HeightMap[x, z] + 1); y++) //look +1 above heightmap as water directly above heightmap could change to ice
-                    {
-                        var blockType = Blocks[x, y, z].Type;
-                        switch (blockType)
-                        {
-                            case Block.BlockType.Grass:
-                            case Block.BlockType.Dirt:
-                            case Block.BlockType.Snow:
-                            case Block.BlockType.Water:
-                            case Block.BlockType.Sand:
-                            case Block.BlockType.SandDark:
-                                break;
-                            default:
-                                continue; //continue if this block type can never cause changes
-                        }
-
-                        bool hasAirAbove = y >= CHUNK_HEIGHT - 1 || Blocks[x, y + 1, z].Type == Block.BlockType.Air;
-                        bool isReceivingSunlight = y > HeightMap[x, z] || (hasAirAbove && WorldData.HasAdjacentBlockReceivingDirectSunlight(worldX, y, worldZ));
-
-                        switch (WorldData.WorldType)
-                        {
-                            case WorldType.Grass:
-                                if (isReceivingSunlight)
-                                {
-                                    switch (blockType)
-                                    {
-                                        case Block.BlockType.Dirt:
-                                            if (hasAirAbove) possibleChanges.Add(new Tuple<Block.BlockType, Position>(Block.BlockType.Grass, new Position(worldX, y, worldZ)));
-                                            continue;
-                                        case Block.BlockType.Snow:
-                                            possibleChanges.Add(new Tuple<Block.BlockType, Position>(Block.BlockType.Dirt, new Position(worldX, y, worldZ)));
-                                            continue;
-                                    }
-                                }
-                                else
-                                {
-                                    switch (blockType)
-                                    {
-                                        case Block.BlockType.Grass:
-                                        case Block.BlockType.Snow:
-                                            possibleChanges.Add(new Tuple<Block.BlockType, Position>(Block.BlockType.Dirt, new Position(worldX, y, worldZ)));
-                                            continue;
-                                    }
-                                }
-                                break;
-                            case WorldType.Desert: //lighting doesnt matter for deserts
-                                switch (blockType)
-                                {
-                                    case Block.BlockType.Grass:
-                                    case Block.BlockType.Snow:
-                                        possibleChanges.Add(new Tuple<Block.BlockType, Position>(Block.BlockType.Sand, new Position(worldX, y, worldZ)));
-                                        continue;
-                                    case Block.BlockType.SandDark:
-                                        if (hasAirAbove) possibleChanges.Add(new Tuple<Block.BlockType, Position>(Block.BlockType.Sand, new Position(worldX, y, worldZ)));
-                                        continue;
-                                }
-                                break;
-                            case WorldType.Winter:
-                                switch (blockType)
-                                {
-                                    case Block.BlockType.Water:
-                                        //water with air above and without more water below can freeze
-                                        //note: this will cause multiple lightbox updates and chunk queues if multiple water freezes at once because water -> ice is a change in transparency; therefore this is acceptable
-                                        if (hasAirAbove)
-                                        {
-                                            var hasWaterBelow = y > 0 && Blocks[x, y - 1, z].Type == Block.BlockType.Water;
-                                            if (!hasWaterBelow) possibleChanges.Add(new Tuple<Block.BlockType, Position>(Block.BlockType.Ice, new Position(worldX, y, worldZ)));
-                                        }
-                                        continue;
-                                }
-                                
-                                if (isReceivingSunlight)
-                                {
-                                    switch (blockType)
-                                    {
-                                        case Block.BlockType.Dirt:
-                                            if (hasAirAbove) possibleChanges.Add(new Tuple<Block.BlockType, Position>(Block.BlockType.Snow, new Position(worldX, y, worldZ)));
-                                            continue;
-                                        case Block.BlockType.Grass:
-                                            possibleChanges.Add(new Tuple<Block.BlockType, Position>(Block.BlockType.Snow, new Position(worldX, y, worldZ)));
-                                            continue;
-                                    }
-                                }
-                                else
-                                {
-                                    switch (blockType)
-                                    {
-                                        case Block.BlockType.Grass:
-                                        case Block.BlockType.Snow:
-                                            possibleChanges.Add(new Tuple<Block.BlockType, Position>(Block.BlockType.Dirt, new Position(worldX, y, worldZ)));
-                                            continue;
-                                    }
-                                }
-                                break;
-                        }
-                    }
-                }
-            }
 
             if (possibleChanges.Count == 0)
             {
                 //this happens after a change is made in the chunk that did not cause any possible grass grow style changes
                 GrassGrowing = false;
-                Debug.WriteLine("Grass finished growing in chunk {0} No possible changes found", Coords);
                 return;
             }
-            Debug.WriteLine("Grass growing in chunk {0} {1} possible change(s)", Coords, possibleChanges.Count);
 
             var changesMade = 0;
-            var addBlocks = new List<AddBlock>(); //only gets used for servers
             Settings.ChunkUpdatesDisabled = true; //change blocks while updates are disabled so chunk is only rebuilt once
             {
                 foreach (var change in possibleChanges)
@@ -1010,7 +521,6 @@ namespace Sean.WorldClient.Hosts.World
             {
                 //when all possible changes have been made we can stop GrassGrowing here without waiting for the next iteration to confirm it
                 GrassGrowing = false;
-                Debug.WriteLine("Grass finished growing in chunk {0} All possible changes made", Coords);
             }
         }
         #endregion
@@ -1020,8 +530,6 @@ namespace Sean.WorldClient.Hosts.World
         {
             var xmlNode = xmlDocument.CreateNode(XmlNodeType.Element, "C", string.Empty);
             if (xmlNode.Attributes == null) throw new Exception("Node attributes is null.");
-            xmlNode.Attributes.Append(xmlDocument.CreateAttribute("X")).Value = Coords.X.ToString();
-            xmlNode.Attributes.Append(xmlDocument.CreateAttribute("Z")).Value = Coords.Z.ToString();
             xmlNode.Attributes.Append(xmlDocument.CreateAttribute("WaterExpanding")).Value = WaterExpanding.ToString();
             xmlNode.Attributes.Append(xmlDocument.CreateAttribute("GrassGrowing")).Value = GrassGrowing.ToString();
             return xmlNode;
