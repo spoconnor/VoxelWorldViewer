@@ -14,12 +14,12 @@ namespace Sean.WorldClient
         {
             InitializeComponent();
             Settings.Launcher = this;
-            ReadFromConfig();
         }
 
         private void Launcher_Load(object sender, EventArgs e)
         {
             Config.Load();
+			ReadFromConfig();
 
             //other settings
             cbSoundEnabled.Checked = Config.SoundEnabled;

@@ -63,7 +63,7 @@ namespace Sean.WorldClient
                 }
                 else //no config file, use defaults
                 {
-                    _configXml.LoadXml("<?xml version=\"1.0\" ?>\n<Config />");
+                    _configXml.LoadXml("<?xml version=\"1.0\" ?><Config><UserName>Test</UserName><Server>127.0.0.1</Server><Port>8084</Port></Config>");
                 }
                 _configXml.Schemas.Add("", XmlReader.Create(new StringReader(Properties.Resources.Config)));
                 _configXml.Validate(null);
