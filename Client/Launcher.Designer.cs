@@ -64,7 +64,7 @@
             this.ddlServerIp.MaxLength = 70;
             this.ddlServerIp.Name = "ddlServerIp";
             this.ddlServerIp.Size = new System.Drawing.Size(177, 21);
-            this.ddlServerIp.TabIndex = 3;
+            this.ddlServerIp.TabIndex = 4;
             // 
             // label2
             // 
@@ -73,7 +73,7 @@
             this.label2.Location = new System.Drawing.Point(19, 41);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(57, 13);
-            this.label2.TabIndex = 6;
+            this.label2.TabIndex = 1;
             this.label2.Text = "UserName";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -84,7 +84,7 @@
             this.txtUserName.MaxLength = 16;
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(177, 20);
-            this.txtUserName.TabIndex = 6;
+            this.txtUserName.TabIndex = 2;
             // 
             // btnStart
             // 
@@ -98,7 +98,7 @@
             this.btnStart.Location = new System.Drawing.Point(352, 137);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(139, 35);
-            this.btnStart.TabIndex = 15;
+            this.btnStart.TabIndex = 11;
             this.btnStart.Text = "Start Game";
             this.btnStart.UseVisualStyleBackColor = false;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
@@ -174,7 +174,7 @@
             this.cbSoundEnabled.Location = new System.Drawing.Point(81, 102);
             this.cbSoundEnabled.Name = "cbSoundEnabled";
             this.cbSoundEnabled.Size = new System.Drawing.Size(99, 17);
-            this.cbSoundEnabled.TabIndex = 24;
+            this.cbSoundEnabled.TabIndex = 7;
             this.cbSoundEnabled.Text = "Sound Enabled";
             this.cbSoundEnabled.UseVisualStyleBackColor = false;
             // 
@@ -185,7 +185,7 @@
             this.txtPort.MaxLength = 5;
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(44, 20);
-            this.txtPort.TabIndex = 58;
+            this.txtPort.TabIndex = 6;
             // 
             // lblPort
             // 
@@ -194,7 +194,7 @@
             this.lblPort.Location = new System.Drawing.Point(278, 67);
             this.lblPort.Name = "lblPort";
             this.lblPort.Size = new System.Drawing.Size(26, 13);
-            this.lblPort.TabIndex = 57;
+            this.lblPort.TabIndex = 5;
             this.lblPort.Text = "Port";
             this.lblPort.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -203,7 +203,7 @@
             this.pbProgress.Location = new System.Drawing.Point(12, 137);
             this.pbProgress.Name = "pbProgress";
             this.pbProgress.Size = new System.Drawing.Size(334, 12);
-            this.pbProgress.TabIndex = 59;
+            this.pbProgress.TabIndex = 9;
             this.pbProgress.Visible = false;
             // 
             // txtProgress
@@ -211,7 +211,7 @@
             this.txtProgress.Location = new System.Drawing.Point(12, 151);
             this.txtProgress.Name = "txtProgress";
             this.txtProgress.Size = new System.Drawing.Size(334, 20);
-            this.txtProgress.TabIndex = 60;
+            this.txtProgress.TabIndex = 10;
             this.txtProgress.Visible = false;
             // 
             // menuStrip1
@@ -223,7 +223,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(496, 24);
-            this.menuStrip1.TabIndex = 61;
+            this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
@@ -238,12 +238,12 @@
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(89, 6);
             // 
             // mnuExit
             // 
             this.mnuExit.Name = "mnuExit";
-            this.mnuExit.Size = new System.Drawing.Size(152, 22);
+            this.mnuExit.Size = new System.Drawing.Size(92, 22);
             this.mnuExit.Text = "Exit";
             this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
@@ -259,12 +259,12 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(104, 6);
             // 
             // mnuAbout
             // 
             this.mnuAbout.Name = "mnuAbout";
-            this.mnuAbout.Size = new System.Drawing.Size(152, 22);
+            this.mnuAbout.Size = new System.Drawing.Size(107, 22);
             this.mnuAbout.Text = "About";
             this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 
@@ -277,7 +277,7 @@
             this.cbMusic.Location = new System.Drawing.Point(186, 102);
             this.cbMusic.Name = "cbMusic";
             this.cbMusic.Size = new System.Drawing.Size(54, 17);
-            this.cbMusic.TabIndex = 63;
+            this.cbMusic.TabIndex = 8;
             this.cbMusic.Text = "Music";
             this.cbMusic.UseVisualStyleBackColor = false;
             // 
@@ -288,7 +288,7 @@
             this.label4.Location = new System.Drawing.Point(19, 67);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(38, 13);
-            this.label4.TabIndex = 64;
+            this.label4.TabIndex = 3;
             this.label4.Text = "Server";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 

@@ -14,6 +14,7 @@ namespace Sean.WorldClient
         {
             InitializeComponent();
             Settings.Launcher = this;
+            ReadFromConfig();
         }
 
         private void Launcher_Load(object sender, EventArgs e)
@@ -26,7 +27,7 @@ namespace Sean.WorldClient
         }
 			
 		private IPAddress _serverIp =  new IPAddress(new byte[]{127,0,0,1});
-        private ushort _serverPort = 8084;
+        private ushort _serverPort = 8080;
         private void btnStart_Click(object sender, EventArgs e)
         {
             if (txtUserName.Enabled && txtUserName.Text.Trim().Length == 0) { Misc.MessageError("UserName is required."); return; }
@@ -144,6 +145,14 @@ namespace Sean.WorldClient
             pbProgress.Visible = false;
         }
 
+        private void ReadFromConfig()
+        {
+            txtUserName.Text = Config.UserName;
+            ddlServerIp.Text = Config.Server;
+            txtPort.Text = Config.Port.ToString();
+            cbSoundEnabled.Checked = Config.SoundEnabled;
+            cbMusic.Checked = Config.MusicEnabled;
+        }
         private void SaveConfig()
         {
             Config.UserName = txtUserName.Text.Trim();
