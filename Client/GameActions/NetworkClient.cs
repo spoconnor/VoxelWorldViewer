@@ -10,6 +10,7 @@ using Sean.WorldClient.GameObjects.Units;
 using Sean.WorldClient.Hosts.Ui;
 using Sean.WorldClient.Hosts.World;
 using Sean.Shared;
+using System.Text;
 
 namespace Sean.WorldClient.GameActions
 {
@@ -58,10 +59,38 @@ namespace Sean.WorldClient.GameActions
 
             Settings.Launcher.UpdateProgressInvokable("Connected...", 0, 0);
 
-			var connect = new LoginAction(-1, Config.UserName);
+
+			//
+			var commsMessage = new CommsMessages.Login.Builder();
+			commsMessage.SetIpaddress("127.0.0.1");
+			commsMessage.SetPort(8085);
+			commsMessage.SetUsername(Config.UserName);
+			commsMessage.SetPassword("password");
+			var loginAction = commsMessage.Build ();
+			var messageBytes = loginAction.ToByteArray ();
+			byte[] data = Encoding.ASCII.GetBytes ("This is a test");
+			var packet = new byte[sizeof(ushort) + messageBytes.Length + data.Length];
+			packet[0] = (byte)((messageBytes.Length + data.Length)/256);
+			packet[1] = (byte)((messageBytes.Length + data.Length)%256);
+			messageBytes.CopyTo(packet, 2);
+			data.CopyTo(packet, messageBytes.Length + 2);
+
+			try
+			{
+				lock (TcpClient)
+				{
+					TcpClient.GetStream().Write(packet, 0, packet.Length);
+				}
+			}
+			catch (Exception ex)
+			{
+				NetworkClient.HandleNetworkError(ex);
+				throw new ServerDisconnectException(ex);
+			}
+			//
+
             try
             {
-                connect.Send();
                 //server will immediately reply to tell us where we are and our Id, or disconnect us
                 var actionTypebytes = new byte[sizeof(ushort)];
                 var bytesRead = 0;

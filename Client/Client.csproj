@@ -290,7 +290,6 @@
     <Compile Include="Scripting\Construction.cs" />
     <Compile Include="Hosts\CharacterHost.cs" />
     <Compile Include="ProtoBufs\CommsMessages.cs" />
-    <Compile Include="GameActions\LoginAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

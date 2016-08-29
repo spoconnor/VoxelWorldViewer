@@ -7,70 +7,71 @@ using Sean.Shared;
 
 namespace Sean.WorldClient.GameActions
 {
-    internal abstract class GameAction
+    public class GameAction
     {
-        protected GameAction()
+        public GameAction()
         {
-            //multiplayer client doesnt always need to pass this because we know how to get it
-            TcpClient = NetworkClient.TcpClient;
         }
 
+		public void SendLoginAction(string username, string password)
+		{
+	
+		}
+
         public TcpClient TcpClient { get; protected set; }
-        public abstract override string ToString();
         internal int DataLength;
-		internal abstract CommsMessages.MsgType ActionType { get; }
+		internal CommsMessages.MsgType ActionType { get; }
+
 
         #region Send
         private byte[] _byteQueue;
         private int _byteQueueIndex;
         private bool _isQueued;
-        protected virtual void Queue()
+		/*
+		protected virtual void Queue()
         {
-            _byteQueue = new byte[sizeof(ushort) + sizeof(int) + DataLength];
-            Write(BitConverter.GetBytes((ushort)ActionType), sizeof(ushort));
-            Write(BitConverter.GetBytes(DataLength), sizeof(int));
-        }
+			_byteQueue = new byte[sizeof(ushort) + DataLength];
+			Write(BitConverter.GetBytes(DataLength), sizeof(ushort));
+
+			Write (PlayerId);
+			Write (Encoding.ASCII.GetBytes (UserName.PadRight (16)), 16);
+			Write (Encoding.ASCII.GetBytes (Version.PadRight (20)), 20);
+			Write (ref Coords);
+        }*/
 
         internal bool Immediate;
-        internal virtual void Send()
+        internal void Send()
         {
             if (!_isQueued)
             {
-                Queue();
+                //Queue();
                 if (_byteQueueIndex != _byteQueue.Length) throw new Exception(string.Format("{0} DataLength {1} + {2} but queued {3}", ActionType, sizeof(ushort) + sizeof(int), DataLength, _byteQueueIndex));
 
                 _isQueued = true;
                 return;
             }
-
-            try
-            {
-                lock (TcpClient)
-                {
-                    TcpClient.GetStream().Write(_byteQueue, 0, _byteQueue.Length);
-                }
-            }
-            catch (Exception ex)
-            {
-                NetworkClient.HandleNetworkError(ex);
-                throw new ServerDisconnectException(ex);
-            }
         }
-			
-		protected void SendMessage(CommsMessages.Message message, byte[] data)
+			/*
+		internal override void Receive()
 		{
-			var messageBytes = WriteMessage (message);
+			lock (TcpClient)
+			{
+				var bytes = ReadStream(DataLength);
+				PlayerId = BitConverter.ToInt32(bytes, 0);
+				UserName = Encoding.ASCII.GetString(bytes, sizeof(int), 16).TrimEnd();
+				Version = Encoding.ASCII.GetString(bytes, sizeof(int) + 16, 20).TrimEnd();
+				Coords = new Coords(bytes, sizeof(int) + 16 + 20);
+			}
 
-			//byte[] msg = Encoding.ASCII.GetBytes ("This is a test<EOF>");
-			var msg = new byte[messageBytes.Length + data.Length];
-			//msg[0] = (byte)((messageBytes.Length + data.Length)/256);
-			//msg[1] = (byte)((messageBytes.Length + data.Length)%256);
-			messageBytes.CopyTo(msg, 0);
-			data.CopyTo(msg, messageBytes.Length);
-
-			Write(msg, msg.Length);
+			//todo: include position in this packet?
+			NetworkClient.Players.TryAdd(PlayerId, new Player(PlayerId, UserName, Coords)); //note: it is not possible for the add to fail on ConcurrentDictionary, see: http://www.albahari.com/threading/part5.aspx#_Concurrent_Collections
+			if (Game.UiHost != null) //ui host will be null for a client that is launching the game
+			{
+				Game.UiHost.AddChatMessage(new ChatMessage(ChatMessageType.Server, string.Format("{0} has connected.", UserName)));
+				Sounds.Audio.PlaySound(Sounds.SoundType.PlayerConnect);
+			}
 		}
-
+*/
         private static CommsMessages.Message ReadMessage(byte[] data)
         {
             byte[] msgBuffer = new byte[data[0]];
@@ -91,17 +92,7 @@ namespace Sean.WorldClient.GameActions
             return recv;
         }
 
-        public static byte[] WriteMessage(CommsMessages.Message message)
-        {
-            using (var memoryStream = new System.IO.MemoryStream())
-            {
-                memoryStream.WriteByte(0); // reserve for length
-                message.WriteTo(memoryStream);
-                var messageBytes = memoryStream.ToArray();
-                messageBytes[0] = (byte)(messageBytes.Length - 1); // ignore nul at end
-                return messageBytes;
-            }
-        }
+   
 
         protected void Write(byte[] buffer, int count)
         {
