@@ -57,8 +57,8 @@ namespace Sean.WorldClient.GameActions
             _tcpStream.ReadTimeout = 15000; //15s timeout during connect
 
             Settings.Launcher.UpdateProgressInvokable("Connected...", 0, 0);
-            /*
-			var connect = new LoginAction(-1, Config.UserName, new Coords());
+
+			var connect = new LoginAction(-1, Config.UserName);
             try
             {
                 connect.Send();
@@ -66,52 +66,52 @@ namespace Sean.WorldClient.GameActions
                 var actionTypebytes = new byte[sizeof(ushort)];
                 var bytesRead = 0;
                 while (bytesRead < actionTypebytes.Length) bytesRead += _tcpStream.Read(actionTypebytes, bytesRead, actionTypebytes.Length - bytesRead);
-                var actionType = (ActionType)BitConverter.ToUInt16(actionTypebytes, 0);
-                if (actionType == ActionType.Connect)
-                {
-                    connect.Receive();
-                }
-                else if(actionType == ActionType.Disconnect)
-                {
-                    var disconnect = new Disconnect();
-                    disconnect.Receive();
-                }
-                else
-                {
-                    throw new Exception(string.Format("Received {0} packet out of order during connect sequence.", actionType));
-                }
+                //var actionType = (ActionType)BitConverter.ToUInt16(actionTypebytes, 0);
+                //if (actionType == ActionType.Connect)
+                //{
+                //    connect.Receive();
+                //}
+                //else if(actionType == ActionType.Disconnect)
+                //{
+                //    var disconnect = new Disconnect();
+                //    disconnect.Receive();
+                //}
+                //else
+                //{
+                //    throw new Exception(string.Format("Received {0} packet out of order during connect sequence.", actionType));
+                //}
                 
-                Game.Player = Players[connect.PlayerId];
+                //Game.Player = Players[connect.PlayerId];
 
-                //then a list of the players connected, followed by the world
-                Settings.Launcher.UpdateProgressInvokable("Waiting for World...", 0, 0);
-                while (!WorldData.IsLoaded)
-                {
-                    bytesRead = 0;
-                    while (bytesRead < actionTypebytes.Length) bytesRead += _tcpStream.Read(actionTypebytes, bytesRead, actionTypebytes.Length - bytesRead);
+                ////then a list of the players connected, followed by the world
+                //Settings.Launcher.UpdateProgressInvokable("Waiting for World...", 0, 0);
+                //while (!WorldData.IsLoaded)
+                //{
+                //    bytesRead = 0;
+                //    while (bytesRead < actionTypebytes.Length) bytesRead += _tcpStream.Read(actionTypebytes, bytesRead, actionTypebytes.Length - bytesRead);
 
-                    actionType = (ActionType)BitConverter.ToUInt16(actionTypebytes, 0);
-                    switch (actionType)
-                    {
-                        case ActionType.Connect:
-                            var recvPlayerList = new LoginAction();
-                            recvPlayerList.Receive();
-                            break;
-                        case ActionType.GetWorld:
-                            var getWorld = new GetWorld();
-                            getWorld.Receive();
-                            break;
-                        default:
-                            throw new Exception(string.Format("Received {0} packet out of order during connect sequence.", actionType));
-                    }
-                }
+                //    actionType = (ActionType)BitConverter.ToUInt16(actionTypebytes, 0);
+                //    switch (actionType)
+                //    {
+                //        case ActionType.Connect:
+                //            var recvPlayerList = new LoginAction();
+                //            recvPlayerList.Receive();
+                //            break;
+                //        case ActionType.GetWorld:
+                //            var getWorld = new GetWorld();
+                //            getWorld.Receive();
+                //            break;
+                //        default:
+                //            throw new Exception(string.Format("Received {0} packet out of order during connect sequence.", actionType));
+                //    }
+                //}
             }
             catch (Exception ex)
             {
                 //HandleNetworkError(ex);
                 throw new ServerConnectException(ex);
             }
-*/
+
             _tcpStream.ReadTimeout = -1;
             TcpClient.NoDelay = true;
             var listenerThread = new Thread(ListenForServerMessageThread) { IsBackground = true, Name = "ListenForServerMessageThread" };

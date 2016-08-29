@@ -27,7 +27,7 @@ namespace Sean.WorldClient
         }
 			
 		private IPAddress _serverIp =  new IPAddress(new byte[]{127,0,0,1});
-        private ushort _serverPort = 8080;
+        private ushort _serverPort = 8084;
         private void btnStart_Click(object sender, EventArgs e)
         {
             if (txtUserName.Enabled && txtUserName.Text.Trim().Length == 0) { Misc.MessageError("UserName is required."); return; }

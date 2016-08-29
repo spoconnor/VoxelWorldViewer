@@ -1,16 +1,18 @@
 ﻿<Properties StartupItem="Client/Client.csproj">
   <MonoDevelop.Ide.Workbench ActiveDocument="Client/GameActions/NetworkClient.cs">
     <Files>
-      <File FileName="Client/GameActions/NetworkClient.cs" Line="124" Column="1" />
-      <File FileName="Client/Launcher.cs" Line="150" Column="1" />
-      <File FileName="Client/Config.cs" Line="75" Column="1" />
+      <File FileName="Client/GameActions/NetworkClient.cs" Line="66" Column="1" />
+      <File FileName="Client/Launcher.cs" Line="30" Column="41" />
+      <File FileName="Client/Config.cs" Line="55" Column="1" />
+      <File FileName="Client/GameActions/LoginAction.cs" Line="24" Column="1" />
+      <File FileName="Client/GameActions/GameAction.cs" Line="58" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/mnt/archive/Programming/Cloud/VoxelWorldViewer/Client/GameActions/NetworkClient.cs" line="32" column="1" />
-      <Breakpoint file="/mnt/archive/Programming/Cloud/VoxelWorldViewer/Client/Config.cs" line="55" column="1" />
+      <Breakpoint file="/mnt/archive/Programming/Cloud/VoxelWorldViewer/Client/GameActions/NetworkClient.cs" line="129" column="1" />
+      <Breakpoint file="/mnt/archive/Programming/Cloud/VoxelWorldViewer/Client/GameActions/NetworkClient.cs" line="61" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
