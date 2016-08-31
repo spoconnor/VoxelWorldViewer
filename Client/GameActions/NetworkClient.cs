@@ -61,18 +61,9 @@ namespace Sean.WorldClient.GameActions
 
 
 			//
-
-			var commsLoginMessageBuilder = new CommsMessages.Login.Builder();
-			commsLoginMessageBuilder.SetIpaddress(Config.Server);
-			commsLoginMessageBuilder.SetPort(Config.Port);
-			commsLoginMessageBuilder.SetUsername(Config.UserName);
-			commsLoginMessageBuilder.SetPassword("password");
-			var commsLoginMessage = commsLoginMessageBuilder.Build ();
-			var commsMessageBuilder = new CommsMessages.Message.Builder();
-			commsMessageBuilder.SetLogin (commsLoginMessage);
-			var commsMessage = commsMessageBuilder.Build ();
+			var message = MessageParser.CreateLoginMessage(Config.Server, Config.Port, Config.UserName, "password");
 			byte[] data = Encoding.ASCII.GetBytes ("This is a test");
-			var packet = WriteMessage (commsMessage, data);
+			var packet = MessageParser.CreatePacket (message, data);
 
 			try
 			{
@@ -150,31 +141,6 @@ namespace Sean.WorldClient.GameActions
             //_playerInfoTimer.Start();
             //_playerInfoTimer.Elapsed += _playerInfoTimer_Elapsed; //wire elapsed event handler
         }
-
-		public static byte[] WriteMessage (CommsMessages.Message message, byte[] data)
-		{
-			using (var memoryStream = new System.IO.MemoryStream()) {
-				memoryStream.WriteByte (0); // reserve for length
-				memoryStream.WriteByte (0); // reserve for length
-				message.WriteTo (memoryStream);
-				var messageLength = memoryStream.Position - 2;
-
-				memoryStream.WriteByte (0); // reserve for length
-				memoryStream.WriteByte (0); // reserve for length
-				using (var dataStream = new System.IO.MemoryStream (data)) {
-					message.WriteTo (dataStream);
-				}
-				var dataLength = memoryStream.Position - messageLength - 4;
-
-				var packetBytes = memoryStream.ToArray ();
-				packetBytes [0] = (byte)((messageLength)/256);
-				packetBytes [1] = (byte)((messageLength)%256);
-				packetBytes [messageLength+2] = (byte)((dataLength)/256);
-				packetBytes [messageLength+3] = (byte)((dataLength)%256);
-
-				return packetBytes;
-			}
-		}
 
         //runs in a thread
         public static void ListenForServerMessageThread()
