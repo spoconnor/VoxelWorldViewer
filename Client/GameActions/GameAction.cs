@@ -4,6 +4,7 @@ using Sean.WorldClient.Hosts.World;
 using OpenTK;
 using System.Text;
 using Sean.Shared;
+using Sean.Shared.Comms;
 
 namespace Sean.WorldClient.GameActions
 {
@@ -20,8 +21,6 @@ namespace Sean.WorldClient.GameActions
 
         public TcpClient TcpClient { get; protected set; }
         internal int DataLength;
-		internal CommsMessages.MsgType ActionType { get; }
-
 
         #region Send
         private byte[] _byteQueue;
@@ -45,7 +44,7 @@ namespace Sean.WorldClient.GameActions
             if (!_isQueued)
             {
                 //Queue();
-                if (_byteQueueIndex != _byteQueue.Length) throw new Exception(string.Format("{0} DataLength {1} + {2} but queued {3}", ActionType, sizeof(ushort) + sizeof(int), DataLength, _byteQueueIndex));
+                if (_byteQueueIndex != _byteQueue.Length) throw new Exception(string.Format("DataLength {0} + {1} but queued {2}", sizeof(ushort) + sizeof(int), DataLength, _byteQueueIndex));
 
                 _isQueued = true;
                 return;
@@ -72,7 +71,7 @@ namespace Sean.WorldClient.GameActions
 			}
 		}
 */
-        private static CommsMessages.Message ReadMessage(byte[] data)
+        private static Message ReadMessage(byte[] data)
         {
             byte[] msgBuffer = new byte[data[0]];
             Array.Copy(data, 1, msgBuffer, 0, data[0]); // Skip length byte
@@ -86,13 +85,11 @@ namespace Sean.WorldClient.GameActions
                 }
                 Console.WriteLine("{0}", builder.ToString());
             }
-            var recv = CommsMessages.Message.ParseFrom(msgBuffer);
-            var msgType = (CommsMessages.MsgType)recv.Msgtype;
-            Console.WriteLine("Msg Type: {0}", msgType);
+            byte [] binData;
+            var recv = Sean.Shared.Comms.MessageParser.ParsePacket(msgBuffer, out binData);
+            Console.WriteLine("Msg Received");
             return recv;
         }
-
-   
 
         protected void Write(byte[] buffer, int count)
         {

@@ -138,12 +138,6 @@
     <Reference Include="OpenTK">
       <HintPath>Libs\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="Google.ProtocolBuffers">
-      <HintPath>..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.ProtocolBuffers.Serialization">
-      <HintPath>..\packages\Google.ProtocolBuffers.2.4.1.555\lib\net40\Google.ProtocolBuffers.Serialization.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
@@ -401,7 +395,6 @@
     <None Include="Textures\Ui\ToolCuboid.png" />
     <None Include="Textures\Ui\ToolTree.png" />
     <None Include="Textures\Ui\BaseCharacter.png" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\Globe1.ico" />

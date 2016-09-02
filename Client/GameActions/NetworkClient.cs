@@ -59,11 +59,10 @@ namespace Sean.WorldClient.GameActions
 
             Settings.Launcher.UpdateProgressInvokable("Connected...", 0, 0);
 
-
 			//
-			var message = MessageParser.CreateLoginMessage(Config.Server, Config.Port, Config.UserName, "password");
+			var message = Sean.Shared.Comms.MessageParser.CreateLoginMessage(Config.Server, Config.Port, Config.UserName, "password");
 			byte[] data = Encoding.ASCII.GetBytes ("This is a test");
-			var packet = MessageParser.CreatePacket (message, data);
+			var packet = Sean.Shared.Comms.MessageParser.CreatePacket (message, data);
 
 			try
 			{
