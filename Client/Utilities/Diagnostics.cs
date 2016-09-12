@@ -26,7 +26,7 @@ namespace Sean.WorldClient.Utilities
             GL.GetInteger(GetPName.MinorVersion, out minor);
             if (major == 0) //this can happen on older comps / OpenGL versions (KNIGHT for example running OpenGL 2.1), so we need to parse the major/minor from the version string
             {
-                var args = OpenGlVersion.Split('.');
+				var args = OpenGlVersion.Split(new char[] {'.',' '});
                 if (args.Length < 2) throw new Exception("Unable to determine OpenGL from version string: " + OpenGlVersion);
                 major = int.Parse(args[0]);
                 minor = int.Parse(args[1]);

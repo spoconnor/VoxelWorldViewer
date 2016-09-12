@@ -60,17 +60,17 @@ namespace Sean.WorldClient
 
             SaveConfig();
 
-            var backgroundWorker = new BackgroundWorker();
-            backgroundWorker.RunWorkerCompleted += InitGame;
-            backgroundWorker.DoWork += GameActions.NetworkClient.Connect;
-            backgroundWorker.RunWorkerAsync(new object[] { _serverIp, _serverPort });
+			GameActions.NetworkClient.Connect();
+			GameActions.NetworkClient.SendPing();
+
+			InitGame ();
         }
 
-        private void InitGame(object sender, RunWorkerCompletedEventArgs e)
+		private void InitGame()//object sender, RunWorkerCompletedEventArgs e)
         {
             try
             {
-                if (e.Error != null) throw e.Error;
+                //if (e.Error != null) throw e.Error;
 
                 UpdateProgress("Initializing Game Window", 0, 0);
                 using (var game = new Game())
@@ -97,35 +97,6 @@ namespace Sean.WorldClient
 #endif
                 Application.Restart(); //just restart the app so theres no need to worry about lingering forms, settings, state issues, etc.                
             }
-#if DEBUG
-#else //comment this line to use this error handling while in debug mode
-            catch (Exception ex)
-            {
-                try
-                {
-                    Misc.MessageError(string.Format("{0}\n\nApplication Version: {1}\nServer: {2}\nPosition: {3}\nPerformance: {4}\n\nOpenGL: {5} {6}\nGLSL: {7}\nVideo Card: {8}\nOS: {9}\nCulture: {10}\n\n{11}",
-                                                    ex.Message,
-                                                    ProductVersion,
-                                                    _serverIp != null ? string.Format("{0}:{1}", _serverIp, _serverPort) : "n/a",
-                                                    Game.Player != null ? Game.Player.Coords.ToString() : "unknown",
-                                                    Game.PerformanceHost != null ? string.Format("{0} mb, {1} fps", Game.PerformanceHost.Memory, Game.PerformanceHost.Fps) : "unknown",
-                                                    Diagnostics.OpenGlVersion,
-                                                    Diagnostics.OpenGlVendor,
-                                                    Diagnostics.OpenGlGlsl,
-                                                    Diagnostics.OpenGlRenderer,
-                                                    Diagnostics.OperatingSystem,
-                                                    System.Globalization.CultureInfo.CurrentCulture.Name,
-                                                    ex.StackTrace));
-                }
-                catch (Exception exInner)
-                {
-                    //should never happen, but we end up here if while trying to display the nice message some of the info is missing/null
-                    //and ive already caught myself making several dumb mistakes by having this. its easy to introduce problems with the
-                    //error handler above because its only getting compiled in release mode, so leave this here as well.
-                    Misc.MessageError(string.Format("Error: {0}\n\n{1}", exInner.Message, exInner.StackTrace));
-                }
-            }
-#endif
             Application.Exit(); //close the application in case the launcher is still running
         }
 

@@ -255,7 +255,7 @@ namespace AiKnowledgeEngine
                 return;
             }
             
-            NetworkClient.SendAddOrRemoveBlock(position, blockType);
+            //NetworkClient.SendAddOrRemoveBlock(position, blockType);
         }
         
     }

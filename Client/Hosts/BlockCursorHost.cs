@@ -139,10 +139,10 @@ namespace Sean.WorldClient.Hosts
             int yIncr = (_leftMouseDownBlock.Y <= _leftMouseUpBlock.Y) ? 1 : -1;
             int zIncr = (_leftMouseDownBlock.Z <= _leftMouseUpBlock.Z) ? 1 : -1;
             Position block = new Position();
-            for (block.X = _leftMouseDownBlock.X; block.X != _leftMouseUpBlock.X+xIncr; block.X += xIncr)
-                for (block.Z = _leftMouseDownBlock.Z; block.Z != _leftMouseUpBlock.Z+zIncr; block.Z += zIncr)
-                    for (block.Y = _leftMouseDownBlock.Y; block.Y != _leftMouseUpBlock.Y+yIncr; block.Y += yIncr)
-                        NetworkClient.SendAddOrRemoveBlock(block, blockType);
+            //for (block.X = _leftMouseDownBlock.X; block.X != _leftMouseUpBlock.X+xIncr; block.X += xIncr)
+            //    for (block.Z = _leftMouseDownBlock.Z; block.Z != _leftMouseUpBlock.Z+zIncr; block.Z += zIncr)
+            //        for (block.Y = _leftMouseDownBlock.Y; block.Y != _leftMouseUpBlock.Y+yIncr; block.Y += yIncr)
+            //            NetworkClient.SendAddOrRemoveBlock(block, blockType);
         }
 
         public void Update(FrameEventArgs e)

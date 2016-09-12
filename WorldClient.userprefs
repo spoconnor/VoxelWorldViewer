@@ -1,8 +1,14 @@
 ﻿<Properties StartupItem="Client/Client.csproj">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Client/GameActions/GameAction.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Client/Hosts/World/Chunk.cs">
     <Files>
-      <File FileName="Client/GameActions/GameAction.cs" Line="47" Column="1" />
-      <File FileName="Client/GameActions/NetworkClient.cs" Line="62" Column="4" />
+      <File FileName="Client/GameActions/GameAction.cs" Line="16" Column="1" />
+      <File FileName="Client/Game.cs" Line="85" Column="34" />
+      <File FileName="Client/Scripting/Tasks.cs" Line="258" Column="15" />
+      <File FileName="Client/Launcher.cs" Line="76" Column="40" />
+      <File FileName="Client/Utilities/Diagnostics.cs" Line="37" Column="1" />
+      <File FileName="Client/Textures/TextureLoader.cs" Line="75" Column="15" />
+      <File FileName="Client/Hosts/World/WorldHost.cs" Line="125" Column="37" />
+      <File FileName="Client/Hosts/World/Chunk.cs" Line="152" Column="9" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

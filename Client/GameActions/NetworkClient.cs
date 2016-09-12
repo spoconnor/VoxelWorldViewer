@@ -11,6 +11,7 @@ using Sean.WorldClient.Hosts.Ui;
 using Sean.WorldClient.Hosts.World;
 using Sean.Shared;
 using System.Text;
+using Sean.Shared.Comms;
 
 namespace Sean.WorldClient.GameActions
 {
@@ -22,172 +23,58 @@ namespace Sean.WorldClient.GameActions
         private static NetworkStream _tcpStream;
         internal static bool AcceptPackets;
 
-        /// <summary>All connected players. Includes local player.</summary>
-        internal static ConcurrentDictionary<int, Player> Players = new ConcurrentDictionary<int, Player>();
-
         /// <summary>Timer used for sending player info to the server periodically.</summary>
         private static System.Timers.Timer _playerInfoTimer;
 
-        internal static void Connect(object sender, DoWorkEventArgs e)
+		internal static void Connect()//object sender, DoWorkEventArgs e)
         {
-            var args = (object[])e.Argument;
-            ServerIp = (IPAddress)args[0];
-            ServerPort = (ushort)args[1];
-            Players.Clear();
+			IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+			IPAddress ipAddress = ipHostInfo.AddressList[0];
+			IPEndPoint remoteEP = new IPEndPoint(ipAddress, 8084);
 
-            //when running client and server it takes a second for the server to start listening so make multiple connection attempts
-            //when joining a server only try once because the attempt can take a long time ~22secs
-            var connectionAttempts = 3;
-            for (var tries = 0; tries < connectionAttempts; tries++)
-            {
-                Settings.Launcher.UpdateProgressInvokable(string.Format("Connecting ({0} of {1})", tries + 1, connectionAttempts), tries + 1, connectionAttempts);
-                try
-                {
-                    TcpClient = new TcpClient();
-                    TcpClient.Connect(ServerIp, ServerPort);
-                    break;
-                }
-                catch (SocketException)
-                {
-                    if (tries == connectionAttempts - 1) throw new ServerConnectException();
-                    Thread.Sleep(1000); //wait one second before trying again
-                }
-            }
+			TcpClient client = new TcpClient();
+			Console.WriteLine ("Connecting...");
+			client.Connect(remoteEP);
 
-            _tcpStream = TcpClient.GetStream();
-            _tcpStream.ReadTimeout = 15000; //15s timeout during connect
+			var connection = ClientConnection.CreateClientConnection(client, ProcessMessage);
+			connection.StartClient();
 
             Settings.Launcher.UpdateProgressInvokable("Connected...", 0, 0);
+		
+			Console.WriteLine("Press any key to exit");
+			Console.ReadKey();
+		}
 
-			//
-			var message = Sean.Shared.Comms.MessageParser.CreateLoginMessage(Config.Server, Config.Port, Config.UserName, "password");
-			byte[] data = Encoding.ASCII.GetBytes ("This is a test");
-			var packet = Sean.Shared.Comms.MessageParser.CreatePacket (message, data);
+		private static void ProcessMessage (Guid clientId, Message msg)
+		{
+			Console.WriteLine ("[ProcessMessage]");
+		}
 
-			try
-			{
-				lock (TcpClient)
-				{
-					TcpClient.GetStream().Write(packet, 0, packet.Length);
-				}
-			}
-			catch (Exception ex)
-			{
-				NetworkClient.HandleNetworkError(ex);
-				throw new ServerDisconnectException(ex);
-			}
-			//
-
-            try
-            {
-                //server will immediately reply to tell us where we are and our Id, or disconnect us
-                var actionTypebytes = new byte[sizeof(ushort)];
-                var bytesRead = 0;
-                while (bytesRead < actionTypebytes.Length) bytesRead += _tcpStream.Read(actionTypebytes, bytesRead, actionTypebytes.Length - bytesRead);
-                //var actionType = (ActionType)BitConverter.ToUInt16(actionTypebytes, 0);
-                //if (actionType == ActionType.Connect)
-                //{
-                //    connect.Receive();
-                //}
-                //else if(actionType == ActionType.Disconnect)
-                //{
-                //    var disconnect = new Disconnect();
-                //    disconnect.Receive();
-                //}
-                //else
-                //{
-                //    throw new Exception(string.Format("Received {0} packet out of order during connect sequence.", actionType));
-                //}
-                
-                //Game.Player = Players[connect.PlayerId];
-
-                ////then a list of the players connected, followed by the world
-                //Settings.Launcher.UpdateProgressInvokable("Waiting for World...", 0, 0);
-                //while (!WorldData.IsLoaded)
-                //{
-                //    bytesRead = 0;
-                //    while (bytesRead < actionTypebytes.Length) bytesRead += _tcpStream.Read(actionTypebytes, bytesRead, actionTypebytes.Length - bytesRead);
-
-                //    actionType = (ActionType)BitConverter.ToUInt16(actionTypebytes, 0);
-                //    switch (actionType)
-                //    {
-                //        case ActionType.Connect:
-                //            var recvPlayerList = new LoginAction();
-                //            recvPlayerList.Receive();
-                //            break;
-                //        case ActionType.GetWorld:
-                //            var getWorld = new GetWorld();
-                //            getWorld.Receive();
-                //            break;
-                //        default:
-                //            throw new Exception(string.Format("Received {0} packet out of order during connect sequence.", actionType));
-                //    }
-                //}
-            }
-            catch (Exception ex)
-            {
-                //HandleNetworkError(ex);
-                throw new ServerConnectException(ex);
-            }
-
-            _tcpStream.ReadTimeout = -1;
-            TcpClient.NoDelay = true;
-            var listenerThread = new Thread(ListenForServerMessageThread) { IsBackground = true, Name = "ListenForServerMessageThread" };
-            listenerThread.Start();
-
-            //send misc player information to server periodically (ie fps, memory).
-            //_playerInfoTimer = new System.Timers.Timer(PlayerInfo.PLAYER_INFO_SEND_INTERVAL);
-            //_playerInfoTimer.Start();
-            //_playerInfoTimer.Elapsed += _playerInfoTimer_Elapsed; //wire elapsed event handler
-        }
-
-        //runs in a thread
-        public static void ListenForServerMessageThread()
-        {
-            while (!AcceptPackets) Thread.Sleep(100); //spin until the game window is loaded
-            try
-            {
-                while (TcpClient.Connected)
-                {
-                    var actionTypeBytes = new byte[sizeof(ushort)];
-                    var bytesRead = 0;
-                    while (bytesRead < actionTypeBytes.Length) bytesRead += _tcpStream.Read(actionTypeBytes, bytesRead, actionTypeBytes.Length - bytesRead);
-                    //var actionType = (ActionType)BitConverter.ToUInt16(actionTypeBytes, 0);
-                    //switch (actionType)
-                    {
-                        //case ActionType.AddBlock: new AddBlock().Receive(); break;
-                        //case ActionType.AddBlockItem: new AddBlockItem().Receive(); break;
-                        //case ActionType.AddBlockMulti: new AddBlockMulti().Receive(); break;
-                        //case ActionType.AddCuboid: new AddCuboid().Receive(); break;
-                        //case ActionType.AddProjectile: new AddProjectile().Receive(); break;
-                        //case ActionType.AddStaticItem: new AddStaticItem().Receive(); break;
-                        //case ActionType.AddStructure: new AddStructure().Receive(); break;
-                        //case ActionType.ChatMsg: new ChatMsg().Receive(); break;
-                        //case ActionType.Connect: new LoginAction().Receive(); break;
-                        //case ActionType.Disconnect: new Disconnect().Receive(); break;
-                        //case ActionType.PickupBlockItem: new PickupBlockItem().Receive(); break;
-                        //case ActionType.PlayerMove: new PlayerMove().Receive(); break;
-                        //case ActionType.PlayerOption: new PlayerOption().Receive(); break;
-                        //case ActionType.RemoveBlock: new RemoveBlock().Receive(); break;
-                        //case ActionType.RemoveBlockItem: new RemoveBlockItem().Receive(); break;
-                        //case ActionType.RemoveBlockMulti: new RemoveBlockMulti().Receive(); break;
-                        //case ActionType.ServerCommand:
-                        //case ActionType.PlayerInfo:
-                        //case ActionType.Error:
-                        //case ActionType.GetWorld:
-                        //    throw new Exception(string.Format("Client should not receive action type: {0}", actionType));
-                        //default:
-                        //    throw new Exception(string.Format("Unhandled action type: {0}", actionType));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleNetworkError(ex);
-            }
-        }
 
         #region Send
+		public static void SendPing()
+		{
+			ClientConnection.BroadcastMessage(new Message()
+				{
+					Ping = new PingMessage()
+					{
+						Message = "Hi"
+					}
+				});
+		}
+
+		public static void SendMapRequest()
+		{
+			ClientConnection.BroadcastMessage(new Message()
+				{
+					MapRequest = new MapRequestMessage()
+					{
+						Coords = new Sean.Shared.ChunkCoords(100, 100)
+					}
+				});
+		}
+
+		/*
         private static Coords _prevCoords = new Coords(0, 0, 0);
 
         public static void SendPlayerLocation(Coords newCoords, bool forceSend = false)
@@ -210,7 +97,9 @@ namespace Sean.WorldClient.GameActions
                 _prevCoords = newCoords;
             }
         }
+		*/
 
+		/*
         /// <summary>Send message to the server to add or remove a block. Block will be removed if the block type is Air.</summary>
         /// <param name="position">position to add the block</param>
         /// <param name="blockType">block type to add</param>
@@ -238,9 +127,11 @@ namespace Sean.WorldClient.GameActions
                 Game.Player.Inventory[(int)blockType]--;
             }
         }
+		*/
 
         public static void Disconnect()
         {
+			/*
             lock (TcpClient)
             {
                 //new Disconnect(Game.Player.Id, "Quit").Send();
@@ -250,21 +141,14 @@ namespace Sean.WorldClient.GameActions
                     TcpClient.Close();
                 }
             }
+            */
         }
-
-        private static void _playerInfoTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            if (Game.PerformanceHost == null)
-            {
-                Debug.WriteLine("Performance Host not initialized yet");
-                return;
-            }
-            //new PlayerInfo(Game.PerformanceHost.Fps, Game.PerformanceHost.Memory).Send();
-        }
+			
         #endregion
 
         internal static void HandleNetworkError(Exception ex)
         {
+			/*
             lock (TcpClient)
             {
                 if (TcpClient.Connected)
@@ -284,6 +168,7 @@ namespace Sean.WorldClient.GameActions
                 foreach (var line in msg.Split('\n')) Game.UiHost.AddChatMessage(new ChatMessage(ChatMessageType.Error, line));
             }
             Debug.WriteLine(msg);
+*/
         }
     }
 }

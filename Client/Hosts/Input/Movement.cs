@@ -59,19 +59,19 @@ namespace Sean.WorldClient.Hosts.Input
                 moved = true;
             }
 
-            if (moved) NetworkClient.SendPlayerLocation(Game.Player.Coords);
+            //if (moved) NetworkClient.SendPlayerLocation(Game.Player.Coords);
         }
 
         internal static void RotateDirection(float radians)
         {
             Game.Player.Coords.Direction += radians;
-            NetworkClient.SendPlayerLocation(Game.Player.Coords);
+            //NetworkClient.SendPlayerLocation(Game.Player.Coords);
         }
 
         internal static void RotatePitch(float radians)
         {
             Game.Player.Coords.Pitch += radians;
-            NetworkClient.SendPlayerLocation(Game.Player.Coords);
+            //NetworkClient.SendPlayerLocation(Game.Player.Coords);
         }
 
         /// <summary>

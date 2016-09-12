@@ -64,15 +64,15 @@ namespace Sean.WorldClient.Textures
     {
         public static void Load()
         {
-            LoadBlockTextures();
-            LoadClutterTextures();
-            LoadEnvironmentTextures();
-            LoadItemTextures();
-            LoadUiTextures();
-            LoadUnitTextures();
+            //LoadBlockTextures();
+            //LoadClutterTextures();
+            //LoadEnvironmentTextures();
+            //LoadItemTextures();
+            //LoadUiTextures();
+            //LoadUnitTextures();
 
-            LoadCharacterTextures(CharacterTexturesLarge, DefaultFontLarge, DEFAULT_FONT_LARGE_WIDTH, DefaultFontLargeHeight);
-            CharacterAtlasSmall = LoadCharacterAtlas(DefaultFontSmall, DEFAULT_FONT_SMALL_WIDTH, DefaultFontSmallHeight);
+            //LoadCharacterTextures(CharacterTexturesLarge, DefaultFontLarge, DEFAULT_FONT_LARGE_WIDTH, DefaultFontLargeHeight);
+            //CharacterAtlasSmall = LoadCharacterAtlas(DefaultFontSmall, DEFAULT_FONT_SMALL_WIDTH, DefaultFontSmallHeight);
             //CharacterAtlasLarge = LoadCharacterAtlas(DefaultFontLarge, DEFAULT_FONT_LARGE_WIDTH, DefaultFontLargeHeight);
         }
 
